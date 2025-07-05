@@ -174,3 +174,108 @@
 2025-07-05 14:57:46,108 INFO spawned: 'etl-monitor' with pid 23
 2025-07-05 14:57:47,683 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 2025-07-05 14:57:47,684 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 15:14:02,793 WARN received SIGTERM indicating exit request
+2025-07-05 15:14:02,793 INFO waiting for cron, etl-monitor to die
+2025-07-05 15:14:02,794 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 15:14:02,799 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 16:02:55,953 INFO Set uid to user 0 succeeded
+2025-07-05 16:02:55,961 INFO supervisord started with pid 1
+2025-07-05 16:02:56,963 INFO spawned: 'cron' with pid 28
+2025-07-05 16:02:56,965 INFO spawned: 'etl-monitor' with pid 29
+2025-07-05 16:02:58,696 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:02:58,696 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:04:18,820 WARN received SIGTERM indicating exit request
+2025-07-05 16:04:18,820 INFO waiting for cron, etl-monitor to die
+2025-07-05 16:04:18,821 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 16:04:18,830 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 16:07:06,693 INFO Set uid to user 0 succeeded
+2025-07-05 16:07:06,697 INFO supervisord started with pid 1
+2025-07-05 16:07:07,700 INFO spawned: 'cron' with pid 23
+2025-07-05 16:07:07,702 INFO spawned: 'etl-monitor' with pid 24
+2025-07-05 16:07:09,323 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:07:09,323 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:14:40,497 INFO reaped unknown pid 194 (exit status 0)
+2025-07-05 16:14:40,497 INFO reaped unknown pid 196 (exit status 0)
+2025-07-05 16:14:40,497 INFO reaped unknown pid 226 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 273 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 301 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 201 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 202 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 225 (exit status 0)
+2025-07-05 16:14:40,499 INFO reaped unknown pid 223 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 387 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 389 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 394 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 395 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 418 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 416 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 419 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 467 (exit status 0)
+2025-07-05 16:15:24,549 INFO reaped unknown pid 503 (exit status 0)
+2025-07-05 16:16:07,594 INFO reaped unknown pid 598 (exit status 0)
+2025-07-05 16:16:07,596 INFO reaped unknown pid 600 (exit status 0)
+2025-07-05 16:16:07,598 INFO reaped unknown pid 605 (exit status 0)
+2025-07-05 16:16:07,600 INFO reaped unknown pid 606 (exit status 0)
+2025-07-05 16:16:07,602 INFO reaped unknown pid 628 (exit status 0)
+2025-07-05 16:16:07,604 INFO reaped unknown pid 627 (exit status 0)
+2025-07-05 16:16:07,604 INFO reaped unknown pid 630 (exit status 0)
+2025-07-05 16:16:07,604 INFO reaped unknown pid 678 (exit status 0)
+2025-07-05 16:16:07,604 INFO reaped unknown pid 708 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 793 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 795 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 800 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 801 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 823 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 824 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 873 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 902 (exit status 0)
+2025-07-05 16:16:50,651 INFO reaped unknown pid 821 (exit status 0)
+2025-07-05 16:17:18,363 WARN received SIGTERM indicating exit request
+2025-07-05 16:17:18,363 INFO waiting for cron, etl-monitor to die
+2025-07-05 16:17:18,363 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 16:17:18,370 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 16:17:21,280 INFO Set uid to user 0 succeeded
+2025-07-05 16:17:21,285 INFO supervisord started with pid 1
+2025-07-05 16:17:22,287 INFO spawned: 'cron' with pid 22
+2025-07-05 16:17:22,289 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 16:17:23,849 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:17:23,849 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 428 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 430 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 435 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 436 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 459 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 457 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 462 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 508 (exit status 0)
+2025-07-05 16:25:59,155 INFO reaped unknown pid 537 (exit status 0)
+2025-07-05 16:26:40,209 INFO reaped unknown pid 630 (exit status 0)
+2025-07-05 16:26:40,209 INFO reaped unknown pid 632 (exit status 0)
+2025-07-05 16:26:40,210 INFO reaped unknown pid 628 (exit status 0)
+2025-07-05 16:26:40,210 INFO reaped unknown pid 637 (exit status 0)
+2025-07-05 16:26:40,210 INFO reaped unknown pid 638 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 840 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 842 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 847 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 848 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 871 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 869 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 872 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 920 (exit status 0)
+2025-07-05 16:27:52,909 INFO reaped unknown pid 948 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1036 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1038 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1034 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1043 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1044 (exit status 0)
+2025-07-05 16:27:55,912 INFO reaped unknown pid 1116 (exit status 0)
+2025-07-05 16:28:08,925 WARN received SIGTERM indicating exit request
+2025-07-05 16:28:08,925 INFO waiting for cron, etl-monitor to die
+2025-07-05 16:28:08,925 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 16:28:08,930 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 16:29:16,496 INFO Set uid to user 0 succeeded
+2025-07-05 16:29:16,500 INFO supervisord started with pid 1
+2025-07-05 16:29:17,503 INFO spawned: 'cron' with pid 22
+2025-07-05 16:29:17,505 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 16:29:19,046 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 16:29:19,046 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

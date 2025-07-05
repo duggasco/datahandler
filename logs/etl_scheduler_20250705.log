@@ -346,3 +346,147 @@ EMEA Data Quality Metrics:
 2025-07-05 14:57:54,720 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
 2025-07-05 14:57:54,720 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
 2025-07-05 14:57:54,720 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 15:13:20,656 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 15:13:20,656 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 15:13:20,657 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 15:13:20,657 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 15:16:35,476 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 15:16:35,477 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 15:16:35,477 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 15:16:35,477 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:01:38,285 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:01:38,286 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:01:38,286 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:01:38,287 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:07:39,504 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:07:39,504 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:07:39,505 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:07:39,505 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:09:41,308 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:09:41,309 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:09:41,309 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:09:41,309 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:13:57,593 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:13:57,593 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:13:59,953 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:13:59,954 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-05...
+2025-07-05 16:14:03,271 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:14:09,688 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:14:39,696 - sap_download_module - ERROR - ✗ Download timeout for AMRS_30DAYS
+2025-07-05 16:14:39,816 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_AMRS_30DAYS.png
+2025-07-05 16:14:39,816 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:14:39,886 - sap_download_module - INFO - Browser closed
+2025-07-05 16:14:40,397 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:14:40,397 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:14:43,696 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:14:43,696 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-05...
+2025-07-05 16:14:46,829 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:14:53,501 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:15:23,508 - sap_download_module - ERROR - ✗ Download timeout for EMEA_30DAYS
+2025-07-05 16:15:23,623 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_EMEA_30DAYS.png
+2025-07-05 16:15:23,623 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:15:23,693 - sap_download_module - INFO - Browser closed
+2025-07-05 16:15:25,871 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:15:25,871 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:15:28,211 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:15:28,211 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-05...
+2025-07-05 16:15:31,343 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:15:37,087 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:16:07,094 - sap_download_module - ERROR - ✗ Download timeout for AMRS_30DAYS
+2025-07-05 16:16:07,223 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_AMRS_30DAYS.png
+2025-07-05 16:16:07,223 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:16:07,291 - sap_download_module - INFO - Browser closed
+2025-07-05 16:16:07,832 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:16:07,832 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:16:10,528 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:16:10,529 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-05...
+2025-07-05 16:16:13,845 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:16:19,599 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:16:49,606 - sap_download_module - ERROR - ✗ Download timeout for EMEA_30DAYS
+2025-07-05 16:16:49,724 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_EMEA_30DAYS.png
+2025-07-05 16:16:49,724 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:16:49,796 - sap_download_module - INFO - Browser closed
+2025-07-05 16:17:28,274 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:17:28,275 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:17:28,275 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:17:28,275 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:17:49,828 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:17:49,828 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:17:49,828 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:17:49,828 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:17:51,466 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:17:51,466 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:17:51,466 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:17:51,466 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:18:49,048 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:18:49,048 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:18:49,049 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:18:49,049 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:18:54,657 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:18:54,657 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:18:56,280 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:18:56,280 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:19:19,629 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:19:19,629 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:19:19,629 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:19:19,629 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:19:24,085 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:19:24,085 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:19:25,661 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:19:25,661 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:19:43,824 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 16:19:43,824 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:19:43,824 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 16:19:43,824 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 16:19:48,942 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:19:48,942 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:19:50,540 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:19:50,540 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:22:11,300 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:22:11,300 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:22:21,819 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:22:21,819 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:22:23,380 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:22:23,380 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:23:21,014 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: name 'region_upper' is not defined
+2025-07-05 16:23:21,014 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: name 'region_upper' is not defined
+2025-07-05 16:25:16,885 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:25:16,885 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:25:19,257 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:25:19,257 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-05...
+2025-07-05 16:25:22,406 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:25:28,684 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:25:58,691 - sap_download_module - ERROR - ✗ Download timeout for AMRS_30DAYS
+2025-07-05 16:25:58,814 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_AMRS_30DAYS.png
+2025-07-05 16:25:58,814 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:25:58,880 - sap_download_module - INFO - Browser closed
+2025-07-05 16:25:59,425 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:25:59,425 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:26:01,725 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:26:01,725 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-05...
+2025-07-05 16:26:05,041 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:26:11,190 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:26:39,106 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(104, 'Connection reset by peer')': /session/24b0aa5678793562c28f5cfc3130ec42
+2025-07-05 16:26:39,107 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7feded644590>: Failed to establish a new connection: [Errno 111] Connection refused')': /session/24b0aa5678793562c28f5cfc3130ec42
+2025-07-05 16:26:39,111 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7feded644bd0>: Failed to establish a new connection: [Errno 111] Connection refused')': /session/24b0aa5678793562c28f5cfc3130ec42
+2025-07-05 16:26:39,114 - sap_download_module - INFO - Browser closed
+2025-07-05 16:27:10,894 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:27:10,894 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:27:13,213 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:27:13,213 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-05...
+2025-07-05 16:27:16,348 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 16:27:22,532 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 16:27:52,539 - sap_download_module - ERROR - ✗ Download timeout for AMRS_30DAYS
+2025-07-05 16:27:52,659 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_AMRS_30DAYS.png
+2025-07-05 16:27:52,659 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 16:27:52,729 - sap_download_module - INFO - Browser closed
+2025-07-05 16:27:53,227 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:27:53,228 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:27:55,444 - urllib3.connectionpool - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(104, 'Connection reset by peer')': /session/b02c9498248c41ac098699506af0abe0
+2025-07-05 16:27:55,444 - urllib3.connectionpool - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fd42db6c750>: Failed to establish a new connection: [Errno 111] Connection refused')': /session/b02c9498248c41ac098699506af0abe0
+2025-07-05 16:27:55,445 - urllib3.connectionpool - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7fd42db6cad0>: Failed to establish a new connection: [Errno 111] Connection refused')': /session/b02c9498248c41ac098699506af0abe0
+2025-07-05 16:27:55,446 - sap_download_module - INFO - Browser closed
+2025-07-05 16:29:24,737 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 16:29:24,738 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 16:29:26,984 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 16:29:26,985 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-05...

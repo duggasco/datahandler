@@ -51,10 +51,15 @@ class SAPOpenDocumentDownloader:
         # URLs from configuration - now supports dynamic URL loading
         # Check if URLs are provided in config, otherwise use defaults
         if 'sap_urls' in config:
+
             # Convert lowercase keys to uppercase for consistency
+
             self.urls = {}
+
             for key, value in config['sap_urls'].items():
+
                 self.urls[key.upper()] = value
+
         else:
             # Default URLs for backward compatibility
             self.urls = {
@@ -175,6 +180,8 @@ class SAPOpenDocumentDownloader:
     
     def download_file(self, region: str, target_date: datetime, output_dir: Path) -> Optional[str]:
         """
+        # Convert region to uppercase for consistency
+        
         Download file for specified region and date
         
         Args:
@@ -189,7 +196,7 @@ class SAPOpenDocumentDownloader:
         region_upper = region.upper()
         
         if region_upper not in self.urls:
-            logger.error(f"Unknown region: {region} (uppercase: {region_upper})")
+            logger.error(f"Unknown region: {region}")
             return None
         
         # Setup driver if not already done
@@ -254,19 +261,19 @@ class SAPOpenDocumentDownloader:
                     output_dir.mkdir(exist_ok=True, parents=True)
                     shutil.move(str(downloaded_file), str(final_path))
                     
-                    logger.info(f"✓ Downloaded {region_upper}: {final_path} ({final_path.stat().st_size:,} bytes)")
+                    logger.info(f"✓ Downloaded {region}: {final_path} ({final_path.stat().st_size:,} bytes)")
                     return str(final_path)
                 else:
                     logger.error(f"Download completed but no Excel file found for {region}")
                     return None
             else:
                 logger.error(f"✗ Download timeout for {region}")
-                self._save_debug_screenshot(f"download_timeout_{region_upper}.png")
+                self._save_debug_screenshot(f"download_timeout_{region}.png")
                 return None
                 
         except Exception as e:
             logger.error(f"Download error for {region}: {e}")
-            self._save_debug_screenshot(f"download_error_{region_upper}.png")
+            self._save_debug_screenshot(f"download_error_{region}.png")
             return None
     
     def _wait_for_download(self, timeout: int = 30) -> bool:
