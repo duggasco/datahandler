@@ -1,0 +1,19 @@
+{
+    "sap_urls": {
+        "amrs": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E",
+        "emea": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E"
+    },
+    "auth": {
+        "username": "sduggan",
+        "password": "sduggan"
+    },
+    "db_path": "/data/fund_data.db",
+    "data_dir": "/data",
+    "download_timeout": 300,
+    "verify_ssl": true,
+    "email_alerts": {
+        "enabled": false,
+        "recipients": ["etl-team@company.com"],
+        "smtp_server": "smtp.company.com"
+    }
+}

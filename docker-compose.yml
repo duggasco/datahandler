@@ -1,0 +1,73 @@
+version: "3.8"
+
+services:
+  fund-etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: fund-etl:latest
+    container_name: fund-etl-container
+    
+    # Run as root initially, entrypoint will switch to etluser
+    user: root
+    
+    environment:
+      - TZ=America/New_York
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    
+    volumes:
+      - ./config:/config
+      - ./data:/data
+      - ./logs:/logs
+    
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sqlite3; import os; os.path.exists('/data/fund_data.db') and sqlite3.connect('/data/fund_data.db').execute('SELECT 1')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    
+    networks:
+      - fund-etl-network
+
+  fund-etl-ui:
+    build:
+      context: .
+      dockerfile: Dockerfile.ui
+    image: fund-etl-ui:latest
+    container_name: fund-etl-ui
+    
+    environment:
+      - DB_PATH=/data/fund_data.db
+    
+    volumes:
+      - ./data:/data:ro
+      - ./logs:/logs:ro
+    
+    ports:
+      - "8080:8080"
+    
+    depends_on:
+      - fund-etl
+    
+    networks:
+      - fund-etl-network
+    
+    profiles:
+      - ui
+
+networks:
+  fund-etl-network:
+    driver: bridge

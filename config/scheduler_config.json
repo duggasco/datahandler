@@ -1,0 +1,17 @@
+{
+    "etl_config_path": "/config/config.json",
+    "email_alerts": {
+        "enabled": false,
+        "smtp_server": "smtp.gmail.com",
+        "smtp_port": 587,
+        "from_email": "etl-alerts@company.com",
+        "to_emails": ["data-team@company.com"],
+        "use_tls": true
+    },
+    "retry_config": {
+        "max_retries": 3,
+        "retry_delay_minutes": 30
+    },
+    "backfill_days": 7,
+    "log_dir": "/logs"
+}
