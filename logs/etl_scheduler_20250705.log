@@ -334,3 +334,15 @@ EMEA Data Quality Metrics:
 2025-07-05 13:49:58,105 - fund_etl_pipeline - WARNING - No previous data found for EMEA to carry forward
 2025-07-05 13:49:58,107 - __main__ - INFO - ETL completed successfully
 2025-07-05 13:49:58,107 - __main__ - INFO - Scheduled ETL run completed
+2025-07-05 14:33:40,408 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 14:33:40,409 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 14:33:40,409 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 14:33:40,409 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 14:53:11,843 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 14:53:11,844 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 14:53:11,845 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 14:53:11,845 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-05 14:57:54,719 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-05 14:57:54,720 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-05 14:57:54,720 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-05 14:57:54,720 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file

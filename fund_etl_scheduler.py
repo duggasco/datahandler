@@ -120,9 +120,27 @@ class ETLScheduler:
             try:
                 self.logger.info(f"ETL attempt {attempt + 1} of {max_retries}")
                 
-                # Run the ETL
-                self.etl.run_daily_etl(run_date)
+                # Run the ETL - now returns dict with validation info
+                result = self.etl.run_daily_etl(run_date)
                 
+                # Check if ETL returned a result dict (new behavior)
+                if isinstance(result, dict) and result.get('success'):
+                    # Send validation alerts if any
+                    if result.get('validation_alerts'):
+                        alert_body = "ETL completed successfully with validation updates:"
+                        alert_body += "".join(result['validation_alerts'])
+                        alert_body += "Database has been updated with corrected data."
+                        
+                        self.send_email_alert(
+                            f"ETL Validation Updates - {run_date.strftime('%Y-%m-%d')}",
+                            alert_body,
+                            is_error=False
+                        )
+                    
+                    self.logger.info("ETL completed successfully")
+                    return True
+                
+                # Legacy behavior - if ETL doesn't return a dict
                 # Verify the run was successful
                 etl_status = self.monitor.get_etl_status(days=1)
                 
@@ -146,9 +164,9 @@ class ETLScheduler:
                     time.sleep(retry_delay * 60)
                 else:
                     # Final attempt failed
-                    error_msg = f"ETL failed after {max_retries} attempts\n\n"
-                    error_msg += f"Error: {str(e)}\n\n"
-                    error_msg += f"Traceback:\n{traceback.format_exc()}"
+                    error_msg = f"ETL failed after {max_retries} attempts"
+                    error_msg += f"Error: {str(e)}"
+                    error_msg += f"Traceback:{traceback.format_exc()}"
                     
                     self.send_email_alert(
                         f"ETL Failed - {run_date.strftime('%Y-%m-%d')}",
@@ -158,7 +176,7 @@ class ETLScheduler:
                     return False
         
         return False
-    
+
     def backfill_missing_dates(self, days: int = None):
         """Backfill any missing dates"""
         if days is None:
@@ -294,6 +312,8 @@ def main():
                        help='Create configuration file templates')
     parser.add_argument('--setup-cron', action='store_true',
                        help='Show cron setup instructions')
+    parser.add_argument('--validate', action='store_true',
+                       help='Run 30-day lookback validation only')
     
     args = parser.parse_args()
     
@@ -320,7 +340,42 @@ def main():
     elif args.historical:
         scheduler.run_historical_load(args.historical[0], args.historical[1])
     
+    elif args.validate:
+        print("Running 30-day lookback validation...")
+        scheduler = ETLScheduler()
+        etl = scheduler.etl
+        validation_summary = []
+        
+        for region in ['AMRS', 'EMEA']:
+            print(f"\nValidating {region}...")
+            try:
+                lookback_df = etl.download_lookback_file(region)
+                if lookback_df is not None:
+                    results = etl.validate_against_lookback(region, lookback_df)
+                    print(f"Missing dates: {results['summary']['missing_dates_count']}")
+                    print(f"Changed records: {results['summary']['changed_records_count']}")
+                    
+                    if results['summary']['requires_update']:
+                        print("Updating database with corrected data...")
+                        etl.update_from_lookback(region, lookback_df, results)
+                        print("Update complete.")
+                        validation_summary.append(f"{region}: Updated {results['summary']['missing_dates_count']} missing dates, {results['summary']['changed_records_count']} changed records")
+                    else:
+                        validation_summary.append(f"{region}: No updates required")
+                else:
+                    print(f"Failed to download lookback file for {region}")
+                    validation_summary.append(f"{region}: Failed to download lookback file")
+            except Exception as e:
+                print(f"Error validating {region}: {str(e)}")
+                validation_summary.append(f"{region}: Error - {str(e)}")
+        
+        print("\n" + "="*60)
+        print("Validation Summary:")
+        for summary in validation_summary:
+            print(f"  - {summary}")
+        print("="*60)
     else:
+        print(f"Failed to download lookback file for {region}")
         parser.print_help()
 
 

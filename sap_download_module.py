@@ -48,11 +48,18 @@ class SAPOpenDocumentDownloader:
         # Create download directory
         self.download_dir.mkdir(exist_ok=True, parents=True)
         
-        # URLs from configuration
-        self.urls = {
-            'AMRS': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E',
-            'EMEA': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E'
-        }
+        # URLs from configuration - now supports dynamic URL loading
+        # Check if URLs are provided in config, otherwise use defaults
+        if 'sap_urls' in config:
+            self.urls = config['sap_urls']
+        else:
+            # Default URLs for backward compatibility
+            self.urls = {
+                'AMRS': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E',
+                'EMEA': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E',
+                'AMRS_30DAYS': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXmFuFTG4DBBrefomiwL1aE&sOutputFormat=E',
+                'EMEA_30DAYS': 'https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AQbKBz8wx0pHojHl0uBm2sw&sOutputFormat=E'
+            }
         
         self.driver = None
         self.wait = None
@@ -298,30 +305,33 @@ class SAPOpenDocumentDownloader:
         self._setup_driver()
         results = {}
         
-        for region, url in self.urls.items():
+        # Test all configured URLs
+        for region_key, url in self.urls.items():
+            # Create a display name for the region
+            display_name = region_key.upper().replace('_', ' ')
+            
             try:
-                logger.info(f"Testing connectivity to {region} URL...")
+                logger.info(f"Testing connectivity to {display_name} URL...")
                 
                 self.driver.get(url)
                 time.sleep(3)
                 
                 # Check page title or content
                 if "logon" in self.driver.current_url.lower():
-                    results[region] = True
-                    logger.info(f"{region}: Login page accessible ✓")
+                    results[display_name] = True
+                    logger.info(f"{display_name}: Login page accessible ✓")
                 elif self.driver.title:
-                    results[region] = True
-                    logger.info(f"{region}: Page accessible ✓")
+                    results[display_name] = True
+                    logger.info(f"{display_name}: Page accessible ✓")
                 else:
-                    results[region] = False
-                    logger.warning(f"{region}: Unknown response")
+                    results[display_name] = False
+                    logger.warning(f"{display_name}: Unknown response")
                     
             except Exception as e:
-                results[region] = False
-                logger.error(f"{region}: Connection failed - {str(e)}")
+                results[display_name] = False
+                logger.error(f"{display_name}: Connection failed - {str(e)}")
         
         return results
-    
     def close(self):
         """Close the browser"""
         if self.driver:
@@ -375,7 +385,7 @@ if __name__ == "__main__":
         output_dir = Path('/tmp')
         target_date = datetime.now()
         
-        for region in ['AMRS', 'EMEA']:
+        for region in ["AMRS", "EMEA", "AMRS_30DAYS", "EMEA_30DAYS"]:
             filepath = downloader.download_file(region, target_date, output_dir)
             if filepath:
                 print(f"\nSuccessfully downloaded {region}: {filepath}")

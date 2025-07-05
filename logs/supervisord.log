@@ -24,3 +24,153 @@
 2025-07-05 13:48:07,628 INFO spawned: 'etl-monitor' with pid 23
 2025-07-05 13:48:09,280 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
 2025-07-05 13:48:09,280 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 13:54:49,401 WARN received SIGTERM indicating exit request
+2025-07-05 13:54:49,401 INFO waiting for cron, etl-monitor to die
+2025-07-05 13:54:49,401 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 13:54:49,408 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:06:52,674 INFO Set uid to user 0 succeeded
+2025-07-05 14:06:52,678 INFO supervisord started with pid 1
+2025-07-05 14:06:53,680 INFO spawned: 'cron' with pid 28
+2025-07-05 14:06:53,690 INFO spawned: 'etl-monitor' with pid 29
+2025-07-05 14:06:54,692 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:06:54,693 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:09:03,576 WARN received SIGTERM indicating exit request
+2025-07-05 14:09:03,576 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:09:03,577 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:09:03,583 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:09:45,336 INFO Set uid to user 0 succeeded
+2025-07-05 14:09:45,339 INFO supervisord started with pid 1
+2025-07-05 14:09:46,340 INFO spawned: 'cron' with pid 22
+2025-07-05 14:09:46,342 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:09:47,939 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:09:47,939 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:11:18,043 WARN received SIGTERM indicating exit request
+2025-07-05 14:11:18,043 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:11:18,044 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:11:18,054 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:15:03,754 INFO Set uid to user 0 succeeded
+2025-07-05 14:15:03,759 INFO supervisord started with pid 1
+2025-07-05 14:15:04,761 INFO spawned: 'cron' with pid 22
+2025-07-05 14:15:04,764 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:15:06,349 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:15:06,349 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:17:18,499 WARN received SIGTERM indicating exit request
+2025-07-05 14:17:18,500 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:17:18,500 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:17:18,507 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:20:24,711 INFO Set uid to user 0 succeeded
+2025-07-05 14:20:24,715 INFO supervisord started with pid 1
+2025-07-05 14:20:25,718 INFO spawned: 'cron' with pid 22
+2025-07-05 14:20:25,720 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:20:26,721 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:20:26,722 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:21:00,515 WARN received SIGTERM indicating exit request
+2025-07-05 14:21:00,515 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:21:00,516 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:21:00,524 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:21:05,569 INFO Set uid to user 0 succeeded
+2025-07-05 14:21:05,573 INFO supervisord started with pid 1
+2025-07-05 14:21:06,576 INFO spawned: 'cron' with pid 23
+2025-07-05 14:21:06,578 INFO spawned: 'etl-monitor' with pid 24
+2025-07-05 14:21:07,580 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:21:07,580 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:21:17,543 WARN received SIGTERM indicating exit request
+2025-07-05 14:21:17,543 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:21:17,544 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:21:17,550 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:23:25,693 INFO Set uid to user 0 succeeded
+2025-07-05 14:23:25,700 INFO supervisord started with pid 1
+2025-07-05 14:23:26,702 INFO spawned: 'cron' with pid 22
+2025-07-05 14:23:26,705 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:23:27,710 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:23:27,710 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:26:51,646 WARN received SIGTERM indicating exit request
+2025-07-05 14:26:51,646 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:26:51,647 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:26:51,655 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:26:58,198 INFO Set uid to user 0 succeeded
+2025-07-05 14:26:58,204 INFO supervisord started with pid 1
+2025-07-05 14:26:59,207 INFO spawned: 'cron' with pid 22
+2025-07-05 14:26:59,211 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:27:00,214 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:27:00,214 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:27:07,888 WARN received SIGTERM indicating exit request
+2025-07-05 14:27:07,888 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:27:07,889 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:27:07,898 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:29:20,149 INFO Set uid to user 0 succeeded
+2025-07-05 14:29:20,153 INFO supervisord started with pid 1
+2025-07-05 14:29:21,156 INFO spawned: 'cron' with pid 22
+2025-07-05 14:29:21,158 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:29:22,159 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:29:22,159 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:31:18,983 WARN received SIGTERM indicating exit request
+2025-07-05 14:31:18,984 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:31:18,986 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:31:18,989 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:33:35,290 INFO Set uid to user 0 succeeded
+2025-07-05 14:33:35,294 INFO supervisord started with pid 1
+2025-07-05 14:33:36,296 INFO spawned: 'cron' with pid 22
+2025-07-05 14:33:36,299 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:33:37,303 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:33:37,304 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:36:57,175 WARN received SIGTERM indicating exit request
+2025-07-05 14:36:57,175 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:36:57,176 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:36:57,184 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:39:11,309 INFO Set uid to user 0 succeeded
+2025-07-05 14:39:11,314 INFO supervisord started with pid 1
+2025-07-05 14:39:12,317 INFO spawned: 'cron' with pid 22
+2025-07-05 14:39:12,319 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:39:13,321 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:39:13,321 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:41:17,098 WARN received SIGTERM indicating exit request
+2025-07-05 14:41:17,098 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:41:17,099 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:41:17,107 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:43:44,009 INFO Set uid to user 0 succeeded
+2025-07-05 14:43:44,015 INFO supervisord started with pid 1
+2025-07-05 14:43:45,018 INFO spawned: 'cron' with pid 22
+2025-07-05 14:43:45,020 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:43:46,597 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:43:46,597 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:44:34,671 WARN received SIGTERM indicating exit request
+2025-07-05 14:44:34,671 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:44:34,672 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:44:34,678 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:47:00,883 INFO Set uid to user 0 succeeded
+2025-07-05 14:47:00,890 INFO supervisord started with pid 1
+2025-07-05 14:47:01,892 INFO spawned: 'cron' with pid 22
+2025-07-05 14:47:01,894 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:47:02,897 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:47:02,897 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:48:06,725 WARN received SIGTERM indicating exit request
+2025-07-05 14:48:06,725 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:48:06,727 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:48:06,731 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:50:14,945 INFO Set uid to user 0 succeeded
+2025-07-05 14:50:14,953 INFO supervisord started with pid 1
+2025-07-05 14:50:15,955 INFO spawned: 'cron' with pid 22
+2025-07-05 14:50:15,961 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:50:16,963 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:50:16,963 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:50:53,677 WARN received SIGTERM indicating exit request
+2025-07-05 14:50:53,677 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:50:53,678 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:50:53,685 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:53:08,017 INFO Set uid to user 0 succeeded
+2025-07-05 14:53:08,025 INFO supervisord started with pid 1
+2025-07-05 14:53:09,028 INFO spawned: 'cron' with pid 22
+2025-07-05 14:53:09,039 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:53:10,044 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:53:10,044 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:55:31,000 WARN received SIGTERM indicating exit request
+2025-07-05 14:55:31,001 INFO waiting for cron, etl-monitor to die
+2025-07-05 14:55:31,001 WARN stopped: cron (terminated by SIGTERM)
+2025-07-05 14:55:31,008 WARN stopped: etl-monitor (terminated by SIGTERM)
+2025-07-05 14:57:45,099 INFO Set uid to user 0 succeeded
+2025-07-05 14:57:45,103 INFO supervisord started with pid 1
+2025-07-05 14:57:46,106 INFO spawned: 'cron' with pid 22
+2025-07-05 14:57:46,108 INFO spawned: 'etl-monitor' with pid 23
+2025-07-05 14:57:47,683 INFO success: cron entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2025-07-05 14:57:47,684 INFO success: etl-monitor entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)

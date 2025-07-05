@@ -349,3 +349,52 @@ if __name__ == "__main__":
             print(f"{region}: {', '.join(dates[:5])}{'...' if len(dates) > 5 else ''}")
         else:
             print(f"{region}: No missing dates")
+
+    def get_lookback_validation_history(self, days: int = 7) -> pd.DataFrame:
+        """Get history of lookback validation updates"""
+        conn = sqlite3.connect(self.db_path)
+        
+        query = """
+        SELECT 
+            run_date,
+            region,
+            records_processed,
+            issues,
+            created_at
+        FROM etl_log
+        WHERE status = 'LOOKBACK_UPDATE'
+        AND run_date >= date('now', '-{} days')
+        ORDER BY created_at DESC
+        """.format(days)
+        
+        df = pd.read_sql_query(query, conn)
+        conn.close()
+        
+        return df
+    
+    def generate_validation_report(self) -> str:
+        """Generate a report of recent validation activities"""
+        validation_history = self.get_lookback_validation_history(days=30)
+        
+        report = f"\n{'='*60}\n"
+        report += f"30-Day Lookback Validation Report\n"
+        report += f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+        report += f"{'='*60}\n\n"
+        
+        if len(validation_history) == 0:
+            report += "No validation updates in the last 30 days.\n"
+        else:
+            report += f"Total validation updates: {len(validation_history)}\n\n"
+            
+            for region in ['AMRS', 'EMEA']:
+                region_updates = validation_history[validation_history['region'] == region]
+                if len(region_updates) > 0:
+                    report += f"\n{region} Region Updates:\n"
+                    report += f"{'-'*30}\n"
+                    
+                    for _, update in region_updates.iterrows():
+                        report += f"Date: {update['run_date']}\n"
+                        report += f"Records updated: {update['records_processed']}\n"
+                        report += f"Details: {update['issues']}\n\n"
+        
+        return report

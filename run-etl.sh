@@ -60,8 +60,18 @@ case "$1" in
         docker compose run --rm fund-etl shell
         ;;
     
+    "validate")
+        echo "Running 30-day lookback validation..."
+        docker compose run --rm fund-etl validate
+        ;;
+    
+    "test-validation")
+        echo "Testing validation feature..."
+        docker compose exec fund-etl python /app/test_lookback_validation.py
+        ;;
+    
     *)
-        echo "Usage: $0 {start|stop|restart|status|logs|run|test|report|ui|build|shell}"
+        echo "Usage: $0 {start|stop|restart|status|logs|run|test|report|ui|build|shell|validate|test-validation}"
         exit 1
         ;;
 esac

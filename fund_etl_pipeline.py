@@ -1,3 +1,4 @@
+from typing import Dict, Any, List, Tuple, Optional
 #!/usr/bin/env python3
 """
 Fund Data ETL Pipeline
@@ -92,6 +93,11 @@ class FundDataETL:
             # Configure Selenium downloader
             sap_config = {
                 'username': self.config.get('auth', {}).get('username', 'sduggan'),
+                'password': self.config.get('auth', {}).get('password', 'sduggan'),
+                'download_dir': str(self.data_dir / 'downloads'),
+                'headless': True,  # Always use headless in container
+                'timeout': self.config.get('download_timeout', 300),
+                'sap_urls': self.config.get('sap_urls', {}).get('username', 'sduggan'),
                 'password': self.config.get('auth', {}).get('password', 'sduggan'),
                 'download_dir': str(self.data_dir / 'downloads'),
                 'headless': True,  # Always use headless in container
@@ -532,9 +538,302 @@ class FundDataETL:
         finally:
             conn.close()
     
+
+    def download_lookback_file(self, region: str, lookback_days: int = 30) -> Optional[pd.DataFrame]:
+        """Download and return 30-day lookback file for validation"""
+        try:
+            lookback_url_key = f"{region.lower()}_30days"
+            if lookback_url_key not in self.config.get('sap_urls', {}):
+                logger.warning(f"No lookback URL configured for {region}")
+                return None
+                
+            url = self.config['sap_urls'][lookback_url_key]
+            
+            # Download using existing SAP module
+            from sap_download_module import SAPOpenDocumentDownloader
+            sap_config = {
+                'username': self.config.get('auth', {}).get('username', 'sduggan'),
+                'password': self.config.get('auth', {}).get('password', 'sduggan'),
+                'download_dir': str(self.data_dir / 'lookback'),
+                'headless': True,
+                'timeout': self.config.get('download_timeout', 300),
+                'sap_urls': self.config.get('sap_urls', {}).get('username', 'sduggan'),  # Pass all SAP URLs
+                'password': self.config.get('auth', {}).get('password', 'sduggan'),
+                'download_dir': str(self.data_dir / 'lookback'),
+                'headless': True,
+                'timeout': self.config.get('download_timeout', 300)
+            }
+            
+            downloader = SAPOpenDocumentDownloader(sap_config)
+            
+            try:
+                # Create lookback directory
+                lookback_dir = self.data_dir / 'lookback'
+                lookback_dir.mkdir(exist_ok=True)
+                
+                filepath = downloader.download_file(
+                    f"{region}_30DAYS", 
+                    datetime.now(), 
+                    lookback_dir
+                )
+                
+                if filepath and os.path.exists(filepath):
+                    df = pd.read_excel(filepath)
+                    logger.info(f"Downloaded {region} lookback file with {len(df)} records")
+                    return df
+                else:
+                    logger.error(f"Failed to download {region} lookback file")
+                    return None
+                    
+            finally:
+                downloader.close()
+                
+        except Exception as e:
+            logger.error(f"Error downloading lookback file for {region}: {str(e)}")
+            return None
+
+    def validate_against_lookback(self, region: str, lookback_df: pd.DataFrame) -> Dict[str, Any]:
+        """Validate database data against 30-day lookback file"""
+        from typing import Dict, Any
+        
+        validation_results = {
+            'missing_dates': [],
+            'changed_records': [],
+            'summary': {
+                'total_dates_checked': 0,
+                'missing_dates_count': 0,
+                'changed_records_count': 0,
+                'requires_update': False
+            }
+        }
+        
+        try:
+            conn = sqlite3.connect(self.db_path)
+            
+            # Clean and prepare lookback data
+            lookback_df['Date'] = pd.to_datetime(lookback_df['Date'], errors='coerce')
+            lookback_df['Fund Code'] = lookback_df['Fund Code'].apply(
+                lambda x: x.strip() if isinstance(x, str) else x
+            )
+            
+            # Get unique dates from lookback file
+            lookback_dates = lookback_df['Date'].dt.date.unique()
+            validation_results['summary']['total_dates_checked'] = len(lookback_dates)
+            
+            # Check for missing dates in database
+            for date in lookback_dates:
+                date_str = date.strftime('%Y-%m-%d')
+                check_query = f"""
+                SELECT COUNT(*) as count FROM fund_data 
+                WHERE date = '{date_str}' AND region = '{region}'
+                """
+                result = pd.read_sql_query(check_query, conn)
+                
+                if result.iloc[0]['count'] == 0:
+                    validation_results['missing_dates'].append(date_str)
+                    validation_results['summary']['missing_dates_count'] += 1
+                    validation_results['summary']['requires_update'] = True
+            
+            # Check for changed records
+            change_threshold = self.config.get('validation', {}).get('change_threshold_percent', 5.0)
+            critical_fields = self.config.get('validation', {}).get('critical_fields', 
+                ['share_class_assets', 'portfolio_assets', 'one_day_yield', 'seven_day_yield'])
+            
+            for date in lookback_dates:
+                if date.strftime('%Y-%m-%d') not in validation_results['missing_dates']:
+                    # Get data from database for this date
+                    db_query = f"""
+                    SELECT * FROM fund_data 
+                    WHERE date = '{date.strftime('%Y-%m-%d')}' 
+                    AND region = '{region}'
+                    """
+                    db_data = pd.read_sql_query(db_query, conn)
+                    
+                    # Get lookback data for this date
+                    lookback_date_data = lookback_df[lookback_df['Date'].dt.date == date].copy()
+                    
+                    # Compare records
+                    changes = self._compare_dataframes(
+                        db_data, lookback_date_data, 
+                        critical_fields, change_threshold
+                    )
+                    
+                    if changes:
+                        validation_results['changed_records'].extend(changes)
+                        validation_results['summary']['changed_records_count'] += len(changes)
+                        validation_results['summary']['requires_update'] = True
+            
+            conn.close()
+            
+        except Exception as e:
+            logger.error(f"Validation error for {region}: {str(e)}")
+            
+        return validation_results
+
+    def _compare_dataframes(self, db_df: pd.DataFrame, lookback_df: pd.DataFrame, 
+                           critical_fields: List[str], threshold_pct: float) -> List[Dict]:
+        """Compare two dataframes and identify significant changes"""
+        changes = []
+        
+        # Map database columns to Excel columns
+        column_mapping_reverse = {
+            'fund_code': 'Fund Code',
+            'share_class_assets': 'Share Class Assets (dly/$mils)',
+            'portfolio_assets': 'Portfolio Assets (dly/$mils)',
+            'one_day_yield': '1-DSY (dly)',
+            'seven_day_yield': '7-DSY (dly)'
+        }
+        
+        # Process each fund in lookback data
+        for _, lookback_row in lookback_df.iterrows():
+            fund_code = lookback_row['Fund Code']
+            
+            # Find corresponding database record
+            db_record = db_df[db_df['fund_code'] == fund_code]
+            
+            if len(db_record) == 0:
+                # New fund not in database
+                changes.append({
+                    'type': 'new_fund',
+                    'fund_code': fund_code,
+                    'date': lookback_row['Date'].strftime('%Y-%m-%d'),
+                    'details': 'Fund not found in database'
+                })
+                continue
+                
+            db_record = db_record.iloc[0]
+            
+            # Check critical fields for changes
+            for db_field in critical_fields:
+                if db_field in column_mapping_reverse:
+                    excel_field = column_mapping_reverse[db_field]
+                    
+                    if excel_field in lookback_row.index:
+                        db_value = db_record[db_field]
+                        lookback_value = pd.to_numeric(
+                            lookback_row[excel_field], errors='coerce'
+                        )
+                        
+                        # Skip if either value is null
+                        if pd.isna(db_value) and pd.isna(lookback_value):
+                            continue
+                        
+                        # Flag if one is null and other isn't
+                        if pd.isna(db_value) != pd.isna(lookback_value):
+                            changes.append({
+                                'type': 'null_mismatch',
+                                'fund_code': fund_code,
+                                'date': db_record['date'],
+                                'field': db_field,
+                                'db_value': db_value,
+                                'lookback_value': lookback_value
+                            })
+                            continue
+                        
+                        # Check percentage change for numeric values
+                        if not pd.isna(db_value) and not pd.isna(lookback_value):
+                            if db_value != 0:
+                                pct_change = abs((lookback_value - db_value) / db_value * 100)
+                                if pct_change > threshold_pct:
+                                    changes.append({
+                                        'type': 'value_change',
+                                        'fund_code': fund_code,
+                                        'date': db_record['date'],
+                                        'field': db_field,
+                                        'db_value': db_value,
+                                        'lookback_value': lookback_value,
+                                        'pct_change': pct_change
+                                    })
+        
+        return changes
+
+    def update_from_lookback(self, region: str, lookback_df: pd.DataFrame, 
+                            validation_results: Dict[str, Any]):
+        """Update database with data from lookback file where changes detected"""
+        if not validation_results['summary']['requires_update']:
+            logger.info(f"No updates required for {region}")
+            return
+            
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        try:
+            # Begin transaction
+            cursor.execute("BEGIN TRANSACTION")
+            
+            updates_made = 0
+            
+            # Process missing dates
+            for missing_date in validation_results['missing_dates']:
+                date_data = lookback_df[
+                    lookback_df['Date'].dt.strftime('%Y-%m-%d') == missing_date
+                ]
+                
+                if len(date_data) > 0:
+                    logger.info(f"Adding {len(date_data)} records for missing date {missing_date}")
+                    
+                    # Process and load missing date data
+                    date_data_processed = self.process_dates(date_data, 
+                        datetime.strptime(missing_date, '%Y-%m-%d'))
+                    self.load_to_database(date_data_processed, region, 
+                        datetime.strptime(missing_date, '%Y-%m-%d'))
+                    updates_made += len(date_data)
+            
+            # Process changed records
+            changed_dates = set()
+            for change in validation_results['changed_records']:
+                changed_dates.add(change['date'])
+            
+            for date_str in changed_dates:
+                # Delete existing data for this date
+                cursor.execute("""
+                    DELETE FROM fund_data 
+                    WHERE date = ? AND region = ?
+                """, (date_str, region))
+                
+                # Load new data from lookback file
+                date_data = lookback_df[
+                    lookback_df['Date'].dt.strftime('%Y-%m-%d') == date_str
+                ]
+                
+                if len(date_data) > 0:
+                    logger.info(f"Updating {len(date_data)} records for {date_str}")
+                    date_data_processed = self.process_dates(date_data, 
+                        datetime.strptime(date_str, '%Y-%m-%d'))
+                    self.load_to_database(date_data_processed, region, 
+                        datetime.strptime(date_str, '%Y-%m-%d'))
+                    updates_made += len(date_data)
+            
+            # Commit transaction
+            conn.commit()
+            logger.info(f"Successfully updated {updates_made} records for {region}")
+            
+            # Log the update in ETL log
+            cursor.execute("""
+                INSERT INTO etl_log (run_date, region, file_date, status, records_processed, issues)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (
+                datetime.now().date(), 
+                region, 
+                datetime.now().date(), 
+                'LOOKBACK_UPDATE',
+                updates_made,
+                f"Updated from lookback: {validation_results['summary']['missing_dates_count']} missing dates, "
+                f"{validation_results['summary']['changed_records_count']} changed records"
+            ))
+            conn.commit()
+            
+        except Exception as e:
+            conn.rollback()
+            logger.error(f"Failed to update from lookback for {region}: {str(e)}")
+            raise
+        finally:
+            conn.close()
+
     def run_daily_etl(self, run_date: Optional[datetime] = None):
         """
         Main ETL process - runs for a specific date or current date
+        Now includes 30-day lookback validation after successful load
         """
         if run_date is None:
             run_date = datetime.now()
@@ -548,7 +847,7 @@ class FundDataETL:
             # For weekends and holidays, carry forward previous data
             for region in ['AMRS', 'EMEA']:
                 self.carry_forward_data(run_date, region)
-            return
+            return {'success': True}
         
         # Get prior business day (files contain prior day's data)
         data_date = self.get_prior_business_day(run_date)
@@ -596,55 +895,50 @@ class FundDataETL:
                 cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, issues)
                 VALUES (?, ?, ?, ?, ?)
-                """, (datetime.now().strftime('%Y-%m-%d'), region, data_date.strftime('%Y-%m-%d'), 'FAILED', str(e)))
+                """, (datetime.now().date(), region, data_date.date(), 'FAILED', str(e)))
                 conn.commit()
                 conn.close()
         
+        # After successful daily load, run lookback validation
+        validation_alerts = []
+        if self.config.get('validation', {}).get('enabled', True):
+            logger.info("Starting 30-day lookback validation...")
+            
+            for region in ['AMRS', 'EMEA']:
+                try:
+                    # Download lookback file
+                    lookback_df = self.download_lookback_file(region)
+                    
+                    if lookback_df is not None:
+                        # Validate against database
+                        validation_results = self.validate_against_lookback(region, lookback_df)
+                        
+                        # Log results
+                        logger.info(f"{region} validation results: "
+                                  f"{validation_results['summary']['missing_dates_count']} missing dates, "
+                                  f"{validation_results['summary']['changed_records_count']} changed records")
+                        
+                        # Generate alert details if needed
+                        if validation_results['summary']['requires_update']:
+                            alert_msg = f"\n{region} Validation Alert:\n"
+                            alert_msg += f"- Missing dates: {', '.join(validation_results['missing_dates'][:5])}"
+                            if len(validation_results['missing_dates']) > 5:
+                                alert_msg += f" and {len(validation_results['missing_dates']) - 5} more"
+                            alert_msg += f"\n- Changed records: {validation_results['summary']['changed_records_count']}"
+                            
+                            validation_alerts.append(alert_msg)
+                            
+                            # Update database with corrected data
+                            self.update_from_lookback(region, lookback_df, validation_results)
+                            
+                except Exception as e:
+                    logger.error(f"Lookback validation failed for {region}: {str(e)}")
+                    validation_alerts.append(f"\n{region} Validation Error: {str(e)}")
+        
         logger.info("ETL process completed")
-
-
-# Configuration file template - FIXED WITH ABSOLUTE PATHS
-CONFIG_TEMPLATE = {
-    "sap_urls": {
-        "amrs": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E",
-        "emea": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E"
-    },
-    "auth": {
-        "username": "sduggan",
-        "password": "sduggan"
-    },
-    "db_path": "/data/fund_data.db",
-    "data_dir": "/data",
-    "download_timeout": 300,
-    "verify_ssl": True,
-    "email_alerts": {
-        "enabled": True,
-        "recipients": ["etl-team@company.com"],
-        "smtp_server": "smtp.company.com"
-    }
-}
-
-
-def create_config_template():
-    """Create a template configuration file"""
-    with open('config_template.json', 'w') as f:
-        json.dump(CONFIG_TEMPLATE, f, indent=2)
-    print("Created config_template.json - please update with your settings")
-
-
-if __name__ == "__main__":
-    # Create config template if needed
-    if not os.path.exists('config.json') and not os.path.exists('config_template.json'):
-        create_config_template()
-    
-    # Initialize ETL
-    etl = FundDataETL()
-    
-    # Setup database
-    etl.setup_database()
-    
-    # Run daily ETL
-    etl.run_daily_etl()
-    
-    # Example: Run for a specific date
-    # etl.run_daily_etl(datetime(2025, 7, 3))
+        
+        # Return validation alerts for scheduler to send
+        if validation_alerts:
+            return {'success': True, 'validation_alerts': validation_alerts}
+        else:
+            return {'success': True}

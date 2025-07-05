@@ -17,5 +17,12 @@
         "enabled": false,
         "recipients": ["etl-team@company.com"],
         "smtp_server": "smtp.company.com"
+    },
+    "validation": {
+        "enabled": true,
+        "change_threshold_percent": 5.0,
+        "critical_fields": ["share_class_assets", "portfolio_assets", "one_day_yield", "seven_day_yield"],
+        "alert_on_missing_dates": true,
+        "alert_on_major_changes": true
     }
 }

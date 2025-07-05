@@ -258,6 +258,11 @@ case "$1" in
         exec su -c "cd /app && python sap_connectivity_test.py" etluser
         ;;
     
+    "validate")
+        echo "Running 30-day lookback validation..."
+        exec su -c "cd /app && python fund_etl_scheduler.py --validate" etluser
+        ;;
+    
     "report")
         echo "Generating data quality report..."
         exec su -c "cd /app && python -c 'from fund_etl_utilities import FundDataMonitor; monitor = FundDataMonitor(\"/data/fund_data.db\"); print(monitor.generate_data_quality_report())'" etluser
