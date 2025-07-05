@@ -1,0 +1,10 @@
+{
+  "timestamp": "2025-07-05T13:53:09.287811",
+  "status": "degraded",
+  "checks": {
+    "database": "ok",
+    "recent_runs": "failed: 2 failures",
+    "missing_data": "warning: 8 missing dates",
+    "disk_space": "low: 0.0MB free"
+  }
+}

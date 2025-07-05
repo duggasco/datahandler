@@ -26,24 +26,34 @@ from fund_etl_utilities import FundDataMonitor
 class ETLScheduler:
     """Orchestrates ETL runs with monitoring and alerting"""
     
-    def __init__(self, config_path: str = 'scheduler_config.json'):
+    def __init__(self, config_path: str = '/config/scheduler_config.json'):
+        # Setup basic logging first to avoid AttributeError
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        )
+        self.logger = logging.getLogger(__name__)
+        
         self.config = self._load_config(config_path)
-        self.etl = FundDataETL(self.config.get('etl_config_path', 'config.json'))
+        self.etl = FundDataETL(self.config.get('etl_config_path', '/config/config.json'))
         self.monitor = FundDataMonitor(self.etl.db_path)
         
-        # Setup logging
+        # Setup logging with proper directory
         log_dir = Path(self.config.get('log_dir', '/logs'))
         log_dir.mkdir(exist_ok=True)
         
         log_file = log_dir / f"etl_scheduler_{datetime.now().strftime('%Y%m%d')}.log"
         
+        # Reconfigure logging with file handler
+        logging.getLogger().handlers = []  # Clear existing handlers
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
                 logging.FileHandler(log_file),
                 logging.StreamHandler()
-            ]
+            ],
+            force=True  # Force reconfiguration
         )
         self.logger = logging.getLogger(__name__)
     
@@ -68,7 +78,8 @@ class ETLScheduler:
                     'retry_delay_minutes': 30
                 },
                 'backfill_days': 7,
-                'log_dir': '/logs'
+                'log_dir': '/logs',
+                'etl_config_path': '/config/config.json'
             }
     
     def send_email_alert(self, subject: str, body: str, is_error: bool = False):

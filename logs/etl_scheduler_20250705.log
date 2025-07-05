@@ -1,0 +1,336 @@
+2025-07-05 13:42:21,182 - __main__ - INFO - ============================================================
+2025-07-05 13:42:21,182 - __main__ - INFO - Starting scheduled ETL run for 2025-07-05 13:42:21
+2025-07-05 13:42:21,182 - __main__ - INFO - ============================================================
+2025-07-05 13:42:21,182 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:42:21,182 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-05
+2025-07-05 13:42:21,182 - fund_etl_pipeline - INFO - 2025-07-05 is not a US business day
+2025-07-05 13:42:21,183 - fund_etl_pipeline - WARNING - No previous data found for AMRS to carry forward
+2025-07-05 13:42:21,183 - fund_etl_pipeline - WARNING - No previous data found for EMEA to carry forward
+2025-07-05 13:42:21,186 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:42:21,192 - __main__ - INFO - Checking for missing data in the last 7 days
+2025-07-05 13:42:21,196 - __main__ - INFO - Found 5 dates to backfill
+2025-07-05 13:42:21,196 - __main__ - INFO - Backfilling data for 2025-06-30
+2025-07-05 13:42:21,196 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:42:21,196 - fund_etl_pipeline - INFO - Starting ETL process for 2025-06-30
+2025-07-05 13:42:21,196 - fund_etl_pipeline - INFO - Processing data for 2025-06-27
+2025-07-05 13:42:21,284 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-06-27 using Selenium
+2025-07-05 13:42:24,280 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:42:24,281 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:42:26,651 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:42:26,652 - sap_download_module - INFO - Downloading AMRS file for 2025-06-27...
+2025-07-05 13:42:30,078 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:42:37,710 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:42:38,711 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250627.xlsx (123,565 bytes)
+2025-07-05 13:42:38,711 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250627.xlsx
+2025-07-05 13:42:38,777 - sap_download_module - INFO - Browser closed
+2025-07-05 13:42:38,778 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250627.xlsx
+2025-07-05 13:42:39,173 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:42:39,173 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:42:39,173 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:42:39,174 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:42:39,174 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:42:39,174 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:42:39,175 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:42:39,175 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:42:39,175 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:42:39,175 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:42:39,193 - fund_etl_pipeline - ERROR - Database load failed: Error binding parameter 1: type 'Timestamp' is not supported
+2025-07-05 13:42:39,193 - fund_etl_pipeline - ERROR - ETL failed for AMRS: Error binding parameter 1: type 'Timestamp' is not supported
+2025-07-05 13:42:39,202 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-06-27 using Selenium
+2025-07-05 13:42:39,728 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:42:39,728 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:42:42,030 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:42:42,031 - sap_download_module - INFO - Downloading EMEA file for 2025-06-27...
+2025-07-05 13:42:45,178 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:42:50,855 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:42:51,856 - sap_download_module - INFO - ✓ Downloaded EMEA: /data/DataDump__EMEA_20250627.xlsx (136,899 bytes)
+2025-07-05 13:42:51,856 - fund_etl_pipeline - INFO - Successfully downloaded EMEA file: /data/DataDump__EMEA_20250627.xlsx
+2025-07-05 13:42:51,921 - sap_download_module - INFO - Browser closed
+2025-07-05 13:42:51,922 - fund_etl_pipeline - INFO - Reading EMEA file: /data/DataDump__EMEA_20250627.xlsx
+2025-07-05 13:42:52,132 - fund_etl_pipeline - WARNING - Found #MULTIVALUE fund code - assigning unique identifiers
+2025-07-05 13:42:52,133 - fund_etl_pipeline - INFO - EMEA: 0.0% NASDAQ values missing (expected ~100%)
+2025-07-05 13:42:52,133 - fund_etl_pipeline - INFO - 
+EMEA Data Quality Metrics:
+2025-07-05 13:42:52,133 - fund_etl_pipeline - INFO - Total rows: 982
+2025-07-05 13:42:52,134 - fund_etl_pipeline - INFO - Unique funds: 982
+2025-07-05 13:42:52,134 - fund_etl_pipeline - INFO - Date range: 2025-07-04 00:00:00 to 2025-07-04 00:00:00
+2025-07-05 13:42:52,134 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:42:52,134 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:42:52,135 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:42:52,135 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:42:52,135 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:42:52,136 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:42:52,136 - fund_etl_pipeline - ERROR - Validation failed for EMEA: ['Found 1 duplicate Fund Codes']
+2025-07-05 13:42:52,136 - fund_etl_pipeline - INFO - ETL process completed
+2025-07-05 13:42:52,138 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:42:52,138 - __main__ - INFO - Backfilling data for 2025-07-01
+2025-07-05 13:42:52,138 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:42:52,138 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-01
+2025-07-05 13:42:52,138 - fund_etl_pipeline - INFO - Processing data for 2025-06-30
+2025-07-05 13:42:52,138 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-06-30 using Selenium
+2025-07-05 13:42:52,587 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:42:52,588 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:42:54,887 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:42:54,887 - sap_download_module - INFO - Downloading AMRS file for 2025-06-30...
+2025-07-05 13:42:58,025 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:43:03,867 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:43:04,870 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250630.xlsx (123,565 bytes)
+2025-07-05 13:43:04,870 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250630.xlsx
+2025-07-05 13:43:04,944 - sap_download_module - INFO - Browser closed
+2025-07-05 13:43:04,944 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250630.xlsx
+2025-07-05 13:43:05,154 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:43:05,155 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:43:05,155 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:43:05,155 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:43:05,155 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:43:05,156 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:43:05,156 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:43:05,156 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:43:05,156 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:43:05,157 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:43:05,175 - fund_etl_pipeline - ERROR - Database load failed: Error binding parameter 1: type 'Timestamp' is not supported
+2025-07-05 13:43:05,176 - fund_etl_pipeline - ERROR - ETL failed for AMRS: Error binding parameter 1: type 'Timestamp' is not supported
+2025-07-05 13:43:05,186 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-06-30 using Selenium
+2025-07-05 13:43:05,714 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:43:05,715 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:43:07,931 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:43:07,931 - sap_download_module - INFO - Downloading EMEA file for 2025-06-30...
+2025-07-05 13:43:11,246 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:48:12,555 - __main__ - INFO - ============================================================
+2025-07-05 13:48:12,555 - __main__ - INFO - Starting scheduled ETL run for 2025-07-05 13:48:12
+2025-07-05 13:48:12,556 - __main__ - INFO - ============================================================
+2025-07-05 13:48:12,556 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:48:12,556 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-05
+2025-07-05 13:48:12,556 - fund_etl_pipeline - INFO - 2025-07-05 is not a US business day
+2025-07-05 13:48:12,556 - fund_etl_pipeline - WARNING - No previous data found for AMRS to carry forward
+2025-07-05 13:48:12,557 - fund_etl_pipeline - WARNING - No previous data found for EMEA to carry forward
+2025-07-05 13:48:12,559 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:48:12,565 - __main__ - INFO - Checking for missing data in the last 7 days
+2025-07-05 13:48:12,569 - __main__ - INFO - Found 5 dates to backfill
+2025-07-05 13:48:12,569 - __main__ - INFO - Backfilling data for 2025-06-30
+2025-07-05 13:48:12,569 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:48:12,569 - fund_etl_pipeline - INFO - Starting ETL process for 2025-06-30
+2025-07-05 13:48:12,569 - fund_etl_pipeline - INFO - Processing data for 2025-06-27
+2025-07-05 13:48:12,632 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-06-27 using Selenium
+2025-07-05 13:48:13,160 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:48:13,160 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:48:15,519 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:48:15,519 - sap_download_module - INFO - Downloading AMRS file for 2025-06-27...
+2025-07-05 13:48:18,664 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:48:24,498 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:48:25,499 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250627.xlsx (123,565 bytes)
+2025-07-05 13:48:25,499 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250627.xlsx
+2025-07-05 13:48:25,566 - sap_download_module - INFO - Browser closed
+2025-07-05 13:48:25,567 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250627.xlsx
+2025-07-05 13:48:25,925 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:48:25,925 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:48:25,925 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:48:25,925 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:48:25,926 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:25,926 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:25,926 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:48:25,926 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:48:25,927 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:48:25,927 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:48:25,980 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-05 13:48:25,981 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-06-27 using Selenium
+2025-07-05 13:48:26,457 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:48:26,457 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:48:28,682 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:48:28,682 - sap_download_module - INFO - Downloading EMEA file for 2025-06-27...
+2025-07-05 13:48:31,994 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:48:38,031 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:48:39,032 - sap_download_module - INFO - ✓ Downloaded EMEA: /data/DataDump__EMEA_20250627.xlsx (136,898 bytes)
+2025-07-05 13:48:39,032 - fund_etl_pipeline - INFO - Successfully downloaded EMEA file: /data/DataDump__EMEA_20250627.xlsx
+2025-07-05 13:48:39,103 - sap_download_module - INFO - Browser closed
+2025-07-05 13:48:39,104 - fund_etl_pipeline - INFO - Reading EMEA file: /data/DataDump__EMEA_20250627.xlsx
+2025-07-05 13:48:39,318 - fund_etl_pipeline - WARNING - Found #MULTIVALUE fund code - assigning unique identifiers
+2025-07-05 13:48:39,320 - fund_etl_pipeline - INFO - EMEA: 0.0% NASDAQ values missing (expected ~100%)
+2025-07-05 13:48:39,320 - fund_etl_pipeline - INFO - 
+EMEA Data Quality Metrics:
+2025-07-05 13:48:39,320 - fund_etl_pipeline - INFO - Total rows: 982
+2025-07-05 13:48:39,320 - fund_etl_pipeline - INFO - Unique funds: 982
+2025-07-05 13:48:39,321 - fund_etl_pipeline - INFO - Date range: 2025-07-04 00:00:00 to 2025-07-04 00:00:00
+2025-07-05 13:48:39,321 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:39,321 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:39,321 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:48:39,322 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:48:39,322 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:48:39,322 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:48:39,322 - fund_etl_pipeline - ERROR - Validation failed for EMEA: ['Found 1 duplicate Fund Codes']
+2025-07-05 13:48:39,322 - fund_etl_pipeline - INFO - ETL process completed
+2025-07-05 13:48:39,324 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:48:39,324 - __main__ - INFO - Backfilling data for 2025-07-01
+2025-07-05 13:48:39,324 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:48:39,324 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-01
+2025-07-05 13:48:39,324 - fund_etl_pipeline - INFO - Processing data for 2025-06-30
+2025-07-05 13:48:39,325 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-06-30 using Selenium
+2025-07-05 13:48:39,792 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:48:39,792 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:48:42,102 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:48:42,102 - sap_download_module - INFO - Downloading AMRS file for 2025-06-30...
+2025-07-05 13:48:45,243 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:48:51,032 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:48:52,033 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250630.xlsx (123,566 bytes)
+2025-07-05 13:48:52,033 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250630.xlsx
+2025-07-05 13:48:52,100 - sap_download_module - INFO - Browser closed
+2025-07-05 13:48:52,101 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250630.xlsx
+2025-07-05 13:48:52,293 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:48:52,293 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:48:52,293 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:48:52,293 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:48:52,294 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:52,294 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:48:52,294 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:48:52,295 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:48:52,295 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:48:52,295 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:48:52,345 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-05 13:48:52,346 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-06-30 using Selenium
+2025-07-05 13:48:52,860 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:48:52,860 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:48:55,157 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:48:55,157 - sap_download_module - INFO - Downloading EMEA file for 2025-06-30...
+2025-07-05 13:48:58,197 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:49:03,823 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:49:04,824 - sap_download_module - INFO - ✓ Downloaded EMEA: /data/DataDump__EMEA_20250630.xlsx (136,899 bytes)
+2025-07-05 13:49:04,824 - fund_etl_pipeline - INFO - Successfully downloaded EMEA file: /data/DataDump__EMEA_20250630.xlsx
+2025-07-05 13:49:04,895 - sap_download_module - INFO - Browser closed
+2025-07-05 13:49:04,896 - fund_etl_pipeline - INFO - Reading EMEA file: /data/DataDump__EMEA_20250630.xlsx
+2025-07-05 13:49:05,101 - fund_etl_pipeline - WARNING - Found #MULTIVALUE fund code - assigning unique identifiers
+2025-07-05 13:49:05,103 - fund_etl_pipeline - INFO - EMEA: 0.0% NASDAQ values missing (expected ~100%)
+2025-07-05 13:49:05,103 - fund_etl_pipeline - INFO - 
+EMEA Data Quality Metrics:
+2025-07-05 13:49:05,103 - fund_etl_pipeline - INFO - Total rows: 982
+2025-07-05 13:49:05,103 - fund_etl_pipeline - INFO - Unique funds: 982
+2025-07-05 13:49:05,103 - fund_etl_pipeline - INFO - Date range: 2025-07-04 00:00:00 to 2025-07-04 00:00:00
+2025-07-05 13:49:05,104 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:05,104 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:05,104 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:49:05,105 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:49:05,105 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:49:05,105 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:49:05,105 - fund_etl_pipeline - ERROR - Validation failed for EMEA: ['Found 1 duplicate Fund Codes']
+2025-07-05 13:49:05,105 - fund_etl_pipeline - INFO - ETL process completed
+2025-07-05 13:49:05,107 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:49:05,107 - __main__ - INFO - Backfilling data for 2025-07-02
+2025-07-05 13:49:05,107 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:49:05,107 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-02
+2025-07-05 13:49:05,108 - fund_etl_pipeline - INFO - Processing data for 2025-07-01
+2025-07-05 13:49:05,108 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-07-01 using Selenium
+2025-07-05 13:49:05,632 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:49:05,632 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:49:07,856 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:49:07,856 - sap_download_module - INFO - Downloading AMRS file for 2025-07-01...
+2025-07-05 13:49:11,157 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:49:17,202 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:49:18,203 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250701.xlsx (123,566 bytes)
+2025-07-05 13:49:18,204 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250701.xlsx
+2025-07-05 13:49:18,269 - sap_download_module - INFO - Browser closed
+2025-07-05 13:49:18,270 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250701.xlsx
+2025-07-05 13:49:18,500 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:49:18,500 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:49:18,500 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:49:18,500 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:49:18,501 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:18,501 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:18,501 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:49:18,501 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:49:18,502 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:49:18,502 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:49:18,549 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-05 13:49:18,550 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-07-01 using Selenium
+2025-07-05 13:49:19,103 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:49:19,103 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:49:21,873 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:49:21,873 - sap_download_module - INFO - Downloading EMEA file for 2025-07-01...
+2025-07-05 13:49:25,006 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:49:30,784 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:49:31,785 - sap_download_module - INFO - ✓ Downloaded EMEA: /data/DataDump__EMEA_20250701.xlsx (136,899 bytes)
+2025-07-05 13:49:31,785 - fund_etl_pipeline - INFO - Successfully downloaded EMEA file: /data/DataDump__EMEA_20250701.xlsx
+2025-07-05 13:49:31,858 - sap_download_module - INFO - Browser closed
+2025-07-05 13:49:31,859 - fund_etl_pipeline - INFO - Reading EMEA file: /data/DataDump__EMEA_20250701.xlsx
+2025-07-05 13:49:32,059 - fund_etl_pipeline - WARNING - Found #MULTIVALUE fund code - assigning unique identifiers
+2025-07-05 13:49:32,061 - fund_etl_pipeline - INFO - EMEA: 0.0% NASDAQ values missing (expected ~100%)
+2025-07-05 13:49:32,061 - fund_etl_pipeline - INFO - 
+EMEA Data Quality Metrics:
+2025-07-05 13:49:32,061 - fund_etl_pipeline - INFO - Total rows: 982
+2025-07-05 13:49:32,061 - fund_etl_pipeline - INFO - Unique funds: 982
+2025-07-05 13:49:32,061 - fund_etl_pipeline - INFO - Date range: 2025-07-04 00:00:00 to 2025-07-04 00:00:00
+2025-07-05 13:49:32,062 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:32,062 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:32,062 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:49:32,063 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:49:32,063 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:49:32,063 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:49:32,063 - fund_etl_pipeline - ERROR - Validation failed for EMEA: ['Found 1 duplicate Fund Codes']
+2025-07-05 13:49:32,064 - fund_etl_pipeline - INFO - ETL process completed
+2025-07-05 13:49:32,066 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:49:32,066 - __main__ - INFO - Backfilling data for 2025-07-03
+2025-07-05 13:49:32,066 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:49:32,066 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-03
+2025-07-05 13:49:32,066 - fund_etl_pipeline - INFO - Processing data for 2025-07-02
+2025-07-05 13:49:32,066 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-07-02 using Selenium
+2025-07-05 13:49:32,578 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:49:32,578 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:49:34,903 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:49:34,903 - sap_download_module - INFO - Downloading AMRS file for 2025-07-02...
+2025-07-05 13:49:38,048 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:49:43,743 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:49:44,744 - sap_download_module - INFO - ✓ Downloaded AMRS: /data/DataDump__AMRS_20250702.xlsx (123,566 bytes)
+2025-07-05 13:49:44,744 - fund_etl_pipeline - INFO - Successfully downloaded AMRS file: /data/DataDump__AMRS_20250702.xlsx
+2025-07-05 13:49:44,809 - sap_download_module - INFO - Browser closed
+2025-07-05 13:49:44,811 - fund_etl_pipeline - INFO - Reading AMRS file: /data/DataDump__AMRS_20250702.xlsx
+2025-07-05 13:49:45,007 - fund_etl_pipeline - INFO - 
+AMRS Data Quality Metrics:
+2025-07-05 13:49:45,007 - fund_etl_pipeline - INFO - Total rows: 862
+2025-07-05 13:49:45,007 - fund_etl_pipeline - INFO - Unique funds: 862
+2025-07-05 13:49:45,007 - fund_etl_pipeline - INFO - Date range: 2025-07-03 00:00:00 to 2025-07-03 00:00:00
+2025-07-05 13:49:45,008 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:45,008 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:45,008 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:49:45,009 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:49:45,009 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:49:45,009 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:49:45,062 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-05 13:49:45,062 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-07-02 using Selenium
+2025-07-05 13:49:45,555 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-05 13:49:45,555 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-05 13:49:47,786 - sap_download_module - INFO - Already logged in or no login required
+2025-07-05 13:49:47,786 - sap_download_module - INFO - Downloading EMEA file for 2025-07-02...
+2025-07-05 13:49:50,938 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-05 13:49:56,805 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-05 13:49:57,806 - sap_download_module - INFO - ✓ Downloaded EMEA: /data/DataDump__EMEA_20250702.xlsx (136,899 bytes)
+2025-07-05 13:49:57,806 - fund_etl_pipeline - INFO - Successfully downloaded EMEA file: /data/DataDump__EMEA_20250702.xlsx
+2025-07-05 13:49:57,874 - sap_download_module - INFO - Browser closed
+2025-07-05 13:49:57,875 - fund_etl_pipeline - INFO - Reading EMEA file: /data/DataDump__EMEA_20250702.xlsx
+2025-07-05 13:49:58,077 - fund_etl_pipeline - WARNING - Found #MULTIVALUE fund code - assigning unique identifiers
+2025-07-05 13:49:58,078 - fund_etl_pipeline - INFO - EMEA: 0.0% NASDAQ values missing (expected ~100%)
+2025-07-05 13:49:58,078 - fund_etl_pipeline - INFO - 
+EMEA Data Quality Metrics:
+2025-07-05 13:49:58,078 - fund_etl_pipeline - INFO - Total rows: 982
+2025-07-05 13:49:58,079 - fund_etl_pipeline - INFO - Unique funds: 982
+2025-07-05 13:49:58,079 - fund_etl_pipeline - INFO - Date range: 2025-07-04 00:00:00 to 2025-07-04 00:00:00
+2025-07-05 13:49:58,079 - fund_etl_pipeline - INFO - Share Class Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:58,080 - fund_etl_pipeline - INFO - Portfolio Assets (dly/$mils): 0.0% missing
+2025-07-05 13:49:58,080 - fund_etl_pipeline - INFO - 1-DSY (dly): 0.0% missing
+2025-07-05 13:49:58,080 - fund_etl_pipeline - INFO - 7-DSY (dly): 0.0% missing
+2025-07-05 13:49:58,080 - fund_etl_pipeline - INFO - WAM (dly): 0.0% missing
+2025-07-05 13:49:58,081 - fund_etl_pipeline - INFO - WAL (dly): 0.0% missing
+2025-07-05 13:49:58,081 - fund_etl_pipeline - ERROR - Validation failed for EMEA: ['Found 1 duplicate Fund Codes']
+2025-07-05 13:49:58,081 - fund_etl_pipeline - INFO - ETL process completed
+2025-07-05 13:49:58,083 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:49:58,083 - __main__ - INFO - Backfilling data for 2025-07-04
+2025-07-05 13:49:58,083 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-05 13:49:58,083 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-04
+2025-07-05 13:49:58,083 - fund_etl_pipeline - INFO - 2025-07-04 is not a US business day
+2025-07-05 13:49:58,084 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-03 to 2025-07-04
+2025-07-05 13:49:58,104 - fund_etl_pipeline - INFO - Carried forward 862 records
+2025-07-05 13:49:58,105 - fund_etl_pipeline - WARNING - No previous data found for EMEA to carry forward
+2025-07-05 13:49:58,107 - __main__ - INFO - ETL completed successfully
+2025-07-05 13:49:58,107 - __main__ - INFO - Scheduled ETL run completed

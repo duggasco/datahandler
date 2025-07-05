@@ -1,0 +1,11 @@
+Matplotlib created a temporary cache directory at /tmp/matplotlib-zqsyrlbg because the default path (/root/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+INFO:__main__:Starting ETL Health Monitor...
+INFO:__main__:Health check: degraded
+Matplotlib created a temporary cache directory at /tmp/matplotlib-ibhdrtzu because the default path (/root/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+INFO:__main__:Starting ETL Health Monitor...
+INFO:__main__:Health check: degraded
+INFO:__main__:Health check: degraded
+Matplotlib created a temporary cache directory at /tmp/matplotlib-ddefu38w because the default path (/root/.config/matplotlib) is not a writable directory; it is highly recommended to set the MPLCONFIGDIR environment variable to a writable directory, in particular to speed up the import of Matplotlib and to better support multiprocessing.
+INFO:__main__:Starting ETL Health Monitor...
+INFO:__main__:Health check: degraded
+INFO:__main__:Health check: degraded

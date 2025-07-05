@@ -80,7 +80,7 @@ class FundDataETL:
             prior_date -= timedelta(days=1)
         return prior_date
     
-	def download_file(self, url: str, region: str, date: datetime) -> Optional[str]:
+    def download_file(self, url: str, region: str, date: datetime) -> Optional[str]:
         """
         Download file from SAP OpenDocument URL
         Returns: Path to downloaded file or None if failed
@@ -262,11 +262,11 @@ class FundDataETL:
             
             # Create Saturday data
             saturday_df = df.copy()
-            saturday_df['Date'] = data_date + timedelta(days=1)
+            saturday_df['Date'] = pd.to_datetime(data_date + timedelta(days=1))
             
             # Create Sunday data  
             sunday_df = df.copy()
-            sunday_df['Date'] = data_date + timedelta(days=2)
+            sunday_df['Date'] = pd.to_datetime(data_date + timedelta(days=2))
             
             # Combine all three days
             df = pd.concat([df, saturday_df, sunday_df], ignore_index=True)
@@ -446,8 +446,13 @@ class FundDataETL:
             for col in numeric_columns:
                 if col in df_load.columns:
                     # Replace '-' with NaN before converting to numeric
-                    df_load[col] = df_load[col].replace(['-', ''], np.nan)
+                    # Use infer_objects to avoid FutureWarning
+                    df_load[col] = df_load[col].replace(['-', ''], np.nan).infer_objects(copy=False)
                     df_load[col] = pd.to_numeric(df_load[col], errors='coerce')
+            
+            # Convert date column to string format for SQLite
+            if 'date' in df_load.columns:
+                df_load['date'] = pd.to_datetime(df_load['date']).dt.strftime('%Y-%m-%d')
             
             # Delete existing data for this date/region to handle updates
             cursor = conn.cursor()
@@ -460,11 +465,10 @@ class FundDataETL:
             df_load.to_sql('fund_data', conn, if_exists='append', index=False)
             
             # Log the ETL run
-            cursor = conn.cursor()
             cursor.execute("""
             INSERT INTO etl_log (run_date, region, file_date, status, records_processed)
             VALUES (?, ?, ?, ?, ?)
-            """, (datetime.now().date(), region, file_date.date(), 'SUCCESS', len(df)))
+            """, (datetime.now().strftime('%Y-%m-%d'), region, file_date.strftime('%Y-%m-%d'), 'SUCCESS', len(df)))
             
             conn.commit()
             logger.info(f"Successfully loaded {len(df)} records for {region}")
@@ -514,7 +518,7 @@ class FundDataETL:
                 cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, records_processed, issues)
                 VALUES (?, ?, ?, ?, ?, ?)
-                """, (datetime.now().date(), region, date.date(), 'CARRIED_FORWARD', 
+                """, (datetime.now().strftime('%Y-%m-%d'), region, date.strftime('%Y-%m-%d'), 'CARRIED_FORWARD', 
                       records, f'Data carried forward from {source_date}'))
                 
                 conn.commit()
@@ -592,7 +596,7 @@ class FundDataETL:
                 cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, issues)
                 VALUES (?, ?, ?, ?, ?)
-                """, (datetime.now().date(), region, data_date.date(), 'FAILED', str(e)))
+                """, (datetime.now().strftime('%Y-%m-%d'), region, data_date.strftime('%Y-%m-%d'), 'FAILED', str(e)))
                 conn.commit()
                 conn.close()
         
