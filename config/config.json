@@ -11,17 +11,25 @@
     },
     "db_path": "/data/fund_data.db",
     "data_dir": "/data",
-    "download_timeout": 300,
+    "download_timeout": 30,
+    "lookback_timeout": 1200,
     "verify_ssl": true,
     "email_alerts": {
         "enabled": false,
-        "recipients": ["etl-team@company.com"],
+        "recipients": [
+            "etl-team@company.com"
+        ],
         "smtp_server": "smtp.company.com"
     },
     "validation": {
         "enabled": true,
         "change_threshold_percent": 5.0,
-        "critical_fields": ["share_class_assets", "portfolio_assets", "one_day_yield", "seven_day_yield"],
+        "critical_fields": [
+            "share_class_assets",
+            "portfolio_assets",
+            "one_day_yield",
+            "seven_day_yield"
+        ],
         "alert_on_missing_dates": true,
         "alert_on_major_changes": true
     }

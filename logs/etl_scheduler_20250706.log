@@ -1,0 +1,18 @@
+2025-07-06 12:26:57,865 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-06 12:26:57,865 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-06 12:27:02,078 - sap_download_module - INFO - Already logged in or no login required
+2025-07-06 12:27:02,080 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-06...
+2025-07-06 12:27:05,261 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-06 12:27:14,566 - sap_download_module - INFO - Waiting for download to complete...
+2025-07-06 12:27:44,574 - sap_download_module - ERROR - ✗ Download timeout for AMRS_30DAYS
+2025-07-06 12:27:44,687 - sap_download_module - INFO - Debug screenshot saved: /logs/download_timeout_AMRS_30DAYS.png
+2025-07-06 12:27:44,687 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-06 12:27:44,763 - sap_download_module - INFO - Browser closed
+2025-07-06 12:27:45,506 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-06 12:27:45,506 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-06 12:43:38,831 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 180 seconds
+2025-07-06 12:43:38,832 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-06 12:43:38,832 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-06 12:43:38,832 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 180 seconds
+2025-07-06 12:43:38,833 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-06 12:43:38,833 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file

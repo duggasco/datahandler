@@ -38,10 +38,12 @@ class SAPOpenDocumentDownloader:
                 - timeout: Request timeout in seconds (default: 300)
                 - download_dir: Directory for downloads (default: /tmp/downloads)
                 - headless: Run Chrome in headless mode (default: True)
+                - lookback_timeout: Extended timeout for lookback files (default: 600)
         """
         self.username = config.get('username', 'sduggan')
         self.password = config.get('password', 'sduggan')
         self.timeout = config.get('timeout', 300)
+        self.lookback_timeout = config.get('lookback_timeout', 600)  # 10 minutes for lookback files
         self.download_dir = Path(config.get('download_dir', '/tmp/downloads'))
         self.headless = config.get('headless', True)
         
@@ -51,10 +53,7 @@ class SAPOpenDocumentDownloader:
         # URLs from configuration - now supports dynamic URL loading
         # Check if URLs are provided in config, otherwise use defaults
         if 'sap_urls' in config:
-            # Convert lowercase keys to uppercase for consistency
-            self.urls = {}
-            for key, value in config['sap_urls'].items():
-                self.urls[key.upper()] = value
+            self.urls = config['sap_urls']
         else:
             # Default URLs for backward compatibility
             self.urls = {
@@ -178,18 +177,15 @@ class SAPOpenDocumentDownloader:
         Download file for specified region and date
         
         Args:
-            region: 'AMRS' or 'EMEA' 
+            region: 'AMRS', 'EMEA', 'AMRS_30DAYS', or 'EMEA_30DAYS'
             target_date: Date for the data
             output_dir: Directory to save the file
             
         Returns:
             Path to downloaded file or None if failed
         """
-        # Convert region to uppercase for consistency
-        region_upper = region.upper()
-        
-        if region_upper not in self.urls:
-            logger.error(f"Unknown region: {region} (uppercase: {region_upper})")
+        if region not in self.urls:
+            logger.error(f"Unknown region: {region}")
             return None
         
         # Setup driver if not already done
@@ -200,11 +196,17 @@ class SAPOpenDocumentDownloader:
             logger.error("Failed to login to BI")
             return None
         
-        url = self.urls[region_upper]
+        url = self.urls[region]
         filename = f"DataDump__{region}_{target_date.strftime('%Y%m%d')}.xlsx"
         final_path = output_dir / filename
         
+        # Determine timeout based on file type
+        is_lookback = '30DAYS' in region
+        download_timeout = self.lookback_timeout if is_lookback else self.timeout
+        
         logger.info(f"Downloading {region} file for {target_date.strftime('%Y-%m-%d')}...")
+        if is_lookback:
+            logger.info(f"Using extended timeout of {download_timeout} seconds for lookback file")
         
         try:
             # Clear download directory
@@ -241,8 +243,8 @@ class SAPOpenDocumentDownloader:
                 # No login form, file might download directly
                 logger.info("No OpenDocument login form found, checking for download...")
             
-            # Wait for download to complete
-            download_complete = self._wait_for_download(timeout=30)
+            # Wait for download to complete with appropriate timeout
+            download_complete = self._wait_for_download(timeout=download_timeout)
             
             if download_complete:
                 # Find the downloaded file
@@ -254,24 +256,27 @@ class SAPOpenDocumentDownloader:
                     output_dir.mkdir(exist_ok=True, parents=True)
                     shutil.move(str(downloaded_file), str(final_path))
                     
-                    logger.info(f"✓ Downloaded {region_upper}: {final_path} ({final_path.stat().st_size:,} bytes)")
+                    logger.info(f"✓ Downloaded {region}: {final_path} ({final_path.stat().st_size:,} bytes)")
                     return str(final_path)
                 else:
                     logger.error(f"Download completed but no Excel file found for {region}")
                     return None
             else:
-                logger.error(f"✗ Download timeout for {region}")
-                self._save_debug_screenshot(f"download_timeout_{region_upper}.png")
+                logger.error(f"✗ Download timeout for {region} after {download_timeout} seconds")
+                self._save_debug_screenshot(f"download_timeout_{region}.png")
                 return None
                 
         except Exception as e:
             logger.error(f"Download error for {region}: {e}")
-            self._save_debug_screenshot(f"download_error_{region_upper}.png")
+            self._save_debug_screenshot(f"download_error_{region}.png")
             return None
     
-    def _wait_for_download(self, timeout: int = 30) -> bool:
+    def _wait_for_download(self, timeout: int = None) -> bool:
         """Wait for download to complete"""
-        logger.info("Waiting for download to complete...")
+        if timeout is None:
+            timeout = self.timeout
+            
+        logger.info(f"Waiting for download to complete (timeout: {timeout}s)...")
         
         for i in range(timeout):
             # Check for Excel files
@@ -287,7 +292,7 @@ class SAPOpenDocumentDownloader:
             
             time.sleep(1)
             
-            if i % 5 == 0:
+            if i % 10 == 0 and i > 0:
                 logger.debug(f"Still waiting... ({i}/{timeout}s)")
         
         return False
@@ -338,6 +343,7 @@ class SAPOpenDocumentDownloader:
                 logger.error(f"{display_name}: Connection failed - {str(e)}")
         
         return results
+    
     def close(self):
         """Close the browser"""
         if self.driver:
@@ -375,7 +381,8 @@ if __name__ == "__main__":
         'username': 'sduggan',
         'password': 'sduggan',
         'download_dir': '/tmp/test_downloads',
-        'headless': True
+        'headless': True,
+        'lookback_timeout': 600  # 10 minutes for lookback files
     }
     
     downloader = SAPOpenDocumentDownloader(config)

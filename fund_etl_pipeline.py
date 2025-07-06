@@ -90,18 +90,15 @@ class FundDataETL:
             # Try to use Selenium-based downloader first
             from sap_download_module import SAPOpenDocumentDownloader
             
-            # Configure Selenium downloader
+            # Configure Selenium downloader - FIXED without duplicates
             sap_config = {
                 'username': self.config.get('auth', {}).get('username', 'sduggan'),
                 'password': self.config.get('auth', {}).get('password', 'sduggan'),
                 'download_dir': str(self.data_dir / 'downloads'),
                 'headless': True,  # Always use headless in container
                 'timeout': self.config.get('download_timeout', 300),
-                'sap_urls': self.config.get('sap_urls', {}),
-                'password': self.config.get('auth', {}).get('password', 'sduggan'),
-                'download_dir': str(self.data_dir / 'downloads'),
-                'headless': True,  # Always use headless in container
-                'timeout': self.config.get('download_timeout', 300)
+                'lookback_timeout': self.config.get('lookback_timeout', 600),  # Also pass lookback timeout
+                'sap_urls': self.config.get('sap_urls', {})  # Pass all URLs for flexibility
             }
             
             downloader = SAPOpenDocumentDownloader(sap_config)
@@ -142,7 +139,7 @@ class FundDataETL:
                 response = requests.get(
                     url,
                     auth=auth,
-                    timeout=300,
+                    timeout=self.config.get('download_timeout', 300),  # Use configured timeout
                     verify=self.config.get('verify_ssl', True)
                 )
                 response.raise_for_status()
@@ -551,17 +548,16 @@ class FundDataETL:
             
             # Download using existing SAP module
             from sap_download_module import SAPOpenDocumentDownloader
+            
+            # Fixed configuration without duplicates
             sap_config = {
                 'username': self.config.get('auth', {}).get('username', 'sduggan'),
                 'password': self.config.get('auth', {}).get('password', 'sduggan'),
                 'download_dir': str(self.data_dir / 'lookback'),
                 'headless': True,
                 'timeout': self.config.get('download_timeout', 300),
-                'sap_urls': self.config.get('sap_urls', {}),  # Pass all SAP URLs
-                'password': self.config.get('auth', {}).get('password', 'sduggan'),
-                'download_dir': str(self.data_dir / 'lookback'),
-                'headless': True,
-                'timeout': self.config.get('download_timeout', 300)
+                'lookback_timeout': self.config.get('lookback_timeout', 600),  # Extended timeout for lookback files
+                'sap_urls': self.config.get('sap_urls', {})  # Pass all SAP URLs
             }
             
             downloader = SAPOpenDocumentDownloader(sap_config)
@@ -571,8 +567,11 @@ class FundDataETL:
                 lookback_dir = self.data_dir / 'lookback'
                 lookback_dir.mkdir(exist_ok=True)
                 
+                # Log the extended timeout being used
+                logger.info(f"Downloading {region} lookback file with extended timeout of {sap_config['lookback_timeout']} seconds")
+                
                 filepath = downloader.download_file(
-                    f"{region.upper()}_30DAYS",  # Use uppercase to match SAP module expectations
+                    f"{region}_30DAYS", 
                     datetime.now(), 
                     lookback_dir
                 )
