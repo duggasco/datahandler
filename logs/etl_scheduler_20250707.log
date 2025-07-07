@@ -14006,3 +14006,282 @@
 2025-07-07 16:47:03,020 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
 2025-07-07 16:47:03,024 - fund_etl_pipeline - INFO - Successfully loaded 992 records for EMEA
 2025-07-07 16:47:03,024 - fund_etl_pipeline - INFO - Successfully updated 0 records and inserted 29151 new records for EMEA
+2025-07-07 17:37:36,807 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 17:37:37,209 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 17:37:37,209 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 17:37:39,651 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 17:37:39,651 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 17:37:39,651 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 17:37:42,781 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 17:37:49,084 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 17:38:06,090 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,441,467 bytes)
+2025-07-07 17:38:10,733 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records, assigned Region=AMRS
+2025-07-07 17:38:10,798 - sap_download_module - INFO - Browser closed
+2025-07-07 17:38:10,826 - fund_etl_pipeline - INFO - Validating AMRS against 30 dates from lookback file
+2025-07-07 17:38:10,838 - fund_etl_pipeline - INFO - Using change threshold: 5.0% for fields: ['share_class_assets', 'portfolio_assets', 'one_day_yield', 'seven_day_yield']
+2025-07-07 17:38:10,847 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:10,848 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:11,067 - fund_etl_pipeline - INFO - Comparison complete: 863 records with changes detected
+2025-07-07 17:38:11,076 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:11,076 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:11,301 - fund_etl_pipeline - INFO - Comparison complete: 863 records with changes detected
+2025-07-07 17:38:11,310 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:11,311 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:11,572 - fund_etl_pipeline - INFO - Comparison complete: 863 records with changes detected
+2025-07-07 17:38:11,586 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:11,586 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:11,949 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:11,964 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:11,964 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:12,334 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:12,349 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:12,349 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:12,733 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:12,753 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:12,753 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:13,105 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:13,123 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:13,123 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:13,489 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:13,506 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:13,506 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:13,878 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:13,898 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:13,898 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:14,309 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:14,329 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:14,329 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:14,701 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:14,719 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:14,719 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:15,078 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:15,097 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:15,097 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:15,490 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:15,509 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 864 records
+2025-07-07 17:38:15,509 - fund_etl_pipeline - DEBUG - Comparing 864 records from lookback file
+2025-07-07 17:38:15,877 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:15,898 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 865 records
+2025-07-07 17:38:15,898 - fund_etl_pipeline - DEBUG - Comparing 865 records from lookback file
+2025-07-07 17:38:16,275 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:16,293 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 866 records
+2025-07-07 17:38:16,293 - fund_etl_pipeline - DEBUG - Comparing 866 records from lookback file
+2025-07-07 17:38:16,664 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:16,682 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 866 records
+2025-07-07 17:38:16,682 - fund_etl_pipeline - DEBUG - Comparing 866 records from lookback file
+2025-07-07 17:38:17,044 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:17,059 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 866 records
+2025-07-07 17:38:17,059 - fund_etl_pipeline - DEBUG - Comparing 866 records from lookback file
+2025-07-07 17:38:17,428 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:17,445 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 858 records
+2025-07-07 17:38:17,445 - fund_etl_pipeline - DEBUG - Comparing 858 records from lookback file
+2025-07-07 17:38:17,817 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:17,831 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 858 records
+2025-07-07 17:38:17,832 - fund_etl_pipeline - DEBUG - Comparing 858 records from lookback file
+2025-07-07 17:38:18,209 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:18,225 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 860 records
+2025-07-07 17:38:18,225 - fund_etl_pipeline - DEBUG - Comparing 860 records from lookback file
+2025-07-07 17:38:18,606 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:18,621 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 861 records
+2025-07-07 17:38:18,621 - fund_etl_pipeline - DEBUG - Comparing 861 records from lookback file
+2025-07-07 17:38:19,000 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:19,021 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 861 records
+2025-07-07 17:38:19,021 - fund_etl_pipeline - DEBUG - Comparing 861 records from lookback file
+2025-07-07 17:38:19,389 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:19,405 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 861 records
+2025-07-07 17:38:19,405 - fund_etl_pipeline - DEBUG - Comparing 861 records from lookback file
+2025-07-07 17:38:19,782 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:19,797 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 861 records
+2025-07-07 17:38:19,797 - fund_etl_pipeline - DEBUG - Comparing 861 records from lookback file
+2025-07-07 17:38:20,158 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:20,174 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 862 records
+2025-07-07 17:38:20,174 - fund_etl_pipeline - DEBUG - Comparing 862 records from lookback file
+2025-07-07 17:38:20,575 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:20,590 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 862 records
+2025-07-07 17:38:20,590 - fund_etl_pipeline - DEBUG - Comparing 862 records from lookback file
+2025-07-07 17:38:20,946 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:20,964 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 862 records
+2025-07-07 17:38:20,964 - fund_etl_pipeline - DEBUG - Comparing 862 records from lookback file
+2025-07-07 17:38:21,324 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:21,342 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 862 records
+2025-07-07 17:38:21,342 - fund_etl_pipeline - DEBUG - Comparing 862 records from lookback file
+2025-07-07 17:38:21,716 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:21,731 - fund_etl_pipeline - DEBUG - Filtered lookback data for AMRS: 862 records
+2025-07-07 17:38:21,731 - fund_etl_pipeline - DEBUG - Comparing 862 records from lookback file
+2025-07-07 17:38:22,093 - fund_etl_pipeline - INFO - Comparison complete: 0 records with changes detected
+2025-07-07 17:38:22,093 - fund_etl_pipeline - INFO - Validation summary for AMRS:
+2025-07-07 17:38:22,093 - fund_etl_pipeline - INFO -   - Total records compared: 25889
+2025-07-07 17:38:22,093 - fund_etl_pipeline - INFO -   - Missing dates: 0
+2025-07-07 17:38:22,093 - fund_etl_pipeline - INFO -   - Records with changes: 2589
+2025-07-07 17:38:22,093 - fund_etl_pipeline - DEBUG - Sample of detected changes:
+2025-07-07 17:38:22,095 - fund_etl_pipeline - INFO - Running selective update for AMRS
+2025-07-07 17:38:22,120 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,147 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,170 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,193 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,218 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,243 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,265 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,290 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,316 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,344 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,370 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,398 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,420 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,443 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,469 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,495 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,522 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,548 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,573 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,595 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,619 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,645 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,670 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,695 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,720 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,747 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,772 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,795 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,819 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,841 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,863 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,888 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,912 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,932 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,958 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:22,983 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,009 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,031 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,059 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,081 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,103 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,130 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,157 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,179 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,208 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,233 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,258 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,283 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,312 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,336 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,366 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,389 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,411 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,437 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,462 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,491 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,520 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,547 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,570 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,591 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,616 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,636 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,660 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,691 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,715 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,742 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,766 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,793 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,820 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,845 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,871 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,895 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,921 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,945 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,966 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:23,987 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,008 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,029 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,051 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,074 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,102 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,123 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,152 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,178 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,198 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,223 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,247 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,271 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,298 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,324 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,353 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,377 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,400 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,424 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,447 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,477 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,500 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,520 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,549 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,578 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,599 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,625 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,651 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,675 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,698 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,725 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,753 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,776 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,799 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,824 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,847 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,872 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,900 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,924 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,949 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,978 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:24,999 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,022 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,046 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,071 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,095 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,116 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,147 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,168 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,193 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,219 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,244 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,269 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,300 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,324 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,353 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,379 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,401 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,423 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,448 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,471 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,500 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,534 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,555 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,582 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,605 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,628 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,653 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,683 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,708 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,734 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,755 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,780 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,801 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,824 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,850 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,872 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,894 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,917 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,944 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,968 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:25,995 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,020 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,046 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,071 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,098 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,120 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,145 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,168 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,192 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,224 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,250 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,272 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,294 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 17:38:26,321 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
