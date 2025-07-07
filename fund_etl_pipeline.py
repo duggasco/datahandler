@@ -606,7 +606,9 @@ class FundDataETL:
                 
                 if filepath and os.path.exists(filepath):
                     df = pd.read_excel(filepath)
-                    logger.info(f"Downloaded {region} lookback file with {len(df)} records")
+                    # Add region column to the lookback data
+                    df['Region'] = region
+                    logger.info(f"Downloaded {region} lookback file with {len(df)} records, assigned Region={region}")
                     return df
                 else:
                     logger.error(f"Failed to download {region} lookback file")
@@ -685,6 +687,19 @@ class FundDataETL:
                     
                     # Get lookback data for this date
                     lookback_date_data = lookback_df[lookback_df['Date'].dt.date == date].copy()
+                    
+                    # If lookback data has a region column, filter by it
+                    if 'Region' in lookback_date_data.columns:
+                        lookback_date_data = lookback_date_data[lookback_date_data['Region'] == region]
+                        logger.debug(f"Filtered lookback data for {region}: {len(lookback_date_data)} records")
+                    elif 'region' in lookback_date_data.columns:
+                        lookback_date_data = lookback_date_data[lookback_date_data['region'] == region]
+                        logger.debug(f"Filtered lookback data for {region}: {len(lookback_date_data)} records")
+                    else:
+                        # Log warning if no region column found - lookback file should be region-specific
+                        if len(lookback_date_data) > 0:
+                            logger.warning(f"No region column found in lookback data. Processing {len(lookback_date_data)} records for {region}. "
+                                         f"Ensure the lookback file is specific to {region} region.")
                     
                     total_comparisons += len(lookback_date_data)
                     

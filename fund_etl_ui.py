@@ -360,7 +360,7 @@ HTML_TEMPLATE = '''
                 <input type="date" id="dateFilter" onchange="filterFundData()">
                 <select id="currencyFilter" onchange="filterFundData()">
                     <option value="">All Currencies</option>
-                    <option value="USD">USD</option>
+                    <option value="US Dollar">US Dollar</option>
                     <option value="EUR">EUR</option>
                     <option value="GBP">GBP</option>
                 </select>

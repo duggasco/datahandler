@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-07-07T15:43:55.046904",
+  "timestamp": "2025-07-07T17:28:23.668760",
   "status": "degraded",
   "checks": {
     "database": "ok",
     "recent_runs": "ok",
-    "missing_data": "warning: 7 missing dates",
+    "missing_data": "ok",
     "disk_space": "low: 0.0MB free"
   }
 }
