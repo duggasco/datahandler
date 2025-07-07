@@ -113,6 +113,23 @@ case "$1" in
         echo "UI available at http://localhost:8080"
         ;;
     
+    "ui-start")
+        echo "Starting UI only..."
+        docker compose --profile ui up -d fund-etl-ui
+        echo "UI available at http://localhost:8080"
+        ;;
+    
+    "ui-stop")
+        echo "Stopping UI..."
+        docker compose --profile ui stop fund-etl-ui
+        ;;
+    
+    "ui-rebuild")
+        echo "Rebuilding UI container..."
+        docker compose --profile ui build fund-etl-ui
+        echo "UI container rebuilt. Run '$0 ui-start' to start it."
+        ;;
+    
     "build")
         echo "Building containers..."
         docker compose build
@@ -247,7 +264,10 @@ for region in ['AMRS', 'EMEA']:
         echo "  run                Run ETL manually for today"
         echo "  test               Run test suite"
         echo "  report             Generate data quality report"
-        echo "  ui                 Start with web UI"
+        echo "  ui                 Start ETL and web UI"
+        echo "  ui-start           Start web UI only"
+        echo "  ui-stop            Stop web UI"
+        echo "  ui-rebuild         Rebuild UI container"
         echo "  build              Build/rebuild containers"
         echo "  shell              Open interactive shell"
         echo ""
@@ -280,7 +300,7 @@ for region in ['AMRS', 'EMEA']:
         echo ""
         echo "Common commands:"
         echo "  start, stop, clean, restart, status, quick-status, ps, logs, logs-ui"
-        echo "  run, test, report, ui, build, shell"
+        echo "  run, test, report, ui, ui-start, ui-stop, ui-rebuild, build, shell"
         echo ""
         echo "Validation commands:"
         echo "  validate, validate-full, validate-dry-run, validate-verbose"
