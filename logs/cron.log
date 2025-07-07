@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/app/fund_etl_scheduler.py", line 22, in <module>
+    from fund_etl_pipeline import FundDataETL
+  File "/app/fund_etl_pipeline.py", line 26, in <module>
+    logging.FileHandler('fund_etl.log'),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/logging/__init__.py", line 1181, in __init__
+    StreamHandler.__init__(self, self._open())
+                                 ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/logging/__init__.py", line 1213, in _open
+    return open_func(self.baseFilename, self.mode,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/app/fund_etl.log'

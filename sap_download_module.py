@@ -53,7 +53,16 @@ class SAPOpenDocumentDownloader:
         # URLs from configuration - now supports dynamic URL loading
         # Check if URLs are provided in config, otherwise use defaults
         if 'sap_urls' in config:
-            self.urls = config['sap_urls']
+
+            # Normalize URL keys to handle both uppercase and lowercase
+
+            self.urls = {}
+
+            for key, value in config['sap_urls'].items():
+
+                # Store with uppercase key for consistency
+
+                self.urls[key.upper()] = value
         else:
             # Default URLs for backward compatibility
             self.urls = {
@@ -184,8 +193,15 @@ class SAPOpenDocumentDownloader:
         Returns:
             Path to downloaded file or None if failed
         """
-        if region not in self.urls:
-            logger.error(f"Unknown region: {region}")
+        # Normalize region to uppercase for consistency
+
+        region_upper = region.upper()
+
+        
+
+        if region_upper not in self.urls:
+            logger.error(f"Unknown region: {region} (normalized: {region_upper})")
+            logger.error(f"Available regions: {list(self.urls.keys())}")
             return None
         
         # Setup driver if not already done
@@ -196,12 +212,12 @@ class SAPOpenDocumentDownloader:
             logger.error("Failed to login to BI")
             return None
         
-        url = self.urls[region]
+        url = self.urls[region_upper]
         filename = f"DataDump__{region}_{target_date.strftime('%Y%m%d')}.xlsx"
         final_path = output_dir / filename
         
         # Determine timeout based on file type
-        is_lookback = '30DAYS' in region
+        is_lookback = '30DAYS' in region_upper
         download_timeout = self.lookback_timeout if is_lookback else self.timeout
         
         logger.info(f"Downloading {region} file for {target_date.strftime('%Y-%m-%d')}...")

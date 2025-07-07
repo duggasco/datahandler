@@ -571,7 +571,7 @@ class FundDataETL:
                 logger.info(f"Downloading {region} lookback file with extended timeout of {sap_config['lookback_timeout']} seconds")
                 
                 filepath = downloader.download_file(
-                    f"{region}_30DAYS", 
+                    f"{region.upper()}_30DAYS", 
                     datetime.now(), 
                     lookback_dir
                 )

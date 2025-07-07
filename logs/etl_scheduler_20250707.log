@@ -1,0 +1,40 @@
+2025-07-07 10:01:20,164 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 10:01:20,164 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-07 10:01:20,164 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-07 10:01:20,164 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 10:01:20,164 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-07 10:01:20,164 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-07 10:17:35,133 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 10:17:35,133 - sap_download_module - ERROR - Unknown region: AMRS_30DAYS
+2025-07-07 10:17:35,133 - fund_etl_pipeline - ERROR - Failed to download AMRS lookback file
+2025-07-07 10:17:35,133 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 10:17:35,133 - sap_download_module - ERROR - Unknown region: EMEA_30DAYS
+2025-07-07 10:17:35,133 - fund_etl_pipeline - ERROR - Failed to download EMEA lookback file
+2025-07-07 10:21:28,334 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 10:21:29,088 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:21:29,089 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:21:31,540 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:21:31,540 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 10:21:31,541 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:21:34,772 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:21:41,416 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:22:02,423 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,864 bytes)
+2025-07-07 10:22:09,066 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 10:22:09,216 - sap_download_module - INFO - Browser closed
+2025-07-07 10:22:09,790 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-21
+2025-07-07 10:22:09,818 - fund_etl_pipeline - ERROR - Database load failed: attempt to write a readonly database
+2025-07-07 10:22:09,818 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: attempt to write a readonly database
+2025-07-07 10:22:09,820 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 10:22:10,421 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:22:10,421 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:22:12,820 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:22:12,820 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 10:22:12,820 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:22:16,014 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:22:21,737 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:22:41,867 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,872 bytes)
+2025-07-07 10:22:47,986 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29133 records
+2025-07-07 10:22:48,060 - sap_download_module - INFO - Browser closed
+2025-07-07 10:22:48,155 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 10:22:48,176 - fund_etl_pipeline - ERROR - Database load failed: attempt to write a readonly database
+2025-07-07 10:22:48,176 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: attempt to write a readonly database
