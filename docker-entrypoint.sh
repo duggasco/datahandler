@@ -72,6 +72,7 @@ init_config() {
     },
     "validation": {
         "enabled": true,
+        "update_mode": "selective",
         "change_threshold_percent": 5.0,
         "critical_fields": [
             "share_class_assets",
@@ -107,6 +108,7 @@ EOF
         
         chown etluser:etluser /config/*.json
         echo "Default configuration created with credentials sduggan/sduggan."
+        echo "Validation mode set to 'selective' (only updates changed records)."
     fi
 }
 
@@ -315,9 +317,21 @@ case "$1" in
         ;;
     
     "validate")
-        echo "Running 30-day lookback validation..."
+        echo "Running 30-day lookback validation with selective updates..."
         fix_db_permissions
         exec su -c "cd /app && python fund_etl_scheduler.py --validate" etluser
+        ;;
+    
+    "validate-verbose")
+        echo "Running 30-day lookback validation with verbose output..."
+        fix_db_permissions
+        exec su -c "cd /app && LOG_LEVEL=DEBUG python fund_etl_scheduler.py --validate" etluser
+        ;;
+    
+    "validate-full")
+        echo "Running 30-day lookback validation with full replacement..."
+        fix_db_permissions
+        exec su -c "cd /app && python fund_etl_scheduler.py --validate-full" etluser
         ;;
     
     "report")

@@ -11,7 +11,7 @@
     },
     "db_path": "/data/fund_data.db",
     "data_dir": "/data",
-    "download_timeout": 30,
+    "download_timeout": 300,
     "lookback_timeout": 1200,
     "verify_ssl": true,
     "email_alerts": {
@@ -23,6 +23,7 @@
     },
     "validation": {
         "enabled": true,
+        "update_mode": "selective",
         "change_threshold_percent": 5.0,
         "critical_fields": [
             "share_class_assets",

@@ -2,6 +2,7 @@
 """
 Fund ETL Scheduler
 Orchestrates daily ETL runs with error handling, notifications, and recovery
+Now supports selective vs full validation modes
 """
 
 import os
@@ -15,6 +16,7 @@ from email.mime.multipart import MIMEMultipart
 import json
 import traceback
 from pathlib import Path
+from typing import Optional
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -257,6 +259,82 @@ class ETLScheduler:
         
         self.logger.info(f"Historical load complete: {success_count}/{total_count} successful")
 
+    def run_validation(self, update_mode: Optional[str] = None):
+        """
+        Run 30-day lookback validation with configurable update mode
+        
+        Args:
+            update_mode: 'selective' or 'full' - overrides config setting
+        """
+        print("Running 30-day lookback validation...")
+        
+        # Set logging to DEBUG for validation to see detailed comparison info
+        logging.getLogger('fund_etl_pipeline').setLevel(logging.DEBUG)
+        
+        # Check environment variable for update mode override
+        if update_mode is None:
+            update_mode = os.environ.get('VALIDATION_MODE', None)
+        
+        validation_summary = []
+        
+        for region in ['AMRS', 'EMEA']:
+            print(f"\nValidating {region}...")
+            try:
+                lookback_df = self.etl.download_lookback_file(region)
+                if lookback_df is not None:
+                    results = self.etl.validate_against_lookback(region, lookback_df)
+                    
+                    # Display validation results
+                    print(f"Total records in lookback file: {len(lookback_df)}")
+                    print(f"Missing dates: {results['summary']['missing_dates_count']}")
+                    print(f"Changed records: {results['summary']['changed_records_count']}")
+                    
+                    if results['summary']['requires_update']:
+                        # Determine update mode
+                        mode = update_mode or self.etl.config.get('validation', {}).get('update_mode', 'selective')
+                        print(f"Updating database with corrected data using {mode} mode...")
+                        
+                        # Update with specified mode
+                        self.etl.update_from_lookback(region, lookback_df, results, update_mode=mode)
+                        
+                        # Create summary message
+                        if mode == 'selective':
+                            # Count actual changes made
+                            updated_count = len([c for c in results['changed_records'] if c['type'] == 'value_change'])
+                            inserted_count = len([c for c in results['changed_records'] if c['type'] == 'new_fund'])
+                            validation_summary.append(
+                                f"{region}: {mode.capitalize()} update - "
+                                f"{results['summary']['missing_dates_count']} missing dates added, "
+                                f"{updated_count} records updated, {inserted_count} new funds added"
+                            )
+                        else:
+                            validation_summary.append(
+                                f"{region}: Full replacement - "
+                                f"{results['summary']['missing_dates_count']} missing dates, "
+                                f"{results['summary']['changed_records_count']} changed records"
+                            )
+                    else:
+                        validation_summary.append(f"{region}: No updates required")
+                else:
+                    print(f"Failed to download lookback file for {region}")
+                    validation_summary.append(f"{region}: Failed to download lookback file")
+            except Exception as e:
+                print(f"Error validating {region}: {str(e)}")
+                validation_summary.append(f"{region}: Error - {str(e)}")
+        
+        print("\n" + "="*60)
+        print("Validation Summary:")
+        for summary in validation_summary:
+            print(f"  - {summary}")
+        print("="*60)
+        
+        # Generate validation report
+        validation_report = self.monitor.generate_validation_report()
+        print(validation_report)
+        
+        # Reset logging level
+        logging.getLogger('fund_etl_pipeline').setLevel(logging.INFO)
+
 
 # Scheduler configuration template - FIXED WITH ABSOLUTE PATHS
 SCHEDULER_CONFIG_TEMPLATE = {
@@ -313,7 +391,11 @@ def main():
     parser.add_argument('--setup-cron', action='store_true',
                        help='Show cron setup instructions')
     parser.add_argument('--validate', action='store_true',
-                       help='Run 30-day lookback validation only')
+                       help='Run 30-day lookback validation with selective updates')
+    parser.add_argument('--validate-full', action='store_true',
+                       help='Run 30-day lookback validation with full replacement')
+    parser.add_argument('--update-mode', choices=['selective', 'full'],
+                       help='Override validation update mode')
     
     args = parser.parse_args()
     
@@ -341,41 +423,14 @@ def main():
         scheduler.run_historical_load(args.historical[0], args.historical[1])
     
     elif args.validate:
-        print("Running 30-day lookback validation...")
-        scheduler = ETLScheduler()
-        etl = scheduler.etl
-        validation_summary = []
-        
-        for region in ['AMRS', 'EMEA']:
-            print(f"\nValidating {region}...")
-            try:
-                lookback_df = etl.download_lookback_file(region)
-                if lookback_df is not None:
-                    results = etl.validate_against_lookback(region, lookback_df)
-                    print(f"Missing dates: {results['summary']['missing_dates_count']}")
-                    print(f"Changed records: {results['summary']['changed_records_count']}")
-                    
-                    if results['summary']['requires_update']:
-                        print("Updating database with corrected data...")
-                        etl.update_from_lookback(region, lookback_df, results)
-                        print("Update complete.")
-                        validation_summary.append(f"{region}: Updated {results['summary']['missing_dates_count']} missing dates, {results['summary']['changed_records_count']} changed records")
-                    else:
-                        validation_summary.append(f"{region}: No updates required")
-                else:
-                    print(f"Failed to download lookback file for {region}")
-                    validation_summary.append(f"{region}: Failed to download lookback file")
-            except Exception as e:
-                print(f"Error validating {region}: {str(e)}")
-                validation_summary.append(f"{region}: Error - {str(e)}")
-        
-        print("\n" + "="*60)
-        print("Validation Summary:")
-        for summary in validation_summary:
-            print(f"  - {summary}")
-        print("="*60)
+        # Default validation with selective mode
+        scheduler.run_validation(update_mode=args.update_mode or 'selective')
+    
+    elif args.validate_full:
+        # Full replacement validation
+        scheduler.run_validation(update_mode='full')
+    
     else:
-        print(f"Failed to download lookback file for {region}")
         parser.print_help()
 
 

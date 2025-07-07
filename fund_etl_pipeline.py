@@ -3,6 +3,7 @@
 Fund Data ETL Pipeline
 Downloads daily fund data files for AMRS and EMEA regions, performs data quality checks,
 and loads to SQLite database with proper date handling and holiday logic.
+Now includes selective update capability for validation to only update materially changed records.
 """
 
 import os
@@ -26,6 +27,12 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+# Check if LOG_LEVEL environment variable is set
+log_level = os.environ.get('LOG_LEVEL', 'INFO').upper()
+if log_level in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
+    logging.getLogger().setLevel(getattr(logging, log_level))
+
 logger = logging.getLogger(__name__)
 
 class FundDataETL:
@@ -395,6 +402,10 @@ class FundDataETL:
             df_load = df.copy()
             df_load['region'] = region
             
+            # CRITICAL: Ensure Fund Code is string before loading
+            if 'Fund Code' in df_load.columns:
+                df_load['Fund Code'] = df_load['Fund Code'].astype(str).str.strip()
+            
             # Rename columns to match database schema
             column_mapping = {
                 'Date': 'date',
@@ -626,13 +637,15 @@ class FundDataETL:
         try:
             # Clean and prepare lookback data
             lookback_df['Date'] = pd.to_datetime(lookback_df['Date'], errors='coerce')
-            lookback_df['Fund Code'] = lookback_df['Fund Code'].apply(
-                lambda x: x.strip() if isinstance(x, str) else x
-            )
+            
+            # CRITICAL FIX: Ensure fund codes are strings in both datasets
+            lookback_df['Fund Code'] = lookback_df['Fund Code'].astype(str).str.strip()
             
             # Get unique dates from lookback file
             lookback_dates = lookback_df['Date'].dt.date.unique()
             validation_results['summary']['total_dates_checked'] = len(lookback_dates)
+            
+            logger.info(f"Validating {region} against {len(lookback_dates)} dates from lookback file")
             
             # Check for missing dates in database
             for date in lookback_dates:
@@ -648,11 +661,15 @@ class FundDataETL:
                     validation_results['summary']['missing_dates_count'] += 1
                     validation_results['summary']['requires_update'] = True
             
-            # Check for changed records
+            # Get validation configuration
             change_threshold = self.config.get('validation', {}).get('change_threshold_percent', 5.0)
             critical_fields = self.config.get('validation', {}).get('critical_fields', 
                 ['share_class_assets', 'portfolio_assets', 'one_day_yield', 'seven_day_yield'])
             
+            logger.info(f"Using change threshold: {change_threshold}% for fields: {critical_fields}")
+            
+            # Check for changed records
+            total_comparisons = 0
             for date in lookback_dates:
                 if date.strftime('%Y-%m-%d') not in validation_results['missing_dates']:
                     # Get data from database for this date
@@ -663,8 +680,13 @@ class FundDataETL:
                     """
                     db_data = pd.read_sql_query(db_query, conn)
                     
+                    # CRITICAL FIX: Ensure database fund codes are also strings
+                    db_data['fund_code'] = db_data['fund_code'].astype(str).str.strip()
+                    
                     # Get lookback data for this date
                     lookback_date_data = lookback_df[lookback_df['Date'].dt.date == date].copy()
+                    
+                    total_comparisons += len(lookback_date_data)
                     
                     # Compare records
                     changes = self._compare_dataframes(
@@ -676,6 +698,23 @@ class FundDataETL:
                         validation_results['changed_records'].extend(changes)
                         validation_results['summary']['changed_records_count'] += len(changes)
                         validation_results['summary']['requires_update'] = True
+            
+            # Log validation summary
+            logger.info(f"Validation summary for {region}:")
+            logger.info(f"  - Total records compared: {total_comparisons}")
+            logger.info(f"  - Missing dates: {validation_results['summary']['missing_dates_count']}")
+            logger.info(f"  - Records with changes: {validation_results['summary']['changed_records_count']}")
+            
+            # Log sample of changes for debugging
+            if validation_results['changed_records']:
+                logger.debug("Sample of detected changes:")
+                for i, change in enumerate(validation_results['changed_records'][:3]):
+                    if change['type'] == 'value_change':
+                        logger.debug(f"  {i+1}. Fund {change['fund_code']} on {change['date']}:")
+                        for field_change in change['changed_fields']:
+                            logger.debug(f"     - {field_change['field']}: "
+                                       f"{field_change.get('db_value')} -> {field_change.get('lookback_value')} "
+                                       f"({field_change.get('pct_change', 0):.2f}% change)")
             
         except Exception as e:
             logger.error(f"Validation error for {region}: {str(e)}")
@@ -700,9 +739,13 @@ class FundDataETL:
             'seven_day_yield': '7-DSY (dly)'
         }
         
+        # Add logging for debugging
+        logger.debug(f"Comparing {len(lookback_df)} records from lookback file")
+        
         # Process each fund in lookback data
         for _, lookback_row in lookback_df.iterrows():
-            fund_code = lookback_row['Fund Code']
+            # Ensure fund code is string
+            fund_code = str(lookback_row['Fund Code']).strip()
             
             # Find corresponding database record
             db_record = db_df[db_df['fund_code'] == fund_code]
@@ -713,11 +756,15 @@ class FundDataETL:
                     'type': 'new_fund',
                     'fund_code': fund_code,
                     'date': lookback_row['Date'].strftime('%Y-%m-%d'),
-                    'details': 'Fund not found in database'
+                    'details': 'Fund not found in database',
+                    'lookback_row': lookback_row  # Store full row for insertion
                 })
                 continue
                 
             db_record = db_record.iloc[0]
+            
+            # Track which fields have changed for this record
+            changed_fields = []
             
             # Check critical fields for changes
             for db_field in critical_fields:
@@ -726,49 +773,98 @@ class FundDataETL:
                     
                     if excel_field in lookback_row.index:
                         db_value = db_record[db_field]
-                        lookback_value = pd.to_numeric(
-                            lookback_row[excel_field], errors='coerce'
-                        )
+                        lookback_value = lookback_row[excel_field]
                         
-                        # Skip if either value is null
+                        # Convert lookback value to numeric, handling special cases
+                        if pd.isna(lookback_value) or lookback_value == '-' or lookback_value == '':
+                            lookback_value = None
+                        else:
+                            lookback_value = pd.to_numeric(lookback_value, errors='coerce')
+                        
+                        # Convert database value to float for comparison if not null
+                        if pd.notna(db_value):
+                            db_value = float(db_value)
+                        
+                        # Skip if both values are null
                         if pd.isna(db_value) and pd.isna(lookback_value):
                             continue
                         
                         # Flag if one is null and other isn't
                         if pd.isna(db_value) != pd.isna(lookback_value):
-                            changes.append({
-                                'type': 'null_mismatch',
-                                'fund_code': fund_code,
-                                'date': db_record['date'],
+                            logger.debug(f"Fund {fund_code}, field {db_field}: null mismatch - "
+                                       f"DB: {db_value}, Lookback: {lookback_value}")
+                            changed_fields.append({
                                 'field': db_field,
                                 'db_value': db_value,
                                 'lookback_value': lookback_value
                             })
                             continue
                         
-                        # Check percentage change for numeric values
+                        # Check for material changes in numeric values
                         if not pd.isna(db_value) and not pd.isna(lookback_value):
-                            if db_value != 0:
+                            # Use a small epsilon for float comparison to handle precision issues
+                            epsilon = 1e-10
+                            
+                            # First check if values are effectively equal (handles float precision)
+                            if abs(db_value - lookback_value) < epsilon:
+                                continue
+                            
+                            # Calculate percentage change
+                            if abs(db_value) > epsilon:  # db_value is not effectively zero
                                 pct_change = abs((lookback_value - db_value) / db_value * 100)
                                 if pct_change > threshold_pct:
-                                    changes.append({
-                                        'type': 'value_change',
-                                        'fund_code': fund_code,
-                                        'date': db_record['date'],
+                                    logger.debug(f"Fund {fund_code}, field {db_field}: "
+                                               f"{pct_change:.2f}% change - "
+                                               f"DB: {db_value}, Lookback: {lookback_value}")
+                                    changed_fields.append({
                                         'field': db_field,
                                         'db_value': db_value,
                                         'lookback_value': lookback_value,
                                         'pct_change': pct_change
                                     })
+                            elif abs(lookback_value) > epsilon:  # db_value is ~0 but lookback isn't
+                                logger.debug(f"Fund {fund_code}, field {db_field}: "
+                                           f"zero to non-zero change - "
+                                           f"DB: {db_value}, Lookback: {lookback_value}")
+                                changed_fields.append({
+                                    'field': db_field,
+                                    'db_value': db_value,
+                                    'lookback_value': lookback_value
+                                })
+            
+            # If any fields changed, record the change
+            if changed_fields:
+                changes.append({
+                    'type': 'value_change',
+                    'fund_code': fund_code,
+                    'date': db_record['date'],
+                    'changed_fields': changed_fields,
+                    'lookback_row': lookback_row  # Store full row for update
+                })
         
+        logger.info(f"Comparison complete: {len(changes)} records with changes detected")
         return changes
 
     def update_from_lookback(self, region: str, lookback_df: pd.DataFrame, 
-                            validation_results: Dict[str, Any]):
-        """Update database with data from lookback file where changes detected"""
+                            validation_results: Dict[str, Any], update_mode: Optional[str] = None):
+        """
+        Update database with data from lookback file where changes detected
+        
+        Args:
+            region: Region to update
+            lookback_df: DataFrame with lookback data
+            validation_results: Results from validation
+            update_mode: 'selective' (default) or 'full' - override config setting
+        """
         if not validation_results['summary']['requires_update']:
             logger.info(f"No updates required for {region}")
             return
+        
+        # Determine update mode from config or parameter
+        if update_mode is None:
+            update_mode = self.config.get('validation', {}).get('update_mode', 'selective')
+        
+        logger.info(f"Running {update_mode} update for {region}")
         
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
@@ -778,8 +874,10 @@ class FundDataETL:
             cursor.execute("BEGIN TRANSACTION")
             
             updates_made = 0
+            records_updated = 0
+            records_inserted = 0
             
-            # Process missing dates
+            # Process missing dates (always full insert)
             for missing_date in validation_results['missing_dates']:
                 date_data = lookback_df[
                     lookback_df['Date'].dt.strftime('%Y-%m-%d') == missing_date
@@ -793,48 +891,80 @@ class FundDataETL:
                         datetime.strptime(missing_date, '%Y-%m-%d'))
                     self.load_to_database(date_data_processed, region, 
                         datetime.strptime(missing_date, '%Y-%m-%d'), conn)
-                    updates_made += len(date_data)
+                    records_inserted += len(date_data)
             
-            # Process changed records
-            changed_dates = set()
-            for change in validation_results['changed_records']:
-                changed_dates.add(change['date'])
-            
-            for date_str in changed_dates:
-                # Delete existing data for this date
-                cursor.execute("""
-                    DELETE FROM fund_data 
-                    WHERE date = ? AND region = ?
-                """, (date_str, region))
+            # Process changed records based on update mode
+            if update_mode == 'selective':
+                # SELECTIVE MODE: Update only specific changed records
+                for change in validation_results['changed_records']:
+                    if change['type'] == 'new_fund':
+                        # Insert new fund
+                        self._insert_single_record(conn, cursor, change['lookback_row'], 
+                                                 region, change['date'])
+                        records_inserted += 1
+                    elif change['type'] == 'value_change':
+                        # Update existing fund with only changed fields
+                        self._update_single_record(conn, cursor, change['lookback_row'], 
+                                                 region, change['date'], change['changed_fields'])
+                        records_updated += 1
                 
-                # If this is Friday, also delete weekend dates
-                check_date = pd.to_datetime(date_str)
-                if check_date.weekday() == 4:
-                    saturday = (check_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
-                    sunday = (check_date + pd.Timedelta(days=2)).strftime('%Y-%m-%d')
+                updates_made = records_updated + records_inserted
+                
+            else:
+                # FULL MODE: Replace all data for changed dates (original behavior)
+                changed_dates = set()
+                for change in validation_results['changed_records']:
+                    changed_dates.add(change['date'])
+                
+                for date_str in changed_dates:
+                    # Delete existing data for this date
                     cursor.execute("""
-                    DELETE FROM fund_data
-                    WHERE date IN (?, ?) AND region = ?
-                    """, (saturday, sunday, region))
-                
-                # Load new data from lookback file
-                date_data = lookback_df[
-                    lookback_df['Date'].dt.strftime('%Y-%m-%d') == date_str
-                ]
-                
-                if len(date_data) > 0:
-                    logger.info(f"Updating {len(date_data)} records for {date_str}")
-                    date_data_processed = self.process_dates(date_data, 
-                        datetime.strptime(date_str, '%Y-%m-%d'))
-                    self.load_to_database(date_data_processed, region, 
-                        datetime.strptime(date_str, '%Y-%m-%d'), conn)
-                    updates_made += len(date_data)
+                        DELETE FROM fund_data 
+                        WHERE date = ? AND region = ?
+                    """, (date_str, region))
+                    
+                    # If this is Friday, also delete weekend dates
+                    check_date = pd.to_datetime(date_str)
+                    if check_date.weekday() == 4:
+                        saturday = (check_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+                        sunday = (check_date + pd.Timedelta(days=2)).strftime('%Y-%m-%d')
+                        cursor.execute("""
+                        DELETE FROM fund_data
+                        WHERE date IN (?, ?) AND region = ?
+                        """, (saturday, sunday, region))
+                    
+                    # Load new data from lookback file
+                    date_data = lookback_df[
+                        lookback_df['Date'].dt.strftime('%Y-%m-%d') == date_str
+                    ]
+                    
+                    if len(date_data) > 0:
+                        logger.info(f"Replacing {len(date_data)} records for {date_str}")
+                        date_data_processed = self.process_dates(date_data, 
+                            datetime.strptime(date_str, '%Y-%m-%d'))
+                        self.load_to_database(date_data_processed, region, 
+                            datetime.strptime(date_str, '%Y-%m-%d'), conn)
+                        updates_made += len(date_data)
             
             # Commit transaction
             conn.commit()
-            logger.info(f"Successfully updated {updates_made} records for {region}")
+            
+            if update_mode == 'selective':
+                logger.info(f"Successfully updated {records_updated} records and inserted "
+                           f"{records_inserted} new records for {region}")
+            else:
+                logger.info(f"Successfully replaced {updates_made} records for {region}")
             
             # Log the update in ETL log
+            update_description = (
+                f"{update_mode.capitalize()} update from lookback: "
+                f"{validation_results['summary']['missing_dates_count']} missing dates, "
+            )
+            if update_mode == 'selective':
+                update_description += f"{records_updated} records updated, {records_inserted} records inserted"
+            else:
+                update_description += f"{validation_results['summary']['changed_records_count']} dates replaced"
+            
             cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, records_processed, issues)
                 VALUES (?, ?, ?, ?, ?, ?)
@@ -844,8 +974,7 @@ class FundDataETL:
                 datetime.now().date(), 
                 'LOOKBACK_UPDATE',
                 updates_made,
-                f"Updated from lookback: {validation_results['summary']['missing_dates_count']} missing dates, "
-                f"{validation_results['summary']['changed_records_count']} changed records"
+                update_description
             ))
             conn.commit()
             
@@ -855,6 +984,112 @@ class FundDataETL:
             raise
         finally:
             conn.close()
+
+    def _update_single_record(self, conn, cursor, lookback_record, region: str, date_str: str, changed_fields: List[Dict]):
+        """Update a single fund record with only changed fields from lookback file"""
+        
+        # Log what we're updating
+        fund_code = lookback_record['Fund Code']
+        logger.debug(f"Updating fund {fund_code} on {date_str} with {len(changed_fields)} changed fields")
+        
+        # Map Excel columns to database columns - comprehensive mapping
+        column_mapping = {
+            'Fund Name': 'fund_name',
+            'Master Class Fund Name': 'master_class_fund_name',
+            'Rating (M/S&P/F)': 'rating',
+            'Unique Identifier': 'unique_identifier',
+            'NASDAQ': 'nasdaq',
+            'Fund Complex (Historical)': 'fund_complex',
+            'SubCategory Historical': 'subcategory',
+            'Domicile': 'domicile',
+            'Currency': 'currency',
+            'Share Class Assets (dly/$mils)': 'share_class_assets',
+            'Portfolio Assets (dly/$mils)': 'portfolio_assets',
+            '1-DSY (dly)': 'one_day_yield',
+            '1-GDSY (dly)': 'one_day_gross_yield',
+            '7-DSY (dly)': 'seven_day_yield',
+            '7-GDSY (dly)': 'seven_day_gross_yield',
+            'Chgd Expense Ratio (mo/dly)': 'expense_ratio',
+            'WAM (dly)': 'wam',
+            'WAL (dly)': 'wal',
+            'Transactional NAV': 'transactional_nav',
+            'Market NAV': 'market_nav',
+            'Daily Liquidity (%)': 'daily_liquidity',
+            'Weekly Liquidity (%)': 'weekly_liquidity',
+            'Fees': 'fees',
+            'Gates': 'gates'
+        }
+        
+        # Build UPDATE statement with only changed fields
+        update_fields = []
+        update_values = []
+        
+        # Get list of changed field names
+        changed_field_names = [cf['field'] for cf in changed_fields]
+        
+        logger.debug(f"Changed fields to update: {changed_field_names}")
+        
+        # Update only the changed fields
+        for excel_col, db_col in column_mapping.items():
+            if db_col in changed_field_names and excel_col in lookback_record.index:
+                value = lookback_record[excel_col]
+                
+                # Handle numeric conversion for numeric columns
+                numeric_columns = [
+                    'share_class_assets', 'portfolio_assets', 'one_day_yield',
+                    'one_day_gross_yield', 'seven_day_yield', 'seven_day_gross_yield',
+                    'expense_ratio', 'wam', 'wal', 'daily_liquidity', 'weekly_liquidity'
+                ]
+                
+                if db_col in numeric_columns:
+                    if pd.notna(value) and value != '-':
+                        value = pd.to_numeric(value, errors='coerce')
+                    elif value == '-':
+                        value = None
+                else:
+                    # For text fields, clean whitespace
+                    if pd.notna(value):
+                        value = str(value).strip()
+                    else:
+                        value = ''
+                
+                update_fields.append(f"{db_col} = ?")
+                update_values.append(value)
+        
+        if update_fields:
+            # Add WHERE clause values
+            update_values.extend([date_str, region, fund_code])
+            
+            update_sql = f"""
+            UPDATE fund_data 
+            SET {', '.join(update_fields)}
+            WHERE date = ? AND region = ? AND fund_code = ?
+            """
+            
+            logger.debug(f"Executing update with {len(update_fields)} fields")
+            cursor.execute(update_sql, update_values)
+            
+            # Handle weekend dates if this is a Friday
+            if pd.to_datetime(date_str).weekday() == 4:
+                for days_ahead in [1, 2]:  # Saturday and Sunday
+                    weekend_date = (pd.to_datetime(date_str) + pd.Timedelta(days=days_ahead)).strftime('%Y-%m-%d')
+                    update_values[-3] = weekend_date  # Update the date parameter
+                    cursor.execute(update_sql, update_values)
+                    logger.debug(f"Also updated weekend date: {weekend_date}")
+        else:
+            logger.warning(f"No fields to update for fund {fund_code} on {date_str}")
+
+    def _insert_single_record(self, conn, cursor, lookback_record, region: str, date_str: str):
+        """Insert a single new fund record from lookback file"""
+        
+        # Prepare the record as a single-row DataFrame for processing
+        single_row_df = pd.DataFrame([lookback_record])
+        
+        # Process dates to handle Friday->weekend expansion
+        processed_df = self.process_dates(single_row_df, datetime.strptime(date_str, '%Y-%m-%d'))
+        
+        # Use existing load_to_database method to handle all the column mapping and cleaning
+        self.load_to_database(processed_df, region, datetime.strptime(date_str, '%Y-%m-%d'), conn)
 
     def run_daily_etl(self, run_date: Optional[datetime] = None):
         """
@@ -994,6 +1229,7 @@ CONFIG_TEMPLATE = {
     },
     "validation": {
         "enabled": True,
+        "update_mode": "selective",
         "change_threshold_percent": 5.0,
         "critical_fields": [
             "share_class_assets",
