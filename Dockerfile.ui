@@ -1,4 +1,4 @@
-# Simple UI for monitoring ETL status
+# Enhanced UI for monitoring ETL status with full database view
 FROM python:3.11-slim
 
 # Install dependencies
@@ -6,7 +6,9 @@ RUN pip install --no-cache-dir \
     flask==3.0.3 \
     flask-cors==4.0.1 \
     pandas==2.2.2 \
-    plotly==5.22.0
+    numpy==1.26.4 \
+    plotly==5.22.0 \
+    gunicorn==21.2.0
 
 # Create app directory
 WORKDIR /app
@@ -23,5 +25,5 @@ USER uiuser
 # Expose port
 EXPOSE 8080
 
-# Run the UI
-CMD ["python", "fund_etl_ui.py"]
+# Run the UI with gunicorn for better performance
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "--workers", "2", "--threads", "4", "--timeout", "120", "fund_etl_ui:app"]
