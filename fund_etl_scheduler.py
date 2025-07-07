@@ -17,6 +17,8 @@ import json
 import traceback
 from pathlib import Path
 from typing import Optional
+import fcntl
+import tempfile
 
 # Add parent directory to path for imports
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +42,10 @@ class ETLScheduler:
         self.etl = FundDataETL(self.config.get('etl_config_path', '/config/config.json'))
         self.monitor = FundDataMonitor(self.etl.db_path)
         
+        # Setup locking to prevent concurrent executions
+        self.lock_file_path = os.path.join(tempfile.gettempdir(), 'fund_etl_scheduler.lock')
+        self.lock_file = None
+        
         # Setup logging with proper directory
         log_dir = Path(self.config.get('log_dir', '/logs'))
         log_dir.mkdir(exist_ok=True)
@@ -58,6 +64,33 @@ class ETLScheduler:
             force=True  # Force reconfiguration
         )
         self.logger = logging.getLogger(__name__)
+    
+    def acquire_lock(self):
+        """Acquire exclusive lock to prevent concurrent ETL runs"""
+        try:
+            self.lock_file = open(self.lock_file_path, 'w')
+            fcntl.flock(self.lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            self.lock_file.write(str(os.getpid()))
+            self.lock_file.flush()
+            return True
+        except (IOError, OSError) as e:
+            if self.lock_file:
+                self.lock_file.close()
+                self.lock_file = None
+            self.logger.error(f"Failed to acquire lock: {e}")
+            return False
+    
+    def release_lock(self):
+        """Release exclusive lock"""
+        if self.lock_file:
+            try:
+                fcntl.flock(self.lock_file.fileno(), fcntl.LOCK_UN)
+                self.lock_file.close()
+                os.remove(self.lock_file_path)
+            except (IOError, OSError) as e:
+                self.logger.error(f"Failed to release lock: {e}")
+            finally:
+                self.lock_file = None
     
     def _load_config(self, config_path: str) -> dict:
         """Load scheduler configuration"""
@@ -210,31 +243,61 @@ class ETLScheduler:
     
     def run_daily_schedule(self):
         """Main scheduling function for daily runs"""
-        run_date = datetime.now()
+        if not self.acquire_lock():
+            self.logger.error("Another ETL process is already running. Skipping this run.")
+            return False
         
-        self.logger.info("="*60)
-        self.logger.info(f"Starting scheduled ETL run for {run_date.strftime('%Y-%m-%d %H:%M:%S')}")
-        self.logger.info("="*60)
-        
-        # Run today's ETL
-        success = self.run_with_retry(run_date)
-        
-        if success:
-            # Generate and send daily report
-            report = self.monitor.generate_data_quality_report()
+        try:
+            run_date = datetime.now()
             
-            self.send_email_alert(
-                f"ETL Success - {run_date.strftime('%Y-%m-%d')}",
-                report,
-                is_error=False
-            )
+            self.logger.info("="*60)
+            self.logger.info(f"Starting scheduled ETL run for {run_date.strftime('%Y-%m-%d %H:%M:%S')}")
+            self.logger.info("="*60)
             
-            # Check for and backfill any missing recent dates
-            self.backfill_missing_dates()
+            # Run today's ETL
+            success = self.run_with_retry(run_date)
+            
+            if success:
+                # Generate and send daily report
+                report = self.monitor.generate_data_quality_report()
+                
+                self.send_email_alert(
+                    f"ETL Success - {run_date.strftime('%Y-%m-%d')}",
+                    report,
+                    is_error=False
+                )
+                
+                # Check for and backfill any missing recent dates
+                self.backfill_missing_dates()
+            
+            self.logger.info("Scheduled ETL run completed")
+            
+            return success
+        finally:
+            self.release_lock()
+    
+    def run_date_schedule(self, target_date: datetime):
+        """Run ETL for a specific date with locking"""
+        if not self.acquire_lock():
+            self.logger.error("Another ETL process is already running. Skipping this run.")
+            return False
         
-        self.logger.info("Scheduled ETL run completed")
-        
-        return success
+        try:
+            self.logger.info("="*60)
+            self.logger.info(f"Starting ETL run for {target_date.strftime('%Y-%m-%d')}")
+            self.logger.info("="*60)
+            
+            # Run ETL for the specific date
+            success = self.run_with_retry(target_date)
+            
+            if success:
+                self.logger.info(f"ETL run completed successfully for {target_date.strftime('%Y-%m-%d')}")
+            else:
+                self.logger.error(f"ETL run failed for {target_date.strftime('%Y-%m-%d')}")
+            
+            return success
+        finally:
+            self.release_lock()
     
     def run_historical_load(self, start_date: str, end_date: str):
         """Load historical data for a date range"""
@@ -266,74 +329,83 @@ class ETLScheduler:
         Args:
             update_mode: 'selective' or 'full' - overrides config setting
         """
-        print("Running 30-day lookback validation...")
+        if not self.acquire_lock():
+            print("Another ETL process is already running. Skipping validation.")
+            return False
         
-        # Set logging to DEBUG for validation to see detailed comparison info
-        logging.getLogger('fund_etl_pipeline').setLevel(logging.DEBUG)
-        
-        # Check environment variable for update mode override
-        if update_mode is None:
-            update_mode = os.environ.get('VALIDATION_MODE', None)
-        
-        validation_summary = []
-        
-        for region in ['AMRS', 'EMEA']:
-            print(f"\nValidating {region}...")
-            try:
-                lookback_df = self.etl.download_lookback_file(region)
-                if lookback_df is not None:
-                    results = self.etl.validate_against_lookback(region, lookback_df)
-                    
-                    # Display validation results
-                    print(f"Total records in lookback file: {len(lookback_df)}")
-                    print(f"Missing dates: {results['summary']['missing_dates_count']}")
-                    print(f"Changed records: {results['summary']['changed_records_count']}")
-                    
-                    if results['summary']['requires_update']:
-                        # Determine update mode
-                        mode = update_mode or self.etl.config.get('validation', {}).get('update_mode', 'selective')
-                        print(f"Updating database with corrected data using {mode} mode...")
+        try:
+            print("Running 30-day lookback validation...")
+            
+            # Set logging to DEBUG for validation to see detailed comparison info
+            logging.getLogger('fund_etl_pipeline').setLevel(logging.DEBUG)
+            
+            # Check environment variable for update mode override
+            if update_mode is None:
+                update_mode = os.environ.get('VALIDATION_MODE', None)
+            
+            validation_summary = []
+            
+            for region in ['AMRS', 'EMEA']:
+                print(f"\nValidating {region}...")
+                try:
+                    lookback_df = self.etl.download_lookback_file(region)
+                    if lookback_df is not None:
+                        results = self.etl.validate_against_lookback(region, lookback_df)
                         
-                        # Update with specified mode
-                        self.etl.update_from_lookback(region, lookback_df, results, update_mode=mode)
+                        # Display validation results
+                        print(f"Total records in lookback file: {len(lookback_df)}")
+                        print(f"Missing dates: {results['summary']['missing_dates_count']}")
+                        print(f"Changed records: {results['summary']['changed_records_count']}")
                         
-                        # Create summary message
-                        if mode == 'selective':
-                            # Count actual changes made
-                            updated_count = len([c for c in results['changed_records'] if c['type'] == 'value_change'])
-                            inserted_count = len([c for c in results['changed_records'] if c['type'] == 'new_fund'])
-                            validation_summary.append(
-                                f"{region}: {mode.capitalize()} update - "
-                                f"{results['summary']['missing_dates_count']} missing dates added, "
-                                f"{updated_count} records updated, {inserted_count} new funds added"
-                            )
+                        if results['summary']['requires_update']:
+                            # Determine update mode
+                            mode = update_mode or self.etl.config.get('validation', {}).get('update_mode', 'selective')
+                            print(f"Updating database with corrected data using {mode} mode...")
+                            
+                            # Update with specified mode
+                            self.etl.update_from_lookback(region, lookback_df, results, update_mode=mode)
+                            
+                            # Create summary message
+                            if mode == 'selective':
+                                # Count actual changes made
+                                updated_count = len([c for c in results['changed_records'] if c['type'] == 'value_change'])
+                                inserted_count = len([c for c in results['changed_records'] if c['type'] == 'new_fund'])
+                                validation_summary.append(
+                                    f"{region}: {mode.capitalize()} update - "
+                                    f"{results['summary']['missing_dates_count']} missing dates added, "
+                                    f"{updated_count} records updated, {inserted_count} new funds added"
+                                )
+                            else:
+                                validation_summary.append(
+                                    f"{region}: Full replacement - "
+                                    f"{results['summary']['missing_dates_count']} missing dates, "
+                                    f"{results['summary']['changed_records_count']} changed records"
+                                )
                         else:
-                            validation_summary.append(
-                                f"{region}: Full replacement - "
-                                f"{results['summary']['missing_dates_count']} missing dates, "
-                                f"{results['summary']['changed_records_count']} changed records"
-                            )
+                            validation_summary.append(f"{region}: No updates required")
                     else:
-                        validation_summary.append(f"{region}: No updates required")
-                else:
-                    print(f"Failed to download lookback file for {region}")
-                    validation_summary.append(f"{region}: Failed to download lookback file")
-            except Exception as e:
-                print(f"Error validating {region}: {str(e)}")
-                validation_summary.append(f"{region}: Error - {str(e)}")
-        
-        print("\n" + "="*60)
-        print("Validation Summary:")
-        for summary in validation_summary:
-            print(f"  - {summary}")
-        print("="*60)
-        
-        # Generate validation report
-        validation_report = self.monitor.generate_validation_report()
-        print(validation_report)
-        
-        # Reset logging level
-        logging.getLogger('fund_etl_pipeline').setLevel(logging.INFO)
+                        print(f"Failed to download lookback file for {region}")
+                        validation_summary.append(f"{region}: Failed to download lookback file")
+                except Exception as e:
+                    print(f"Error validating {region}: {str(e)}")
+                    validation_summary.append(f"{region}: Error - {str(e)}")
+            
+            print("\n" + "="*60)
+            print("Validation Summary:")
+            for summary in validation_summary:
+                print(f"  - {summary}")
+            print("="*60)
+            
+            # Generate validation report
+            validation_report = self.monitor.generate_validation_report()
+            print(validation_report)
+            
+            # Reset logging level
+            logging.getLogger('fund_etl_pipeline').setLevel(logging.INFO)
+            
+            return True
+        finally:
+            self.release_lock()
 
 
 # Scheduler configuration template - FIXED WITH ABSOLUTE PATHS
@@ -396,6 +468,8 @@ def main():
                        help='Run 30-day lookback validation with full replacement')
     parser.add_argument('--update-mode', choices=['selective', 'full'],
                        help='Override validation update mode')
+    parser.add_argument('--run-date', metavar='DATE',
+                       help='Run ETL for a specific date (YYYY-MM-DD format)')
     
     args = parser.parse_args()
     
@@ -429,6 +503,16 @@ def main():
     elif args.validate_full:
         # Full replacement validation
         scheduler.run_validation(update_mode='full')
+    
+    elif args.run_date:
+        # Run ETL for specific date
+        try:
+            target_date = datetime.strptime(args.run_date, '%Y-%m-%d')
+            success = scheduler.run_date_schedule(target_date)
+            sys.exit(0 if success else 1)
+        except ValueError:
+            print(f"Error: Invalid date format '{args.run_date}'. Use YYYY-MM-DD format.")
+            sys.exit(1)
     
     else:
         parser.print_help()

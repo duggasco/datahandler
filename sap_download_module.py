@@ -12,6 +12,8 @@ from typing import Optional, Dict
 import os
 import shutil
 import glob
+import uuid
+import tempfile
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -75,6 +77,7 @@ class SAPOpenDocumentDownloader:
         self.driver = None
         self.wait = None
         self._logged_in = False
+        self.user_data_dir = None
     
     def _setup_driver(self):
         """Setup Chrome driver with download preferences"""
@@ -116,12 +119,29 @@ class SAPOpenDocumentDownloader:
         chrome_options.add_argument("--allow-running-insecure-content")
         chrome_options.add_argument("--window-size=1920,1080")
         
+        # Create unique user data directory to prevent conflicts
+        import time
+        timestamp = str(int(time.time() * 1000000))  # Microsecond precision
+        process_id = str(os.getpid())
+        random_id = uuid.uuid4().hex[:8]
+        self.user_data_dir = os.path.join(tempfile.gettempdir(), f"chrome-user-data-{process_id}-{timestamp}-{random_id}")
+        
+        # Ensure directory doesn't exist (cleanup any stale directories)
+        if os.path.exists(self.user_data_dir):
+            shutil.rmtree(self.user_data_dir, ignore_errors=True)
+        
+        chrome_options.add_argument(f"--user-data-dir={self.user_data_dir}")
+        # Add additional Chrome isolation options
+        chrome_options.add_argument("--disable-background-timer-throttling")
+        chrome_options.add_argument("--disable-backgrounding-occluded-windows")
+        chrome_options.add_argument("--disable-renderer-backgrounding")
+        
         # Create driver
         try:
             service = Service('/usr/local/bin/chromedriver')
             self.driver = webdriver.Chrome(service=service, options=chrome_options)
             self.wait = WebDriverWait(self.driver, 30)
-            logger.info("Chrome driver initialized successfully")
+            logger.info(f"Chrome driver initialized successfully with user data dir: {self.user_data_dir}")
         except Exception as e:
             logger.error(f"Failed to initialize Chrome driver: {e}")
             raise
@@ -361,7 +381,7 @@ class SAPOpenDocumentDownloader:
         return results
     
     def close(self):
-        """Close the browser"""
+        """Close the browser and cleanup temporary directories"""
         if self.driver:
             try:
                 self.driver.quit()
@@ -372,6 +392,16 @@ class SAPOpenDocumentDownloader:
                 self.driver = None
                 self.wait = None
                 self._logged_in = False
+        
+        # Clean up user data directory
+        if self.user_data_dir and os.path.exists(self.user_data_dir):
+            try:
+                shutil.rmtree(self.user_data_dir)
+                logger.info(f"Cleaned up user data directory: {self.user_data_dir}")
+            except Exception as e:
+                logger.warning(f"Failed to clean up user data directory {self.user_data_dir}: {e}")
+            finally:
+                self.user_data_dir = None
 
 
 # Backward compatibility wrapper

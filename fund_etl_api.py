@@ -32,9 +32,29 @@ logger = logging.getLogger(__name__)
 workflows = {}
 workflow_lock = threading.Lock()
 
+# Global ETL execution lock to prevent concurrent ETL processes
+etl_execution_lock = threading.Lock()
+running_etl_workflows = set()  # Track currently running ETL workflows
+
+def is_etl_running():
+    """Check if any ETL process is currently running"""
+    with etl_execution_lock:
+        return len(running_etl_workflows) > 0
+
+def can_start_etl(workflow_type, workflow_id):
+    """Check if we can start a new ETL process and reserve the slot atomically"""
+    with etl_execution_lock:
+        # Don't allow any concurrent ETL operations
+        if len(running_etl_workflows) == 0:
+            running_etl_workflows.add(workflow_id)
+            return True
+        return False
+
 def run_etl_process(workflow_id, command_args):
     """Run ETL process in background thread"""
     try:
+        # Workflow ID should already be in running_etl_workflows from can_start_etl()
+        
         with workflow_lock:
             workflows[workflow_id]['status'] = 'running'
             workflows[workflow_id]['started_at'] = datetime.now().isoformat()
@@ -84,6 +104,10 @@ def run_etl_process(workflow_id, command_args):
             workflows[workflow_id]['status'] = 'failed'
             workflows[workflow_id]['error'] = str(e)
             workflows[workflow_id]['completed_at'] = datetime.now().isoformat()
+    finally:
+        # Remove from running workflows
+        with etl_execution_lock:
+            running_etl_workflows.discard(workflow_id)
 
 @app.route('/health', methods=['GET'])
 def health_check():
@@ -99,6 +123,13 @@ def run_daily_etl():
     """Trigger daily ETL run"""
     try:
         workflow_id = str(uuid.uuid4())
+        
+        # Check if ETL is already running and reserve slot atomically
+        if not can_start_etl('daily-etl', workflow_id):
+            return jsonify({
+                'error': 'An ETL process is already running. Please wait for it to complete.',
+                'status': 'rejected'
+            }), 409
         
         # Initialize workflow
         with workflow_lock:
@@ -143,6 +174,13 @@ def run_validation():
             return jsonify({'error': 'Invalid mode. Must be "selective" or "full"'}), 400
         
         workflow_id = str(uuid.uuid4())
+        
+        # Check if ETL is already running and reserve slot atomically
+        if not can_start_etl(f'validation-{mode}', workflow_id):
+            return jsonify({
+                'error': 'An ETL process is already running. Please wait for it to complete.',
+                'status': 'rejected'
+            }), 409
         
         # Initialize workflow
         with workflow_lock:
@@ -199,6 +237,13 @@ def run_etl_for_date():
             return jsonify({'error': 'Invalid date format. Use YYYY-MM-DD'}), 400
         
         workflow_id = str(uuid.uuid4())
+        
+        # Check if ETL is already running and reserve slot atomically
+        if not can_start_etl('run-date', workflow_id):
+            return jsonify({
+                'error': 'An ETL process is already running. Please wait for it to complete.',
+                'status': 'rejected'
+            }), 409
         
         # Initialize workflow
         with workflow_lock:
