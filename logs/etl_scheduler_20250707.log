@@ -14285,3 +14285,523 @@
 2025-07-07 17:38:26,272 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
 2025-07-07 17:38:26,294 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
 2025-07-07 17:38:26,321 - fund_etl_pipeline - INFO - Successfully loaded 1 records for AMRS
+2025-07-07 18:38:12,380 - __main__ - INFO - ============================================================
+2025-07-07 18:38:12,380 - __main__ - INFO - Starting scheduled ETL run for 2025-07-07 18:38:12
+2025-07-07 18:38:12,380 - __main__ - INFO - ============================================================
+2025-07-07 18:38:12,380 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-07 18:38:12,381 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-07
+2025-07-07 18:38:12,381 - fund_etl_pipeline - INFO - Processing data for 2025-07-03
+2025-07-07 18:38:12,434 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-07-03 using Selenium
+2025-07-07 18:38:12,616 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55e821e141da <unknown>
+#1 0x55e8218beab0 <unknown>
+#2 0x55e8218f98ac <unknown>
+#3 0x55e8218f4307 <unknown>
+#4 0x55e821944696 <unknown>
+#5 0x55e821943d56 <unknown>
+#6 0x55e821935f73 <unknown>
+#7 0x55e821902aeb <unknown>
+#8 0x55e821903751 <unknown>
+#9 0x55e821dd8aeb <unknown>
+#10 0x55e821ddc8c9 <unknown>
+#11 0x55e821dbf8c9 <unknown>
+#12 0x55e821ddd488 <unknown>
+#13 0x55e821da407f <unknown>
+#14 0x55e821e01888 <unknown>
+#15 0x55e821e01a66 <unknown>
+#16 0x55e821e134f6 <unknown>
+#17 0x7f20c255a1f5 <unknown>
+
+2025-07-07 18:38:12,616 - fund_etl_pipeline - ERROR - Failed to download AMRS file: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55e821e141da <unknown>
+#1 0x55e8218beab0 <unknown>
+#2 0x55e8218f98ac <unknown>
+#3 0x55e8218f4307 <unknown>
+#4 0x55e821944696 <unknown>
+#5 0x55e821943d56 <unknown>
+#6 0x55e821935f73 <unknown>
+#7 0x55e821902aeb <unknown>
+#8 0x55e821903751 <unknown>
+#9 0x55e821dd8aeb <unknown>
+#10 0x55e821ddc8c9 <unknown>
+#11 0x55e821dbf8c9 <unknown>
+#12 0x55e821ddd488 <unknown>
+#13 0x55e821da407f <unknown>
+#14 0x55e821e01888 <unknown>
+#15 0x55e821e01a66 <unknown>
+#16 0x55e821e134f6 <unknown>
+#17 0x7f20c255a1f5 <unknown>
+
+2025-07-07 18:38:12,616 - fund_etl_pipeline - WARNING - No file available for AMRS, carrying forward data
+2025-07-07 18:38:12,627 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-04 to 2025-07-07
+2025-07-07 18:38:12,675 - fund_etl_pipeline - INFO - Carried forward 862 records
+2025-07-07 18:38:12,675 - fund_etl_pipeline - INFO - Downloading EMEA file for 2025-07-03 using Selenium
+2025-07-07 18:38:12,804 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5560088c31da <unknown>
+#1 0x55600836dab0 <unknown>
+#2 0x5560083a88ac <unknown>
+#3 0x5560083a3307 <unknown>
+#4 0x5560083f3696 <unknown>
+#5 0x5560083f2d56 <unknown>
+#6 0x5560083e4f73 <unknown>
+#7 0x5560083b1aeb <unknown>
+#8 0x5560083b2751 <unknown>
+#9 0x556008887aeb <unknown>
+#10 0x55600888b8c9 <unknown>
+#11 0x55600886e8c9 <unknown>
+#12 0x55600888c488 <unknown>
+#13 0x55600885307f <unknown>
+#14 0x5560088b0888 <unknown>
+#15 0x5560088b0a66 <unknown>
+#16 0x5560088c24f6 <unknown>
+#17 0x7f13f6f651f5 <unknown>
+
+2025-07-07 18:38:12,805 - fund_etl_pipeline - ERROR - Failed to download EMEA file: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5560088c31da <unknown>
+#1 0x55600836dab0 <unknown>
+#2 0x5560083a88ac <unknown>
+#3 0x5560083a3307 <unknown>
+#4 0x5560083f3696 <unknown>
+#5 0x5560083f2d56 <unknown>
+#6 0x5560083e4f73 <unknown>
+#7 0x5560083b1aeb <unknown>
+#8 0x5560083b2751 <unknown>
+#9 0x556008887aeb <unknown>
+#10 0x55600888b8c9 <unknown>
+#11 0x55600886e8c9 <unknown>
+#12 0x55600888c488 <unknown>
+#13 0x55600885307f <unknown>
+#14 0x5560088b0888 <unknown>
+#15 0x5560088b0a66 <unknown>
+#16 0x5560088c24f6 <unknown>
+#17 0x7f13f6f651f5 <unknown>
+
+2025-07-07 18:38:12,805 - fund_etl_pipeline - WARNING - No file available for EMEA, carrying forward data
+2025-07-07 18:38:12,815 - fund_etl_pipeline - INFO - Carrying forward EMEA data from 2025-07-04 to 2025-07-07
+2025-07-07 18:38:12,818 - fund_etl_pipeline - ERROR - Failed to carry forward data: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 18:38:12,818 - fund_etl_pipeline - ERROR - ETL failed for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 18:38:17,829 - __main__ - ERROR - ETL attempt 1 failed: database is locked
+2025-07-07 18:38:17,829 - __main__ - INFO - Waiting 30 minutes before retry...
+2025-07-07 18:53:34,896 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 18:53:35,080 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x560436ba11da <unknown>
+#1 0x56043664bab0 <unknown>
+#2 0x5604366868ac <unknown>
+#3 0x560436681307 <unknown>
+#4 0x5604366d1696 <unknown>
+#5 0x5604366d0d56 <unknown>
+#6 0x5604366c2f73 <unknown>
+#7 0x56043668faeb <unknown>
+#8 0x560436690751 <unknown>
+#9 0x560436b65aeb <unknown>
+#10 0x560436b698c9 <unknown>
+#11 0x560436b4c8c9 <unknown>
+#12 0x560436b6a488 <unknown>
+#13 0x560436b3107f <unknown>
+#14 0x560436b8e888 <unknown>
+#15 0x560436b8ea66 <unknown>
+#16 0x560436ba04f6 <unknown>
+#17 0x7f6f214221f5 <unknown>
+
+2025-07-07 18:53:35,080 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x560436ba11da <unknown>
+#1 0x56043664bab0 <unknown>
+#2 0x5604366868ac <unknown>
+#3 0x560436681307 <unknown>
+#4 0x5604366d1696 <unknown>
+#5 0x5604366d0d56 <unknown>
+#6 0x5604366c2f73 <unknown>
+#7 0x56043668faeb <unknown>
+#8 0x560436690751 <unknown>
+#9 0x560436b65aeb <unknown>
+#10 0x560436b698c9 <unknown>
+#11 0x560436b4c8c9 <unknown>
+#12 0x560436b6a488 <unknown>
+#13 0x560436b3107f <unknown>
+#14 0x560436b8e888 <unknown>
+#15 0x560436b8ea66 <unknown>
+#16 0x560436ba04f6 <unknown>
+#17 0x7f6f214221f5 <unknown>
+
+2025-07-07 18:53:35,081 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 18:53:35,211 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x561b4f1a41da <unknown>
+#1 0x561b4ec4eab0 <unknown>
+#2 0x561b4ec898ac <unknown>
+#3 0x561b4ec84307 <unknown>
+#4 0x561b4ecd4696 <unknown>
+#5 0x561b4ecd3d56 <unknown>
+#6 0x561b4ecc5f73 <unknown>
+#7 0x561b4ec92aeb <unknown>
+#8 0x561b4ec93751 <unknown>
+#9 0x561b4f168aeb <unknown>
+#10 0x561b4f16c8c9 <unknown>
+#11 0x561b4f14f8c9 <unknown>
+#12 0x561b4f16d488 <unknown>
+#13 0x561b4f13407f <unknown>
+#14 0x561b4f191888 <unknown>
+#15 0x561b4f191a66 <unknown>
+#16 0x561b4f1a34f6 <unknown>
+#17 0x7f55188421f5 <unknown>
+
+2025-07-07 18:53:35,211 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x561b4f1a41da <unknown>
+#1 0x561b4ec4eab0 <unknown>
+#2 0x561b4ec898ac <unknown>
+#3 0x561b4ec84307 <unknown>
+#4 0x561b4ecd4696 <unknown>
+#5 0x561b4ecd3d56 <unknown>
+#6 0x561b4ecc5f73 <unknown>
+#7 0x561b4ec92aeb <unknown>
+#8 0x561b4ec93751 <unknown>
+#9 0x561b4f168aeb <unknown>
+#10 0x561b4f16c8c9 <unknown>
+#11 0x561b4f14f8c9 <unknown>
+#12 0x561b4f16d488 <unknown>
+#13 0x561b4f13407f <unknown>
+#14 0x561b4f191888 <unknown>
+#15 0x561b4f191a66 <unknown>
+#16 0x561b4f1a34f6 <unknown>
+#17 0x7f55188421f5 <unknown>
+
+2025-07-07 18:57:02,454 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 18:57:02,638 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x561a9f2ca1da <unknown>
+#1 0x561a9ed74ab0 <unknown>
+#2 0x561a9edaf8ac <unknown>
+#3 0x561a9edaa307 <unknown>
+#4 0x561a9edfa696 <unknown>
+#5 0x561a9edf9d56 <unknown>
+#6 0x561a9edebf73 <unknown>
+#7 0x561a9edb8aeb <unknown>
+#8 0x561a9edb9751 <unknown>
+#9 0x561a9f28eaeb <unknown>
+#10 0x561a9f2928c9 <unknown>
+#11 0x561a9f2758c9 <unknown>
+#12 0x561a9f293488 <unknown>
+#13 0x561a9f25a07f <unknown>
+#14 0x561a9f2b7888 <unknown>
+#15 0x561a9f2b7a66 <unknown>
+#16 0x561a9f2c94f6 <unknown>
+#17 0x7f72ec55d1f5 <unknown>
+
+2025-07-07 18:57:02,638 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-96428fe7
+2025-07-07 18:57:02,639 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x561a9f2ca1da <unknown>
+#1 0x561a9ed74ab0 <unknown>
+#2 0x561a9edaf8ac <unknown>
+#3 0x561a9edaa307 <unknown>
+#4 0x561a9edfa696 <unknown>
+#5 0x561a9edf9d56 <unknown>
+#6 0x561a9edebf73 <unknown>
+#7 0x561a9edb8aeb <unknown>
+#8 0x561a9edb9751 <unknown>
+#9 0x561a9f28eaeb <unknown>
+#10 0x561a9f2928c9 <unknown>
+#11 0x561a9f2758c9 <unknown>
+#12 0x561a9f293488 <unknown>
+#13 0x561a9f25a07f <unknown>
+#14 0x561a9f2b7888 <unknown>
+#15 0x561a9f2b7a66 <unknown>
+#16 0x561a9f2c94f6 <unknown>
+#17 0x7f72ec55d1f5 <unknown>
+
+2025-07-07 18:57:02,639 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 18:57:02,821 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55aa880ff1da <unknown>
+#1 0x55aa87ba9ab0 <unknown>
+#2 0x55aa87be48ac <unknown>
+#3 0x55aa87bdf307 <unknown>
+#4 0x55aa87c2f696 <unknown>
+#5 0x55aa87c2ed56 <unknown>
+#6 0x55aa87c20f73 <unknown>
+#7 0x55aa87bedaeb <unknown>
+#8 0x55aa87bee751 <unknown>
+#9 0x55aa880c3aeb <unknown>
+#10 0x55aa880c78c9 <unknown>
+#11 0x55aa880aa8c9 <unknown>
+#12 0x55aa880c8488 <unknown>
+#13 0x55aa8808f07f <unknown>
+#14 0x55aa880ec888 <unknown>
+#15 0x55aa880eca66 <unknown>
+#16 0x55aa880fe4f6 <unknown>
+#17 0x7fc4f603e1f5 <unknown>
+
+2025-07-07 18:57:02,822 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-8d18b3ba
+2025-07-07 18:57:02,822 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55aa880ff1da <unknown>
+#1 0x55aa87ba9ab0 <unknown>
+#2 0x55aa87be48ac <unknown>
+#3 0x55aa87bdf307 <unknown>
+#4 0x55aa87c2f696 <unknown>
+#5 0x55aa87c2ed56 <unknown>
+#6 0x55aa87c20f73 <unknown>
+#7 0x55aa87bedaeb <unknown>
+#8 0x55aa87bee751 <unknown>
+#9 0x55aa880c3aeb <unknown>
+#10 0x55aa880c78c9 <unknown>
+#11 0x55aa880aa8c9 <unknown>
+#12 0x55aa880c8488 <unknown>
+#13 0x55aa8808f07f <unknown>
+#14 0x55aa880ec888 <unknown>
+#15 0x55aa880eca66 <unknown>
+#16 0x55aa880fe4f6 <unknown>
+#17 0x7fc4f603e1f5 <unknown>
+
+2025-07-07 18:58:37,635 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 18:58:37,752 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 18:58:37,860 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 18:58:38,091 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5621942d41da <unknown>
+#1 0x562193d7eab0 <unknown>
+#2 0x562193db98ac <unknown>
+#3 0x562193db4307 <unknown>
+#4 0x562193e04696 <unknown>
+#5 0x562193e03d56 <unknown>
+#6 0x562193df5f73 <unknown>
+#7 0x562193dc2aeb <unknown>
+#8 0x562193dc3751 <unknown>
+#9 0x562194298aeb <unknown>
+#10 0x56219429c8c9 <unknown>
+#11 0x56219427f8c9 <unknown>
+#12 0x56219429d488 <unknown>
+#13 0x56219426407f <unknown>
+#14 0x5621942c1888 <unknown>
+#15 0x5621942c1a66 <unknown>
+#16 0x5621942d34f6 <unknown>
+#17 0x7f44fd7de1f5 <unknown>
+
+2025-07-07 18:58:38,092 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-f718d9d8
+2025-07-07 18:58:38,092 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5621942d41da <unknown>
+#1 0x562193d7eab0 <unknown>
+#2 0x562193db98ac <unknown>
+#3 0x562193db4307 <unknown>
+#4 0x562193e04696 <unknown>
+#5 0x562193e03d56 <unknown>
+#6 0x562193df5f73 <unknown>
+#7 0x562193dc2aeb <unknown>
+#8 0x562193dc3751 <unknown>
+#9 0x562194298aeb <unknown>
+#10 0x56219429c8c9 <unknown>
+#11 0x56219427f8c9 <unknown>
+#12 0x56219429d488 <unknown>
+#13 0x56219426407f <unknown>
+#14 0x5621942c1888 <unknown>
+#15 0x5621942c1a66 <unknown>
+#16 0x5621942d34f6 <unknown>
+#17 0x7f44fd7de1f5 <unknown>
+
+2025-07-07 18:58:38,093 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 18:58:38,281 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x558a3e37b1da <unknown>
+#1 0x558a3de25ab0 <unknown>
+#2 0x558a3de608ac <unknown>
+#3 0x558a3de5b307 <unknown>
+#4 0x558a3deab696 <unknown>
+#5 0x558a3deaad56 <unknown>
+#6 0x558a3de9cf73 <unknown>
+#7 0x558a3de69aeb <unknown>
+#8 0x558a3de6a751 <unknown>
+#9 0x558a3e33faeb <unknown>
+#10 0x558a3e3438c9 <unknown>
+#11 0x558a3e3268c9 <unknown>
+#12 0x558a3e344488 <unknown>
+#13 0x558a3e30b07f <unknown>
+#14 0x558a3e368888 <unknown>
+#15 0x558a3e368a66 <unknown>
+#16 0x558a3e37a4f6 <unknown>
+#17 0x7f5ab43521f5 <unknown>
+
+2025-07-07 18:58:38,282 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-0a2c559c
+2025-07-07 18:58:38,282 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x558a3e37b1da <unknown>
+#1 0x558a3de25ab0 <unknown>
+#2 0x558a3de608ac <unknown>
+#3 0x558a3de5b307 <unknown>
+#4 0x558a3deab696 <unknown>
+#5 0x558a3deaad56 <unknown>
+#6 0x558a3de9cf73 <unknown>
+#7 0x558a3de69aeb <unknown>
+#8 0x558a3de6a751 <unknown>
+#9 0x558a3e33faeb <unknown>
+#10 0x558a3e3438c9 <unknown>
+#11 0x558a3e3268c9 <unknown>
+#12 0x558a3e344488 <unknown>
+#13 0x558a3e30b07f <unknown>
+#14 0x558a3e368888 <unknown>
+#15 0x558a3e368a66 <unknown>
+#16 0x558a3e37a4f6 <unknown>
+#17 0x7f5ab43521f5 <unknown>
+
+2025-07-07 19:03:35,901 - __main__ - INFO - ============================================================
+2025-07-07 19:03:35,901 - __main__ - INFO - Starting ETL run for 2025-07-06
+2025-07-07 19:03:35,901 - __main__ - INFO - ============================================================
+2025-07-07 19:03:35,901 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-07 19:03:35,901 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-06
+2025-07-07 19:03:35,901 - fund_etl_pipeline - INFO - 2025-07-06 is not a US business day
+2025-07-07 19:03:35,917 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-04 to 2025-07-06
+2025-07-07 19:03:35,981 - fund_etl_pipeline - INFO - Carried forward 862 records
+2025-07-07 19:03:35,991 - fund_etl_pipeline - INFO - Carrying forward EMEA data from 2025-07-04 to 2025-07-06
+2025-07-07 19:03:36,024 - fund_etl_pipeline - INFO - Carried forward 984 records
+2025-07-07 19:03:36,024 - __main__ - INFO - ETL completed successfully
+2025-07-07 19:03:36,024 - __main__ - INFO - ETL run completed successfully for 2025-07-06
+2025-07-07 19:04:00,347 - __main__ - INFO - ============================================================
+2025-07-07 19:04:00,347 - __main__ - INFO - Starting ETL run for 2025-07-04
+2025-07-07 19:04:00,347 - __main__ - INFO - ============================================================
+2025-07-07 19:04:00,347 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-07 19:04:00,347 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-04
+2025-07-07 19:04:00,347 - fund_etl_pipeline - INFO - 2025-07-04 is not a US business day
+2025-07-07 19:04:00,363 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-03 to 2025-07-04
+2025-07-07 19:04:00,366 - fund_etl_pipeline - ERROR - Failed to carry forward data: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:04:00,366 - __main__ - ERROR - ETL attempt 1 failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:04:00,366 - __main__ - INFO - Waiting 30 minutes before retry...
+2025-07-07 19:04:00,375 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:04:00,375 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:04:16,769 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:04:16,769 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:06:57,386 - __main__ - INFO - ============================================================
+2025-07-07 19:06:57,386 - __main__ - INFO - Starting ETL run for 2025-07-03
+2025-07-07 19:06:57,386 - __main__ - INFO - ============================================================
+2025-07-07 19:06:57,386 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-07 19:06:57,386 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-03
+2025-07-07 19:06:57,386 - fund_etl_pipeline - INFO - Processing data for 2025-07-02
+2025-07-07 19:06:57,437 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-07-02 using Selenium
+2025-07-07 19:06:57,569 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55cab1b7a1da <unknown>
+#1 0x55cab1624ab0 <unknown>
+#2 0x55cab165f8ac <unknown>
+#3 0x55cab165a307 <unknown>
+#4 0x55cab16aa696 <unknown>
+#5 0x55cab16a9d56 <unknown>
+#6 0x55cab169bf73 <unknown>
+#7 0x55cab1668aeb <unknown>
+#8 0x55cab1669751 <unknown>
+#9 0x55cab1b3eaeb <unknown>
+#10 0x55cab1b428c9 <unknown>
+#11 0x55cab1b258c9 <unknown>
+#12 0x55cab1b43488 <unknown>
+#13 0x55cab1b0a07f <unknown>
+#14 0x55cab1b67888 <unknown>
+#15 0x55cab1b67a66 <unknown>
+#16 0x55cab1b794f6 <unknown>
+#17 0x7fa9520031f5 <unknown>
+
+2025-07-07 19:06:57,569 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-f20709cb
+2025-07-07 19:06:57,569 - fund_etl_pipeline - ERROR - Failed to download AMRS file: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55cab1b7a1da <unknown>
+#1 0x55cab1624ab0 <unknown>
+#2 0x55cab165f8ac <unknown>
+#3 0x55cab165a307 <unknown>
+#4 0x55cab16aa696 <unknown>
+#5 0x55cab16a9d56 <unknown>
+#6 0x55cab169bf73 <unknown>
+#7 0x55cab1668aeb <unknown>
+#8 0x55cab1669751 <unknown>
+#9 0x55cab1b3eaeb <unknown>
+#10 0x55cab1b428c9 <unknown>
+#11 0x55cab1b258c9 <unknown>
+#12 0x55cab1b43488 <unknown>
+#13 0x55cab1b0a07f <unknown>
+#14 0x55cab1b67888 <unknown>
+#15 0x55cab1b67a66 <unknown>
+#16 0x55cab1b794f6 <unknown>
+#17 0x7fa9520031f5 <unknown>
+
+2025-07-07 19:06:57,570 - fund_etl_pipeline - WARNING - No file available for AMRS, carrying forward data
+2025-07-07 19:06:57,583 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-02 to 2025-07-03
+2025-07-07 19:06:57,586 - fund_etl_pipeline - ERROR - Failed to carry forward data: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:06:57,586 - fund_etl_pipeline - ERROR - ETL failed for AMRS: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:07:02,597 - __main__ - ERROR - ETL attempt 1 failed: database is locked
+2025-07-07 19:07:02,597 - __main__ - INFO - Waiting 30 minutes before retry...
+2025-07-07 19:07:25,215 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:07:25,216 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:13:39,507 - __main__ - INFO - ============================================================
+2025-07-07 19:13:39,509 - __main__ - INFO - Starting scheduled ETL run for 2025-07-07 19:13:39
+2025-07-07 19:13:39,509 - __main__ - INFO - ============================================================
+2025-07-07 19:13:39,509 - __main__ - INFO - ETL attempt 1 of 3
+2025-07-07 19:13:39,509 - fund_etl_pipeline - INFO - Starting ETL process for 2025-07-07
+2025-07-07 19:13:39,509 - fund_etl_pipeline - INFO - Processing data for 2025-07-03
+2025-07-07 19:13:39,537 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:13:39,537 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:13:39,636 - fund_etl_pipeline - INFO - Downloading AMRS file for 2025-07-03 using Selenium
+2025-07-07 19:13:39,640 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:13:39,643 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:13:39,895 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55a8f90f91da <unknown>
+#1 0x55a8f8ba3ab0 <unknown>
+#2 0x55a8f8bde8ac <unknown>
+#3 0x55a8f8bd9307 <unknown>
+#4 0x55a8f8c29696 <unknown>
+#5 0x55a8f8c28d56 <unknown>
+#6 0x55a8f8c1af73 <unknown>
+#7 0x55a8f8be7aeb <unknown>
+#8 0x55a8f8be8751 <unknown>
+#9 0x55a8f90bdaeb <unknown>
+#10 0x55a8f90c18c9 <unknown>
+#11 0x55a8f90a48c9 <unknown>
+#12 0x55a8f90c2488 <unknown>
+#13 0x55a8f908907f <unknown>
+#14 0x55a8f90e6888 <unknown>
+#15 0x55a8f90e6a66 <unknown>
+#16 0x55a8f90f84f6 <unknown>
+#17 0x7f64dcc921f5 <unknown>
+
+2025-07-07 19:13:39,896 - sap_download_module - INFO - Cleaned up user data directory: /tmp/chrome-user-data-0179334c
+2025-07-07 19:13:39,896 - fund_etl_pipeline - ERROR - Failed to download AMRS file: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55a8f90f91da <unknown>
+#1 0x55a8f8ba3ab0 <unknown>
+#2 0x55a8f8bde8ac <unknown>
+#3 0x55a8f8bd9307 <unknown>
+#4 0x55a8f8c29696 <unknown>
+#5 0x55a8f8c28d56 <unknown>
+#6 0x55a8f8c1af73 <unknown>
+#7 0x55a8f8be7aeb <unknown>
+#8 0x55a8f8be8751 <unknown>
+#9 0x55a8f90bdaeb <unknown>
+#10 0x55a8f90c18c9 <unknown>
+#11 0x55a8f90a48c9 <unknown>
+#12 0x55a8f90c2488 <unknown>
+#13 0x55a8f908907f <unknown>
+#14 0x55a8f90e6888 <unknown>
+#15 0x55a8f90e6a66 <unknown>
+#16 0x55a8f90f84f6 <unknown>
+#17 0x7f64dcc921f5 <unknown>
+
+2025-07-07 19:13:39,897 - fund_etl_pipeline - WARNING - No file available for AMRS, carrying forward data
+2025-07-07 19:13:39,914 - fund_etl_pipeline - INFO - Carrying forward AMRS data from 2025-07-06 to 2025-07-07
+2025-07-07 19:13:39,916 - fund_etl_pipeline - ERROR - Failed to carry forward data: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:13:39,916 - fund_etl_pipeline - ERROR - ETL failed for AMRS: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 19:13:44,926 - __main__ - ERROR - ETL attempt 1 failed: database is locked
+2025-07-07 19:13:44,926 - __main__ - INFO - Waiting 30 minutes before retry...
+2025-07-07 19:13:56,171 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:13:56,171 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:14:01,849 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:14:01,849 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:18:02,920 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:18:02,921 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:18:11,928 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:18:11,928 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
+2025-07-07 19:18:16,711 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:18:31,869 - __main__ - ERROR - Failed to acquire lock: [Errno 11] Resource temporarily unavailable
+2025-07-07 19:18:31,869 - __main__ - ERROR - Another ETL process is already running. Skipping this run.
