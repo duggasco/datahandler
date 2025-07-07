@@ -18,10 +18,83 @@ import numpy as np
 import json
 from datetime import datetime, timedelta
 import os
+import subprocess
+import threading
+import uuid
+import time
 
 app = Flask(__name__)
 
 DB_PATH = os.environ.get('DB_PATH', '/data/fund_data.db')
+
+# Workflow tracking
+workflow_status = {}
+workflow_lock = threading.Lock()
+
+class WorkflowTracker:
+    """Track running workflows and their status"""
+    
+    def __init__(self):
+        self.workflows = {}
+        self.lock = threading.Lock()
+    
+    def start_workflow(self, workflow_type, params):
+        """Start tracking a new workflow"""
+        workflow_id = str(uuid.uuid4())
+        with self.lock:
+            self.workflows[workflow_id] = {
+                'id': workflow_id,
+                'type': workflow_type,
+                'params': params,
+                'status': 'running',
+                'started_at': datetime.now().isoformat(),
+                'completed_at': None,
+                'output': [],
+                'error': None
+            }
+        return workflow_id
+    
+    def update_workflow(self, workflow_id, output_line=None, status=None, error=None):
+        """Update workflow status or add output"""
+        with self.lock:
+            if workflow_id in self.workflows:
+                if output_line:
+                    self.workflows[workflow_id]['output'].append({
+                        'timestamp': datetime.now().isoformat(),
+                        'message': output_line
+                    })
+                if status:
+                    self.workflows[workflow_id]['status'] = status
+                    if status in ['completed', 'failed']:
+                        self.workflows[workflow_id]['completed_at'] = datetime.now().isoformat()
+                if error:
+                    self.workflows[workflow_id]['error'] = error
+    
+    def get_workflow(self, workflow_id):
+        """Get workflow status"""
+        with self.lock:
+            return self.workflows.get(workflow_id)
+    
+    def get_all_workflows(self):
+        """Get all workflows"""
+        with self.lock:
+            return list(self.workflows.values())
+    
+    def cleanup_old_workflows(self, hours=24):
+        """Remove workflows older than specified hours"""
+        cutoff = datetime.now() - timedelta(hours=hours)
+        with self.lock:
+            to_remove = []
+            for wf_id, wf in self.workflows.items():
+                if wf.get('completed_at'):
+                    completed = datetime.fromisoformat(wf['completed_at'])
+                    if completed < cutoff:
+                        to_remove.append(wf_id)
+            for wf_id in to_remove:
+                del self.workflows[wf_id]
+
+# Initialize workflow tracker
+workflow_tracker = WorkflowTracker()
 
 class NumpyEncoder(json.JSONEncoder):
     """Custom JSON encoder to handle numpy types"""
@@ -277,6 +350,7 @@ HTML_TEMPLATE = '''
         <button onclick="showSection('fundData')">📈 Fund Data</button>
         <button onclick="showSection('etlLog')">📋 ETL History</button>
         <button onclick="showSection('telemetry')">📡 Telemetry</button>
+        <button onclick="showSection('workflows')">⚙️ Workflows</button>
         <button onclick="refreshData()" style="float: right; background: #10b981;">🔄 Refresh</button>
     </div>
     
@@ -474,6 +548,71 @@ HTML_TEMPLATE = '''
                 </table>
             </div>
         </div>
+        
+        <!-- Workflows Section -->
+        <div id="workflows" class="section hidden">
+            <h2>ETL Workflows</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                <!-- Run Daily ETL Card -->
+                <div class="telemetry-card">
+                    <h4>📅 Run Daily ETL</h4>
+                    <p style="color: #6b7280; margin: 10px 0;">Downloads and processes data for the previous business day</p>
+                    <button class="nav button" onclick="runDailyETL()" style="width: 100%; margin-top: 10px;">
+                        Run Daily ETL
+                    </button>
+                </div>
+                
+                <!-- 30-Day Validation Card -->
+                <div class="telemetry-card">
+                    <h4>🔍 30-Day Validation</h4>
+                    <p style="color: #6b7280; margin: 10px 0;">Validates database against 30-day lookback files</p>
+                    <select id="validationMode" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
+                        <option value="selective">Selective Mode (Update changed records only)</option>
+                        <option value="full">Full Mode (Replace entire dates)</option>
+                    </select>
+                    <button class="nav button" onclick="runValidation()" style="width: 100%;">
+                        Run Validation
+                    </button>
+                </div>
+            </div>
+            
+            <h3>Active Workflows</h3>
+            <div id="workflowsList">
+                <p style="color: #6b7280;">No active workflows</p>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Workflow History</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Started</th>
+                            <th>Completed</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="workflowHistory">
+                        <tr><td colspan="5" style="text-align: center; color: #6b7280;">No workflow history</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Workflow Output Modal -->
+            <div id="workflowModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000;">
+                <div style="position: relative; margin: 50px auto; width: 90%; max-width: 800px; background: white; border-radius: 8px; max-height: 80vh; display: flex; flex-direction: column;">
+                    <div style="padding: 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+                        <h3 id="modalTitle" style="margin: 0;">Workflow Output</h3>
+                        <button onclick="closeWorkflowModal()" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+                    </div>
+                    <div id="modalContent" style="padding: 20px; overflow-y: auto; flex: 1; font-family: monospace; font-size: 14px; background: #f8f9fa;">
+                        <!-- Output will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -498,6 +637,12 @@ HTML_TEMPLATE = '''
                 loadETLData();
             } else if (sectionId === 'telemetry') {
                 loadTelemetry();
+            } else if (sectionId === 'workflows') {
+                updateWorkflowStatus();
+                // Start monitoring if there are active workflows
+                if (activeWorkflows.size > 0) {
+                    startWorkflowMonitoring();
+                }
             }
         }
         
@@ -760,8 +905,181 @@ HTML_TEMPLATE = '''
             location.reload();
         }
         
-        // Auto-refresh every 60 seconds
-        setInterval(refreshData, 60000);
+        // Workflow management functions
+        let activeWorkflows = new Set();
+        let workflowCheckInterval = null;
+        
+        async function runDailyETL() {
+            if (!confirm('Run daily ETL for the previous business day?')) return;
+            
+            try {
+                const response = await fetch('/api/workflow/run-daily', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'}
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Daily ETL workflow started!\nWorkflow ID: ${data.workflow_id}`);
+                    activeWorkflows.add(data.workflow_id);
+                    startWorkflowMonitoring();
+                    showSection('workflows');
+                } else {
+                    alert(`Error: ${data.error || 'Failed to start workflow'}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+        
+        async function runValidation() {
+            const mode = document.getElementById('validationMode').value;
+            const confirmMsg = mode === 'full' 
+                ? 'Run FULL validation? This will replace entire dates with any changes!'
+                : 'Run selective validation? This will update only changed records.';
+            
+            if (!confirm(confirmMsg)) return;
+            
+            try {
+                const response = await fetch('/api/workflow/validate', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ mode: mode })
+                });
+                
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`Validation workflow started in ${mode} mode!\nWorkflow ID: ${data.workflow_id}`);
+                    activeWorkflows.add(data.workflow_id);
+                    startWorkflowMonitoring();
+                    showSection('workflows');
+                } else {
+                    alert(`Error: ${data.error || 'Failed to start workflow'}`);
+                }
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+            }
+        }
+        
+        function startWorkflowMonitoring() {
+            if (!workflowCheckInterval) {
+                updateWorkflowStatus();
+                workflowCheckInterval = setInterval(updateWorkflowStatus, 2000); // Check every 2 seconds
+            }
+        }
+        
+        async function updateWorkflowStatus() {
+            try {
+                const response = await fetch('/api/workflow/list');
+                const workflows = await response.json();
+                
+                // Update active workflows
+                const activeList = workflows.filter(w => w.status === 'running');
+                activeWorkflows = new Set(activeList.map(w => w.id));
+                
+                // Update active workflows display
+                const activeDiv = document.getElementById('workflowsList');
+                if (activeList.length > 0) {
+                    activeDiv.innerHTML = activeList.map(w => `
+                        <div style="padding: 15px; background: #f3f4f6; border-radius: 6px; margin-bottom: 10px;">
+                            <h4 style="margin: 0 0 10px 0;">🔄 ${w.type}</h4>
+                            <p style="margin: 5px 0; color: #6b7280;">Started: ${new Date(w.started_at).toLocaleString()}</p>
+                            <button onclick="viewWorkflowOutput('${w.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                View Output
+                            </button>
+                        </div>
+                    `).join('');
+                } else {
+                    activeDiv.innerHTML = '<p style="color: #6b7280;">No active workflows</p>';
+                }
+                
+                // Update workflow history
+                const historyBody = document.getElementById('workflowHistory');
+                const completedWorkflows = workflows.filter(w => w.status !== 'running').slice(0, 10);
+                
+                if (completedWorkflows.length > 0) {
+                    historyBody.innerHTML = completedWorkflows.map(w => {
+                        const statusColor = w.status === 'completed' ? '#22c55e' : '#ef4444';
+                        const statusIcon = w.status === 'completed' ? '✅' : '❌';
+                        return `
+                            <tr>
+                                <td>${w.type}</td>
+                                <td style="color: ${statusColor}; font-weight: 600;">${statusIcon} ${w.status}</td>
+                                <td>${new Date(w.started_at).toLocaleString()}</td>
+                                <td>${w.completed_at ? new Date(w.completed_at).toLocaleString() : '-'}</td>
+                                <td>
+                                    <button onclick="viewWorkflowOutput('${w.id}')" style="padding: 4px 8px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                        View Log
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    historyBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6b7280;">No workflow history</td></tr>';
+                }
+                
+                // Stop monitoring if no active workflows
+                if (activeWorkflows.size === 0 && workflowCheckInterval) {
+                    clearInterval(workflowCheckInterval);
+                    workflowCheckInterval = null;
+                }
+            } catch (error) {
+                console.error('Error updating workflow status:', error);
+            }
+        }
+        
+        async function viewWorkflowOutput(workflowId) {
+            try {
+                const response = await fetch(`/api/workflow/status/${workflowId}`);
+                const workflow = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('modalTitle').textContent = `${workflow.type} - ${workflow.status}`;
+                    const content = document.getElementById('modalContent');
+                    
+                    if (workflow.output && workflow.output.length > 0) {
+                        content.innerHTML = workflow.output.map(o => 
+                            `<div style="margin-bottom: 5px;"><span style="color: #6b7280;">[${new Date(o.timestamp).toLocaleTimeString()}]</span> ${escapeHtml(o.message)}</div>`
+                        ).join('');
+                    } else {
+                        content.innerHTML = '<p style="color: #6b7280;">No output available</p>';
+                    }
+                    
+                    if (workflow.error) {
+                        content.innerHTML += `<div style="margin-top: 20px; padding: 10px; background: #fee; border: 1px solid #fcc; border-radius: 4px; color: #c00;">
+                            <strong>Error:</strong> ${escapeHtml(workflow.error)}
+                        </div>`;
+                    }
+                    
+                    document.getElementById('workflowModal').style.display = 'block';
+                    
+                    // Auto-scroll to bottom
+                    content.scrollTop = content.scrollHeight;
+                }
+            } catch (error) {
+                alert(`Error loading workflow output: ${error.message}`);
+            }
+        }
+        
+        function closeWorkflowModal() {
+            document.getElementById('workflowModal').style.display = 'none';
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Auto-refresh every 60 seconds (disabled for workflow section to prevent interruption)
+        let refreshInterval = setInterval(function() {
+            // Only refresh if not on workflows section
+            const activeSection = document.querySelector('.section:not(.hidden)');
+            if (activeSection && activeSection.id !== 'workflows') {
+                refreshData();
+            }
+        }, 60000);
         
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
@@ -1097,6 +1415,185 @@ def export_etl_log():
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+def poll_etl_workflow(ui_workflow_id, etl_workflow_id):
+    """Poll ETL API for workflow status and update UI tracker"""
+    import requests
+    import time
+    
+    try:
+        workflow_tracker.update_workflow(ui_workflow_id, output_line=f"Monitoring ETL workflow: {etl_workflow_id}")
+        
+        # Poll the ETL API for workflow status
+        while True:
+            try:
+                # Call the fund-etl API to get workflow status
+                response = requests.get(f'http://fund-etl:8081/api/etl/workflow/{etl_workflow_id}')
+                
+                if response.status_code == 200:
+                    etl_workflow = response.json()
+                    
+                    # Update UI workflow with ETL output
+                    if etl_workflow.get('output'):
+                        for output_item in etl_workflow['output']:
+                            workflow_tracker.update_workflow(
+                                ui_workflow_id, 
+                                output_line=output_item['message']
+                            )
+                    
+                    # Check if workflow is complete
+                    if etl_workflow['status'] in ['completed', 'failed']:
+                        if etl_workflow['status'] == 'completed':
+                            workflow_tracker.update_workflow(
+                                ui_workflow_id, 
+                                status='completed',
+                                output_line="ETL workflow completed successfully"
+                            )
+                        else:
+                            workflow_tracker.update_workflow(
+                                ui_workflow_id, 
+                                status='failed',
+                                error=etl_workflow.get('error', 'ETL workflow failed')
+                            )
+                        break
+                else:
+                    workflow_tracker.update_workflow(
+                        ui_workflow_id,
+                        output_line=f"Failed to get workflow status: HTTP {response.status_code}"
+                    )
+            
+            except requests.exceptions.ConnectionError:
+                workflow_tracker.update_workflow(
+                    ui_workflow_id,
+                    output_line="Waiting for ETL API to be available..."
+                )
+            
+            except Exception as e:
+                workflow_tracker.update_workflow(
+                    ui_workflow_id,
+                    output_line=f"Error polling workflow: {str(e)}"
+                )
+            
+            time.sleep(2)  # Poll every 2 seconds
+    
+    except Exception as e:
+        workflow_tracker.update_workflow(ui_workflow_id, status='failed', error=str(e))
+
+@app.route('/api/workflow/run-daily', methods=['POST'])
+def run_daily_workflow():
+    """Run ETL for previous business day"""
+    import requests
+    
+    try:
+        # Start UI workflow tracking
+        ui_workflow_id = workflow_tracker.start_workflow('run-daily', {})
+        
+        # Call the fund-etl API to start the ETL
+        try:
+            response = requests.post('http://fund-etl:8081/api/etl/run-daily')
+            
+            if response.status_code in [200, 202]:
+                etl_response = response.json()
+                etl_workflow_id = etl_response.get('workflow_id')
+                
+                # Start polling thread to monitor ETL workflow
+                thread = threading.Thread(
+                    target=poll_etl_workflow,
+                    args=(ui_workflow_id, etl_workflow_id)
+                )
+                thread.daemon = True
+                thread.start()
+                
+                return jsonify({
+                    'workflow_id': ui_workflow_id,
+                    'etl_workflow_id': etl_workflow_id,
+                    'status': 'started',
+                    'message': 'Daily ETL workflow started'
+                })
+            else:
+                error_msg = f"Failed to start ETL: {response.text}"
+                workflow_tracker.update_workflow(ui_workflow_id, status='failed', error=error_msg)
+                return jsonify({'error': error_msg}), response.status_code
+                
+        except requests.exceptions.ConnectionError:
+            error_msg = "Unable to connect to ETL API. Make sure the fund-etl service is running."
+            workflow_tracker.update_workflow(ui_workflow_id, status='failed', error=error_msg)
+            return jsonify({'error': error_msg}), 503
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/workflow/validate', methods=['POST'])
+def run_validation_workflow():
+    """Run 30-day validation workflow"""
+    import requests
+    
+    try:
+        # Get validation mode from request
+        data = request.get_json() or {}
+        mode = data.get('mode', 'selective')  # selective or full
+        
+        # Start UI workflow tracking
+        ui_workflow_id = workflow_tracker.start_workflow('validate', {'mode': mode})
+        
+        # Call the fund-etl API to start validation
+        try:
+            response = requests.post(
+                'http://fund-etl:8081/api/etl/validate',
+                json={'mode': mode}
+            )
+            
+            if response.status_code in [200, 202]:
+                etl_response = response.json()
+                etl_workflow_id = etl_response.get('workflow_id')
+                
+                # Start polling thread to monitor ETL workflow
+                thread = threading.Thread(
+                    target=poll_etl_workflow,
+                    args=(ui_workflow_id, etl_workflow_id)
+                )
+                thread.daemon = True
+                thread.start()
+                
+                return jsonify({
+                    'workflow_id': ui_workflow_id,
+                    'etl_workflow_id': etl_workflow_id,
+                    'status': 'started',
+                    'message': f'30-day validation workflow started in {mode} mode'
+                })
+            else:
+                error_msg = f"Failed to start validation: {response.text}"
+                workflow_tracker.update_workflow(ui_workflow_id, status='failed', error=error_msg)
+                return jsonify({'error': error_msg}), response.status_code
+                
+        except requests.exceptions.ConnectionError:
+            error_msg = "Unable to connect to ETL API. Make sure the fund-etl service is running."
+            workflow_tracker.update_workflow(ui_workflow_id, status='failed', error=error_msg)
+            return jsonify({'error': error_msg}), 503
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/workflow/status/<workflow_id>')
+def get_workflow_status(workflow_id):
+    """Get status of a specific workflow"""
+    workflow = workflow_tracker.get_workflow(workflow_id)
+    if workflow:
+        return jsonify(workflow)
+    else:
+        return jsonify({'error': 'Workflow not found'}), 404
+
+@app.route('/api/workflow/list')
+def list_workflows():
+    """List all workflows"""
+    # Clean up old workflows first
+    workflow_tracker.cleanup_old_workflows()
+    
+    workflows = workflow_tracker.get_all_workflows()
+    # Sort by started_at descending
+    workflows.sort(key=lambda x: x['started_at'], reverse=True)
+    
+    return jsonify(workflows)
 
 @app.route('/api/health')
 def health():

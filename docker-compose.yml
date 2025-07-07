@@ -19,6 +19,10 @@ services:
       - ./data:/data
       - ./logs:/logs
     
+    # Expose the API port internally for container-to-container communication
+    expose:
+      - "8081"
+    
     deploy:
       resources:
         limits:
@@ -49,10 +53,12 @@ services:
     
     environment:
       - DB_PATH=/data/fund_data.db
+      - DOCKER_HOST=unix:///var/run/docker.sock
     
     volumes:
       - ./data:/data:ro
       - ./logs:/logs:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     
     ports:
       - "8080:8080"
