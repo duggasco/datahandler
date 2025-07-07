@@ -164,3 +164,196 @@
 2025-07-07 10:55:26,503 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
 2025-07-07 10:55:26,547 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
 2025-07-07 10:55:26,548 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:12:22,712 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:12:23,406 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:12:23,407 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:12:25,770 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:12:25,771 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:12:25,771 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:12:28,904 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:12:35,198 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:12:52,204 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:12:58,365 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:12:58,443 - sap_download_module - INFO - Browser closed
+2025-07-07 11:13:08,491 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-10
+2025-07-07 11:13:13,528 - fund_etl_pipeline - ERROR - Database load failed: database is locked
+2025-07-07 11:13:13,529 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: database is locked
+2025-07-07 11:13:13,530 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:13:16,067 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:13:16,067 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:13:18,370 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:13:18,370 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:13:18,370 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:13:21,815 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:13:28,637 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:13:47,644 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,069 bytes)
+2025-07-07 11:13:54,805 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:13:54,869 - sap_download_module - INFO - Browser closed
+2025-07-07 11:13:54,946 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 11:13:54,989 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:13:54,989 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:22:24,499 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:22:24,983 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:22:24,983 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:22:27,308 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:22:27,309 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:22:27,309 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:22:30,432 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:22:36,368 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:22:54,374 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:22:59,124 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:22:59,188 - sap_download_module - INFO - Browser closed
+2025-07-07 11:23:07,127 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-05
+2025-07-07 11:23:12,156 - fund_etl_pipeline - ERROR - Database load failed: database is locked
+2025-07-07 11:23:12,158 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: database is locked
+2025-07-07 11:23:12,158 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:23:12,533 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:23:12,533 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:23:14,835 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:23:14,835 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:23:14,835 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:23:17,965 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:23:23,656 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:23:42,662 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,105 bytes)
+2025-07-07 11:23:47,725 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:23:47,793 - sap_download_module - INFO - Browser closed
+2025-07-07 11:23:47,853 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 11:23:47,897 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:23:47,897 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:31:52,745 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:31:53,176 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:31:53,176 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:31:55,540 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:31:55,541 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:31:55,541 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:31:58,674 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:32:03,991 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:32:21,004 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,910 bytes)
+2025-07-07 11:32:25,734 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:32:25,805 - sap_download_module - INFO - Browser closed
+2025-07-07 11:32:34,061 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-23
+2025-07-07 11:32:34,064 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-23
+2025-07-07 11:32:34,066 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-24 and 2025-05-25
+2025-07-07 11:32:34,100 - fund_etl_pipeline - ERROR - Database load failed: near "close_conn": syntax error
+2025-07-07 11:32:34,101 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: cannot access local variable 'close_conn' where it is not associated with a value
+2025-07-07 11:32:34,102 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:32:34,499 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:32:34,499 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:32:36,723 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:32:36,723 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:32:36,723 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:32:39,847 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:34:40,172 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:34:40,607 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:34:40,607 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:34:42,906 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:34:42,906 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:34:42,906 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:34:46,021 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:34:52,220 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:35:09,225 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:35:13,878 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:35:13,944 - sap_download_module - INFO - Browser closed
+2025-07-07 11:35:21,798 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-21
+2025-07-07 11:35:21,879 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 11:35:21,900 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-03
+2025-07-07 11:35:21,971 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 11:35:21,992 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-05
+2025-07-07 11:35:22,069 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 11:35:22,091 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-27
+2025-07-07 11:35:22,162 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 11:35:22,181 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-13
+2025-07-07 11:35:22,183 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 11:35:22,185 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 11:35:22,232 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:35:22,232 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:35:22,234 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:35:22,621 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:35:22,622 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:35:24,905 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:35:24,905 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:35:24,905 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:35:28,021 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:35:33,867 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:35:52,875 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,105 bytes)
+2025-07-07 11:35:57,888 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:35:57,952 - sap_download_module - INFO - Browser closed
+2025-07-07 11:35:58,045 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 11:35:58,097 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:35:58,097 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 11:46:00,933 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:46:01,397 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:46:01,398 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:46:04,323 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:46:04,323 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:46:04,323 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:46:07,443 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:46:13,482 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:46:30,488 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:46:35,130 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:46:35,193 - sap_download_module - INFO - Browser closed
+2025-07-07 11:46:43,041 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-22
+2025-07-07 11:46:43,060 - fund_etl_pipeline - ERROR - Database load failed: near "close_conn": syntax error
+2025-07-07 11:46:43,061 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: near "close_conn": syntax error
+2025-07-07 11:46:43,062 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:46:43,449 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:46:43,449 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:46:45,665 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:46:45,666 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:46:45,666 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:46:48,806 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:46:54,297 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:47:13,302 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,073 bytes)
+2025-07-07 11:47:18,335 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:47:18,399 - sap_download_module - INFO - Browser closed
+2025-07-07 11:47:18,459 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 11:47:18,476 - fund_etl_pipeline - ERROR - Database load failed: near "close_conn": syntax error
+2025-07-07 11:47:18,476 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: near "close_conn": syntax error
+2025-07-07 11:53:59,158 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:53:59,628 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:53:59,629 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:54:02,009 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:54:02,009 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:54:02,009 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:54:05,134 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:54:11,353 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:54:27,362 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:54:31,956 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:54:32,026 - sap_download_module - INFO - Browser closed
+2025-07-07 11:54:32,052 - fund_etl_pipeline - ERROR - Validation error for AMRS: name 'conn' is not defined
+2025-07-07 11:54:32,053 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:54:32,443 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:54:32,443 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:54:34,661 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:54:34,662 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:54:34,662 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:54:37,785 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:54:43,574 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:55:02,580 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,073 bytes)
+2025-07-07 11:55:07,373 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:55:07,455 - sap_download_module - INFO - Browser closed
+2025-07-07 11:55:07,485 - fund_etl_pipeline - ERROR - Validation error for EMEA: name 'conn' is not defined
+2025-07-07 11:58:02,097 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 11:58:02,563 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:58:02,563 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:58:04,939 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:58:04,940 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 11:58:04,940 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:58:08,062 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:58:14,452 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:58:30,457 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,911 bytes)
+2025-07-07 11:58:35,056 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 11:58:35,120 - sap_download_module - INFO - Browser closed
+2025-07-07 11:58:35,147 - fund_etl_pipeline - ERROR - Validation error for AMRS: 'NoneType' object has no attribute 'cursor'
+2025-07-07 11:58:35,147 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 11:58:35,553 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 11:58:35,553 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 11:58:37,756 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 11:58:37,757 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 11:58:37,757 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 11:58:40,882 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 11:58:46,490 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 11:59:05,495 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,137 bytes)
+2025-07-07 11:59:10,302 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 11:59:10,367 - sap_download_module - INFO - Browser closed
+2025-07-07 11:59:10,393 - fund_etl_pipeline - ERROR - Validation error for EMEA: 'NoneType' object has no attribute 'cursor'

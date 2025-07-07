@@ -297,7 +297,6 @@ class FundDataETL:
             raise PermissionError(f"Cannot write to directory: {db_dir}")
         
         try:
-            conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
             # Create main fund data table - matching our Excel structure
@@ -378,15 +377,17 @@ class FundDataETL:
                 raise Exception("Failed to create all required tables")
             
             conn.commit()
-            conn.close()
             
         except Exception as e:
             logger.error(f"Database setup failed: {str(e)}")
             raise
     
-    def load_to_database(self, df: pd.DataFrame, region: str, file_date: datetime):
+    def load_to_database(self, df: pd.DataFrame, region: str, file_date: datetime, conn=None):
         """Load processed data to SQLite database"""
-        conn = sqlite3.connect(self.db_path)
+        close_conn = False
+        if conn is None:
+            conn = sqlite3.connect(self.db_path)
+            close_conn = True
         
         try:
             # Prepare dataframe for loading
@@ -480,11 +481,11 @@ class FundDataETL:
             logger.error(f"Database load failed: {str(e)}")
             raise
         finally:
-            conn.close()
+            if close_conn:
+                conn.close()
     
     def carry_forward_data(self, date: datetime, region: str):
         """Carry forward previous day's data when no new file is available"""
-        conn = sqlite3.connect(self.db_path)
         
         try:
             # Find the most recent data for this region
@@ -533,7 +534,8 @@ class FundDataETL:
             logger.error(f"Failed to carry forward data: {str(e)}")
             raise
         finally:
-            conn.close()
+            if close_conn:
+                conn.close()
     
 
     def download_lookback_file(self, region: str, lookback_days: int = 30) -> Optional[pd.DataFrame]:
@@ -593,6 +595,7 @@ class FundDataETL:
 
     def validate_against_lookback(self, region: str, lookback_df: pd.DataFrame) -> Dict[str, Any]:
         """Validate database data against 30-day lookback file"""
+        conn = None  # Initialize to avoid NameError
         from typing import Dict, Any
         
         validation_results = {
@@ -607,7 +610,6 @@ class FundDataETL:
         }
         
         try:
-            conn = sqlite3.connect(self.db_path)
             
             # Clean and prepare lookback data
             lookback_df['Date'] = pd.to_datetime(lookback_df['Date'], errors='coerce')
@@ -662,7 +664,6 @@ class FundDataETL:
                         validation_results['summary']['changed_records_count'] += len(changes)
                         validation_results['summary']['requires_update'] = True
             
-            conn.close()
             
         except Exception as e:
             logger.error(f"Validation error for {region}: {str(e)}")
@@ -753,7 +754,6 @@ class FundDataETL:
             logger.info(f"No updates required for {region}")
             return
             
-        conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         try:
@@ -775,7 +775,7 @@ class FundDataETL:
                     date_data_processed = self.process_dates(date_data, 
                         datetime.strptime(missing_date, '%Y-%m-%d'))
                     self.load_to_database(date_data_processed, region, 
-                        datetime.strptime(missing_date, '%Y-%m-%d'))
+                        datetime.strptime(missing_date, '%Y-%m-%d'), conn)
                     updates_made += len(date_data)
             
             # Process changed records
@@ -800,7 +800,7 @@ class FundDataETL:
                     date_data_processed = self.process_dates(date_data, 
                         datetime.strptime(date_str, '%Y-%m-%d'))
                     self.load_to_database(date_data_processed, region, 
-                        datetime.strptime(date_str, '%Y-%m-%d'))
+                        datetime.strptime(date_str, '%Y-%m-%d'), conn)
                     updates_made += len(date_data)
             
             # Commit transaction
@@ -827,7 +827,8 @@ class FundDataETL:
             logger.error(f"Failed to update from lookback for {region}: {str(e)}")
             raise
         finally:
-            conn.close()
+            if close_conn:
+                conn.close()
 
     def run_daily_etl(self, run_date: Optional[datetime] = None):
         """
@@ -889,14 +890,12 @@ class FundDataETL:
                 logger.error(f"ETL failed for {region}: {str(e)}")
                 
                 # Log failure
-                conn = sqlite3.connect(self.db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, issues)
                 VALUES (?, ?, ?, ?, ?)
                 """, (datetime.now().date(), region, data_date.date(), 'FAILED', str(e)))
                 conn.commit()
-                conn.close()
         
         # After successful daily load, run lookback validation
         validation_alerts = []
