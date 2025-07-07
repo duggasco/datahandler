@@ -52,7 +52,9 @@ init_config() {
 {
     "sap_urls": {
         "amrs": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E",
-        "emea": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E"
+        "emea": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E",
+        "amrs_30days": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXmFuFTG4DBBrefomiwL1aE&sOutputFormat=E",
+        "emea_30days": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AQbKBz8wx0pHojHl0uBm2sw&sOutputFormat=E"
     },
     "auth": {
         "username": "sduggan",
@@ -61,11 +63,24 @@ init_config() {
     "db_path": "/data/fund_data.db",
     "data_dir": "/data",
     "download_timeout": 300,
+    "lookback_timeout": 1200,
     "verify_ssl": true,
     "email_alerts": {
         "enabled": false,
         "recipients": ["etl-team@company.com"],
         "smtp_server": "smtp.company.com"
+    },
+    "validation": {
+        "enabled": true,
+        "change_threshold_percent": 5.0,
+        "critical_fields": [
+            "share_class_assets",
+            "portfolio_assets",
+            "one_day_yield",
+            "seven_day_yield"
+        ],
+        "alert_on_missing_dates": true,
+        "alert_on_major_changes": true
     }
 }
 EOF
@@ -97,6 +112,17 @@ EOF
 
 # Function to initialize database
 init_database() {
+    # Fix ownership of existing database if it exists
+    if [ -f "/data/fund_data.db" ]; then
+        current_owner=$(stat -c '%U' /data/fund_data.db)
+        if [ "$current_owner" != "etluser" ]; then
+            echo "Fixing database ownership (currently owned by $current_owner)..."
+            chown etluser:etluser /data/fund_data.db
+            chmod 664 /data/fund_data.db
+            echo "Database ownership fixed"
+        fi
+    fi
+    
     if [ ! -f "/data/fund_data.db" ]; then
         echo "Database not found. Initializing..."
         
@@ -148,6 +174,9 @@ else:
         
         if [ $? -eq 0 ]; then
             echo "Database initialized successfully"
+            # Ensure proper ownership
+            chown etluser:etluser /data/fund_data.db
+            chmod 664 /data/fund_data.db
             ls -la /data/fund_data.db
         else
             echo "ERROR: Failed to initialize database"
@@ -212,6 +241,30 @@ print(\"\\nAll tests passed!\")
     fi
 }
 
+# Fix database permissions before operations
+fix_db_permissions() {
+    if [ -f "/data/fund_data.db" ]; then
+        # Check current ownership
+        current_owner=$(stat -c '%U' /data/fund_data.db)
+        current_perms=$(stat -c '%a' /data/fund_data.db)
+        
+        if [ "$current_owner" != "etluser" ] || [ "$current_perms" != "664" ]; then
+            echo "Fixing database permissions..."
+            chown etluser:etluser /data/fund_data.db
+            chmod 664 /data/fund_data.db
+            echo "Database permissions fixed"
+        fi
+    fi
+    
+    # Also fix any SQLite journal files
+    for f in /data/fund_data.db-*; do
+        if [ -f "$f" ]; then
+            chown etluser:etluser "$f"
+            chmod 664 "$f"
+        fi
+    done
+}
+
 # Main initialization sequence
 echo "Starting initialization sequence..."
 
@@ -238,18 +291,21 @@ case "$1" in
     
     "run-daily")
         echo "Running daily ETL..."
+        fix_db_permissions
         exec su -c "cd /app && python fund_etl_scheduler.py --run-daily" etluser
         ;;
     
     "backfill")
         shift
         echo "Running backfill for $1 days..."
+        fix_db_permissions
         exec su -c "cd /app && python fund_etl_scheduler.py --backfill $1" etluser
         ;;
     
     "historical")
         shift
         echo "Loading historical data from $1 to $2..."
+        fix_db_permissions
         exec su -c "cd /app && python fund_etl_scheduler.py --historical $1 $2" etluser
         ;;
     
@@ -260,6 +316,7 @@ case "$1" in
     
     "validate")
         echo "Running 30-day lookback validation..."
+        fix_db_permissions
         exec su -c "cd /app && python fund_etl_scheduler.py --validate" etluser
         ;;
     

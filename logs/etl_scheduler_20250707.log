@@ -38,3 +38,129 @@
 2025-07-07 10:22:48,155 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
 2025-07-07 10:22:48,176 - fund_etl_pipeline - ERROR - Database load failed: attempt to write a readonly database
 2025-07-07 10:22:48,176 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: attempt to write a readonly database
+2025-07-07 10:32:25,239 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 10:32:29,596 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:32:29,596 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:32:32,091 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:32:32,091 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 10:32:32,091 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:32:35,311 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:32:43,761 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:33:02,766 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,863 bytes)
+2025-07-07 10:33:08,508 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 10:33:08,707 - sap_download_module - INFO - Browser closed
+2025-07-07 10:33:09,122 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-21
+2025-07-07 10:33:09,194 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,211 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-22
+2025-07-07 10:33:09,262 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,281 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-23
+2025-07-07 10:33:09,283 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-23
+2025-07-07 10:33:09,285 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-24 and 2025-05-25
+2025-07-07 10:33:09,375 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 10:33:09,393 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-27
+2025-07-07 10:33:09,449 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,467 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-28
+2025-07-07 10:33:09,517 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,536 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-29
+2025-07-07 10:33:09,612 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,631 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-05-30
+2025-07-07 10:33:09,634 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-30
+2025-07-07 10:33:09,636 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-31 and 2025-06-01
+2025-07-07 10:33:09,756 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 10:33:09,773 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-02
+2025-07-07 10:33:09,843 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,860 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-03
+2025-07-07 10:33:09,930 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:09,950 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-04
+2025-07-07 10:33:10,008 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:10,025 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-05
+2025-07-07 10:33:10,119 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:10,136 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-06
+2025-07-07 10:33:10,138 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-06
+2025-07-07 10:33:10,140 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-07 and 2025-06-08
+2025-07-07 10:33:10,249 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 10:33:10,266 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-09
+2025-07-07 10:33:10,360 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:10,376 - fund_etl_pipeline - INFO - Adding 864 records for missing date 2025-06-10
+2025-07-07 10:33:10,457 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 10:33:10,499 - fund_etl_pipeline - INFO - Adding 865 records for missing date 2025-06-11
+2025-07-07 10:33:10,580 - fund_etl_pipeline - INFO - Successfully loaded 865 records for AMRS
+2025-07-07 10:33:10,597 - fund_etl_pipeline - INFO - Adding 866 records for missing date 2025-06-12
+2025-07-07 10:33:10,665 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 10:33:10,682 - fund_etl_pipeline - INFO - Adding 866 records for missing date 2025-06-13
+2025-07-07 10:33:10,685 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 10:33:10,689 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 10:33:10,793 - fund_etl_pipeline - INFO - Successfully loaded 2598 records for AMRS
+2025-07-07 10:33:10,812 - fund_etl_pipeline - INFO - Adding 866 records for missing date 2025-06-16
+2025-07-07 10:33:10,893 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 10:33:10,913 - fund_etl_pipeline - INFO - Adding 858 records for missing date 2025-06-17
+2025-07-07 10:33:10,976 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 10:33:10,994 - fund_etl_pipeline - INFO - Adding 858 records for missing date 2025-06-18
+2025-07-07 10:33:11,058 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 10:33:11,076 - fund_etl_pipeline - INFO - Adding 860 records for missing date 2025-06-20
+2025-07-07 10:33:11,080 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-20
+2025-07-07 10:33:11,083 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-21 and 2025-06-22
+2025-07-07 10:33:11,196 - fund_etl_pipeline - INFO - Successfully loaded 2580 records for AMRS
+2025-07-07 10:33:11,212 - fund_etl_pipeline - INFO - Adding 861 records for missing date 2025-06-23
+2025-07-07 10:33:11,293 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 10:33:11,313 - fund_etl_pipeline - INFO - Adding 861 records for missing date 2025-06-24
+2025-07-07 10:33:11,390 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 10:33:11,407 - fund_etl_pipeline - INFO - Adding 861 records for missing date 2025-06-25
+2025-07-07 10:33:11,492 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 10:33:11,512 - fund_etl_pipeline - INFO - Adding 861 records for missing date 2025-06-26
+2025-07-07 10:33:11,622 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 10:33:11,644 - fund_etl_pipeline - INFO - Adding 862 records for missing date 2025-06-27
+2025-07-07 10:33:11,648 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-27
+2025-07-07 10:33:11,651 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-28 and 2025-06-29
+2025-07-07 10:33:11,981 - fund_etl_pipeline - INFO - Successfully loaded 2586 records for AMRS
+2025-07-07 10:33:11,999 - fund_etl_pipeline - INFO - Adding 862 records for missing date 2025-06-30
+2025-07-07 10:33:12,257 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 10:33:12,276 - fund_etl_pipeline - INFO - Adding 862 records for missing date 2025-07-01
+2025-07-07 10:33:12,434 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 10:33:12,454 - fund_etl_pipeline - INFO - Adding 862 records for missing date 2025-07-02
+2025-07-07 10:33:12,570 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 10:33:12,591 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-03
+2025-07-07 10:33:17,620 - fund_etl_pipeline - ERROR - Database load failed: database is locked
+2025-07-07 10:33:17,624 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: database is locked
+2025-07-07 10:33:17,625 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 10:33:20,166 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:33:20,166 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:33:22,484 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:33:22,484 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 10:33:22,484 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:33:25,627 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:33:31,152 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:33:51,158 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,872 bytes)
+2025-07-07 10:33:56,674 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29133 records
+2025-07-07 10:33:56,740 - sap_download_module - INFO - Browser closed
+2025-07-07 10:33:56,824 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 10:33:56,873 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 10:33:56,874 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 10:53:55,313 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 10:53:56,865 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:53:56,865 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:53:59,400 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:53:59,400 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 10:53:59,400 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:54:02,578 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:54:08,755 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:54:24,760 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,440,875 bytes)
+2025-07-07 10:54:30,883 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 10:54:30,956 - sap_download_module - INFO - Browser closed
+2025-07-07 10:54:43,264 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-16
+2025-07-07 10:54:48,296 - fund_etl_pipeline - ERROR - Database load failed: database is locked
+2025-07-07 10:54:48,297 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: database is locked
+2025-07-07 10:54:48,299 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 10:54:48,806 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 10:54:48,810 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 10:54:52,445 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 10:54:52,445 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 10:54:52,445 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 10:54:55,601 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 10:55:01,081 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 10:55:20,088 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,954,676 bytes)
+2025-07-07 10:55:26,358 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 10:55:26,429 - sap_download_module - INFO - Browser closed
+2025-07-07 10:55:26,503 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 10:55:26,547 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 10:55:26,548 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code

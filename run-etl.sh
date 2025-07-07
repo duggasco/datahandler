@@ -70,8 +70,17 @@ case "$1" in
         docker compose exec fund-etl python /app/test_lookback_validation.py
         ;;
     
+    "fix-permissions")
+        echo "Fixing database permissions..."
+        docker compose exec -u root fund-etl chown -R etluser:etluser /data
+        docker compose exec -u root fund-etl chmod 664 /data/fund_data.db 2>/dev/null || true
+        docker compose exec -u root fund-etl bash -c 'for f in /data/fund_data.db-*; do [ -f "$f" ] && chmod 664 "$f" && chown etluser:etluser "$f"; done' 2>/dev/null || true
+        echo "Permissions fixed. Current status:"
+        docker compose exec fund-etl ls -la /data/fund_data.db
+        ;;
+    
     *)
-        echo "Usage: $0 {start|stop|restart|status|logs|run|test|report|ui|build|shell|validate|test-validation}"
+        echo "Usage: $0 {start|stop|restart|status|logs|run|test|report|ui|build|shell|validate|test-validation|fix-permissions}"
         exit 1
         ;;
 esac
