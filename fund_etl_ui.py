@@ -23,6 +23,19 @@ app = Flask(__name__)
 
 DB_PATH = os.environ.get('DB_PATH', '/data/fund_data.db')
 
+class NumpyEncoder(json.JSONEncoder):
+    """Custom JSON encoder to handle numpy types"""
+    def default(self, obj):
+        if isinstance(obj, (np.integer, np.int64)):
+            return int(obj)
+        elif isinstance(obj, (np.floating, np.float64)):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif pd.isna(obj):
+            return None
+        return super(NumpyEncoder, self).default(obj)
+
 # Enhanced HTML template with scrollable tables
 HTML_TEMPLATE = '''
 <!DOCTYPE html>
@@ -805,31 +818,40 @@ def index():
                 'issues': run['issues']
             })
         
-        # Get data quality by region
+        # Get data quality by region - using each region's latest date
         data_quality = []
         for region in ['AMRS', 'EMEA']:
-            quality_query = f"""
-            SELECT 
-                COUNT(*) as records,
-                ROUND(AVG(CASE WHEN share_class_assets IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as assets_pct,
-                ROUND(AVG(CASE WHEN one_day_yield IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as yield_1d_pct,
-                ROUND(AVG(CASE WHEN seven_day_yield IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as yield_7d_pct,
-                ROUND(AVG(CASE WHEN daily_liquidity IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as liquidity_pct
-            FROM fund_data
-            WHERE region = '{region}' AND date = '{latest_date}'
+            # First get the latest date for this specific region
+            region_date_query = f"""
+            SELECT MAX(date) as latest_date 
+            FROM fund_data 
+            WHERE region = '{region}'
             """
+            region_latest = pd.read_sql_query(region_date_query, conn).iloc[0]['latest_date']
             
-            quality_df = pd.read_sql_query(quality_query, conn)
-            if len(quality_df) > 0 and quality_df.iloc[0]['records'] > 0:
-                row = quality_df.iloc[0]
-                data_quality.append({
-                    'name': region,
-                    'records': row['records'],
-                    'assets_pct': row['assets_pct'],
-                    'yield_1d_pct': row['yield_1d_pct'],
-                    'yield_7d_pct': row['yield_7d_pct'],
-                    'liquidity_pct': row['liquidity_pct']
-                })
+            if region_latest:
+                quality_query = f"""
+                SELECT 
+                    COUNT(*) as records,
+                    ROUND(AVG(CASE WHEN share_class_assets IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as assets_pct,
+                    ROUND(AVG(CASE WHEN one_day_yield IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as yield_1d_pct,
+                    ROUND(AVG(CASE WHEN seven_day_yield IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as yield_7d_pct,
+                    ROUND(AVG(CASE WHEN daily_liquidity IS NOT NULL THEN 1 ELSE 0 END) * 100, 1) as liquidity_pct
+                FROM fund_data
+                WHERE region = '{region}' AND date = '{region_latest}'
+                """
+                
+                quality_df = pd.read_sql_query(quality_query, conn)
+                if len(quality_df) > 0 and quality_df.iloc[0]['records'] > 0:
+                    row = quality_df.iloc[0]
+                    data_quality.append({
+                        'name': f"{region} ({region_latest})",
+                        'records': row['records'],
+                        'assets_pct': row['assets_pct'],
+                        'yield_1d_pct': row['yield_1d_pct'],
+                        'yield_7d_pct': row['yield_7d_pct'],
+                        'liquidity_pct': row['liquidity_pct']
+                    })
         
         conn.close()
         
@@ -918,14 +940,14 @@ def get_telemetry():
             "SELECT COUNT(*) as count FROM sqlite_master WHERE type='table'", 
             conn
         ).iloc[0]['count']
-        telemetry['table_count'] = table_count
+        telemetry['table_count'] = int(table_count)
         
         # Index count
         index_count = pd.read_sql_query(
             "SELECT COUNT(*) as count FROM sqlite_master WHERE type='index'", 
             conn
         ).iloc[0]['count']
-        telemetry['index_count'] = index_count
+        telemetry['index_count'] = int(index_count)
         
         # Last ETL run
         last_run = pd.read_sql_query(
@@ -942,7 +964,7 @@ def get_telemetry():
         WHERE run_date >= date('now', '-7 days')
         """
         success_rate = pd.read_sql_query(success_rate_query, conn).iloc[0]['rate']
-        telemetry['success_rate'] = success_rate if success_rate is not None else 0
+        telemetry['success_rate'] = float(success_rate) if success_rate is not None else 0.0
         
         # Average processing time (dummy for now)
         telemetry['avg_processing_time'] = '45'
@@ -954,14 +976,14 @@ def get_telemetry():
         FROM fund_data
         """
         coverage = pd.read_sql_query(coverage_query, conn).iloc[0]['days']
-        telemetry['data_coverage_days'] = coverage if coverage is not None else 0
+        telemetry['data_coverage_days'] = int(coverage) if coverage is not None else 0
         
         # Unique funds
         unique_funds = pd.read_sql_query(
             "SELECT COUNT(DISTINCT fund_code) as count FROM fund_data", 
             conn
         ).iloc[0]['count']
-        telemetry['unique_funds'] = unique_funds
+        telemetry['unique_funds'] = int(unique_funds)
         
         # Database statistics
         db_stats = []
@@ -1003,7 +1025,7 @@ def get_telemetry():
         
         conn.close()
         
-        return jsonify(telemetry)
+        return json.dumps(telemetry, cls=NumpyEncoder), 200, {'Content-Type': 'application/json'}
         
     except Exception as e:
         return jsonify({'error': str(e)}), 500
