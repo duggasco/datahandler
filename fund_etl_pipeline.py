@@ -1,4 +1,3 @@
-from typing import Dict, Any, List, Tuple, Optional
 #!/usr/bin/env python3
 """
 Fund Data ETL Pipeline
@@ -13,7 +12,7 @@ import numpy as np
 from datetime import datetime, timedelta
 import requests
 import logging
-from typing import Dict, List, Tuple, Optional
+from typing import Dict, List, Tuple, Optional, Any
 import holidays
 import json
 from pathlib import Path
@@ -90,15 +89,15 @@ class FundDataETL:
             # Try to use Selenium-based downloader first
             from sap_download_module import SAPOpenDocumentDownloader
             
-            # Configure Selenium downloader - FIXED without duplicates
+            # Configure Selenium downloader
             sap_config = {
                 'username': self.config.get('auth', {}).get('username', 'sduggan'),
                 'password': self.config.get('auth', {}).get('password', 'sduggan'),
                 'download_dir': str(self.data_dir / 'downloads'),
                 'headless': True,  # Always use headless in container
                 'timeout': self.config.get('download_timeout', 300),
-                'lookback_timeout': self.config.get('lookback_timeout', 600),  # Also pass lookback timeout
-                'sap_urls': self.config.get('sap_urls', {})  # Pass all URLs for flexibility
+                'lookback_timeout': self.config.get('lookback_timeout', 600),
+                'sap_urls': self.config.get('sap_urls', {})
             }
             
             downloader = SAPOpenDocumentDownloader(sap_config)
@@ -139,7 +138,7 @@ class FundDataETL:
                 response = requests.get(
                     url,
                     auth=auth,
-                    timeout=self.config.get('download_timeout', 300),  # Use configured timeout
+                    timeout=self.config.get('download_timeout', 300),
                     verify=self.config.get('verify_ssl', True)
                 )
                 response.raise_for_status()
@@ -248,7 +247,6 @@ class FundDataETL:
         df = df.copy()
         
         # Ensure Date column is datetime - handle different date formats
-        # Both "7/01/2025" and "07/02/2025" formats should parse correctly
         df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
         
         # Check for any date parsing errors
@@ -297,6 +295,7 @@ class FundDataETL:
             raise PermissionError(f"Cannot write to directory: {db_dir}")
         
         try:
+            conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
             # Create main fund data table - matching our Excel structure
@@ -377,6 +376,7 @@ class FundDataETL:
                 raise Exception("Failed to create all required tables")
             
             conn.commit()
+            conn.close()
             
         except Exception as e:
             logger.error(f"Database setup failed: {str(e)}")
@@ -384,7 +384,8 @@ class FundDataETL:
     
     def load_to_database(self, df: pd.DataFrame, region: str, file_date: datetime, conn=None):
         """Load processed data to SQLite database"""
-        close_conn = False
+        close_conn = False  # Initialize first to prevent NameError
+        
         if conn is None:
             conn = sqlite3.connect(self.db_path)
             close_conn = True
@@ -450,8 +451,7 @@ class FundDataETL:
             for col in numeric_columns:
                 if col in df_load.columns:
                     # Replace '-' with NaN before converting to numeric
-                    # Use infer_objects to avoid FutureWarning
-                    df_load[col] = df_load[col].replace(['-', ''], np.nan).infer_objects(copy=False)
+                    df_load[col] = df_load[col].replace(['-', ''], np.nan)
                     df_load[col] = pd.to_numeric(df_load[col], errors='coerce')
             
             # Convert date column to string format for SQLite
@@ -465,8 +465,24 @@ class FundDataETL:
             WHERE date = ? AND region = ?
             """, (df_load['date'].iloc[0], region))
             
+            # If this is Friday data, also delete weekend dates to avoid duplicates
+            if len(df_load) > 0:
+                first_date = pd.to_datetime(df_load['date'].iloc[0])
+                if first_date.weekday() == 4:  # Friday
+                    # Also delete Saturday and Sunday
+                    saturday = (first_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+                    sunday = (first_date + pd.Timedelta(days=2)).strftime('%Y-%m-%d')
+                    cursor.execute("""
+                    DELETE FROM fund_data
+                    WHERE date IN (?, ?) AND region = ?
+                    """, (saturday, sunday, region))
+            
             # Load to database (replace existing data for the date/region)
-            df_load.to_sql('fund_data', conn, if_exists='append', index=False)
+            try:
+                df_load.to_sql('fund_data', conn, if_exists='append', index=False)
+            except sqlite3.IntegrityError as e:
+                # During lookback updates, duplicates are expected for weekend dates
+                logger.warning(f"Ignoring duplicate entries during update: {str(e)}")
             
             # Log the ETL run
             cursor.execute("""
@@ -488,6 +504,7 @@ class FundDataETL:
         """Carry forward previous day's data when no new file is available"""
         
         try:
+            conn = sqlite3.connect(self.db_path)
             # Find the most recent data for this region
             query = """
             SELECT DISTINCT date FROM fund_data 
@@ -534,10 +551,8 @@ class FundDataETL:
             logger.error(f"Failed to carry forward data: {str(e)}")
             raise
         finally:
-            if close_conn:
-                conn.close()
+            conn.close()
     
-
     def download_lookback_file(self, region: str, lookback_days: int = 30) -> Optional[pd.DataFrame]:
         """Download and return 30-day lookback file for validation"""
         try:
@@ -558,8 +573,8 @@ class FundDataETL:
                 'download_dir': str(self.data_dir / 'lookback'),
                 'headless': True,
                 'timeout': self.config.get('download_timeout', 300),
-                'lookback_timeout': self.config.get('lookback_timeout', 600),  # Extended timeout for lookback files
-                'sap_urls': self.config.get('sap_urls', {})  # Pass all SAP URLs
+                'lookback_timeout': self.config.get('lookback_timeout', 600),
+                'sap_urls': self.config.get('sap_urls', {})
             }
             
             downloader = SAPOpenDocumentDownloader(sap_config)
@@ -595,8 +610,7 @@ class FundDataETL:
 
     def validate_against_lookback(self, region: str, lookback_df: pd.DataFrame) -> Dict[str, Any]:
         """Validate database data against 30-day lookback file"""
-        conn = None  # Initialize to avoid NameError
-        from typing import Dict, Any
+        conn = sqlite3.connect(self.db_path)  # Open connection
         
         validation_results = {
             'missing_dates': [],
@@ -610,7 +624,6 @@ class FundDataETL:
         }
         
         try:
-            
             # Clean and prepare lookback data
             lookback_df['Date'] = pd.to_datetime(lookback_df['Date'], errors='coerce')
             lookback_df['Fund Code'] = lookback_df['Fund Code'].apply(
@@ -664,10 +677,13 @@ class FundDataETL:
                         validation_results['summary']['changed_records_count'] += len(changes)
                         validation_results['summary']['requires_update'] = True
             
-            
         except Exception as e:
             logger.error(f"Validation error for {region}: {str(e)}")
             
+        finally:
+            if conn:
+                conn.close()
+        
         return validation_results
 
     def _compare_dataframes(self, db_df: pd.DataFrame, lookback_df: pd.DataFrame, 
@@ -753,7 +769,8 @@ class FundDataETL:
         if not validation_results['summary']['requires_update']:
             logger.info(f"No updates required for {region}")
             return
-            
+        
+        conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
         try:
@@ -789,6 +806,16 @@ class FundDataETL:
                     DELETE FROM fund_data 
                     WHERE date = ? AND region = ?
                 """, (date_str, region))
+                
+                # If this is Friday, also delete weekend dates
+                check_date = pd.to_datetime(date_str)
+                if check_date.weekday() == 4:
+                    saturday = (check_date + pd.Timedelta(days=1)).strftime('%Y-%m-%d')
+                    sunday = (check_date + pd.Timedelta(days=2)).strftime('%Y-%m-%d')
+                    cursor.execute("""
+                    DELETE FROM fund_data
+                    WHERE date IN (?, ?) AND region = ?
+                    """, (saturday, sunday, region))
                 
                 # Load new data from lookback file
                 date_data = lookback_df[
@@ -827,8 +854,7 @@ class FundDataETL:
             logger.error(f"Failed to update from lookback for {region}: {str(e)}")
             raise
         finally:
-            if close_conn:
-                conn.close()
+            conn.close()
 
     def run_daily_etl(self, run_date: Optional[datetime] = None):
         """
@@ -890,12 +916,14 @@ class FundDataETL:
                 logger.error(f"ETL failed for {region}: {str(e)}")
                 
                 # Log failure
+                conn = sqlite3.connect(self.db_path)
                 cursor = conn.cursor()
                 cursor.execute("""
                 INSERT INTO etl_log (run_date, region, file_date, status, issues)
                 VALUES (?, ?, ?, ?, ?)
                 """, (datetime.now().date(), region, data_date.date(), 'FAILED', str(e)))
                 conn.commit()
+                conn.close()
         
         # After successful daily load, run lookback validation
         validation_alerts = []
@@ -940,3 +968,75 @@ class FundDataETL:
             return {'success': True, 'validation_alerts': validation_alerts}
         else:
             return {'success': True}
+
+
+# Configuration template
+CONFIG_TEMPLATE = {
+    "sap_urls": {
+        "amrs": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AYscKsmnmVFMgwa4u8GO5GU&sOutputFormat=E",
+        "emea": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXFSzkEFSQpOrrU9_35AhpQ&sOutputFormat=E",
+        "amrs_30days": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AXmFuFTG4DBBrefomiwL1aE&sOutputFormat=E",
+        "emea_30days": "https://www.mfanalyzer.com/BOE/OpenDocument/opendoc/openDocument.jsp?sIDType=CUID&iDocID=AQbKBz8wx0pHojHl0uBm2sw&sOutputFormat=E"
+    },
+    "auth": {
+        "username": "sduggan",
+        "password": "sduggan"
+    },
+    "db_path": "/data/fund_data.db",
+    "data_dir": "/data",
+    "download_timeout": 300,
+    "lookback_timeout": 1200,
+    "verify_ssl": True,
+    "email_alerts": {
+        "enabled": False,
+        "recipients": ["etl-team@company.com"],
+        "smtp_server": "smtp.company.com"
+    },
+    "validation": {
+        "enabled": True,
+        "change_threshold_percent": 5.0,
+        "critical_fields": [
+            "share_class_assets",
+            "portfolio_assets",
+            "one_day_yield",
+            "seven_day_yield"
+        ],
+        "alert_on_missing_dates": True,
+        "alert_on_major_changes": True
+    }
+}
+
+
+def create_config_template():
+    """Create a template configuration file"""
+    with open('config_template.json', 'w') as f:
+        json.dump(CONFIG_TEMPLATE, f, indent=2)
+    print("Created config_template.json - please update with your settings")
+
+
+if __name__ == "__main__":
+    # Example usage
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='Fund Data ETL Pipeline')
+    parser.add_argument('--config', default='/config/config.json', help='Configuration file path')
+    parser.add_argument('--date', help='Run ETL for specific date (YYYY-MM-DD)')
+    parser.add_argument('--create-config', action='store_true', help='Create configuration template')
+    
+    args = parser.parse_args()
+    
+    if args.create_config:
+        create_config_template()
+    else:
+        etl = FundDataETL(args.config)
+        
+        # Setup database if needed
+        etl.setup_database()
+        
+        # Run ETL
+        if args.date:
+            run_date = datetime.strptime(args.date, '%Y-%m-%d')
+        else:
+            run_date = None
+            
+        etl.run_daily_etl(run_date)

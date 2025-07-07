@@ -357,3 +357,433 @@
 2025-07-07 11:59:10,302 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
 2025-07-07 11:59:10,367 - sap_download_module - INFO - Browser closed
 2025-07-07 11:59:10,393 - fund_etl_pipeline - ERROR - Validation error for EMEA: 'NoneType' object has no attribute 'cursor'
+2025-07-07 13:15:19,337 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 13:15:19,799 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:15:19,799 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:15:22,144 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:15:22,144 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 13:15:22,144 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:15:25,273 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:15:31,263 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:15:49,269 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,441,318 bytes)
+2025-07-07 13:15:53,902 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 13:15:53,967 - sap_download_module - INFO - Browser closed
+2025-07-07 13:16:02,329 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-10
+2025-07-07 13:16:02,404 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:16:02,426 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-26
+2025-07-07 13:16:02,504 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:16:02,524 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-13
+2025-07-07 13:16:02,526 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 13:16:02,528 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 13:16:02,571 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:16:02,571 - fund_etl_pipeline - ERROR - Failed to update from lookback for AMRS: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:16:02,573 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 13:16:02,949 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:16:02,950 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:16:05,201 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:16:05,201 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 13:16:05,201 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:16:08,327 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:16:14,621 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:16:34,627 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,955,791 bytes)
+2025-07-07 13:16:39,715 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29125 records
+2025-07-07 13:16:39,780 - sap_download_module - INFO - Browser closed
+2025-07-07 13:16:39,883 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-26
+2025-07-07 13:16:39,918 - fund_etl_pipeline - ERROR - Database load failed: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:16:39,918 - fund_etl_pipeline - ERROR - Failed to update from lookback for EMEA: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:45:34,987 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 13:45:35,630 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:45:35,630 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:45:38,316 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:45:38,316 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 13:45:38,316 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:45:41,458 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:45:48,206 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:46:05,211 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,441,318 bytes)
+2025-07-07 13:46:09,894 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 13:46:09,958 - sap_download_module - INFO - Browser closed
+2025-07-07 13:46:17,980 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-26
+2025-07-07 13:46:18,061 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:46:18,084 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-09
+2025-07-07 13:46:18,153 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:18,184 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-13
+2025-07-07 13:46:18,186 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 13:46:18,189 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 13:46:18,309 - fund_etl_pipeline - INFO - Successfully loaded 2598 records for AMRS
+2025-07-07 13:46:18,330 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-23
+2025-07-07 13:46:18,397 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:46:18,435 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-28
+2025-07-07 13:46:18,520 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:18,541 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-12
+2025-07-07 13:46:18,610 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 13:46:18,636 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-16
+2025-07-07 13:46:18,705 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 13:46:18,726 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-24
+2025-07-07 13:46:18,787 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:46:18,812 - fund_etl_pipeline - INFO - Updating 862 records for 2025-06-30
+2025-07-07 13:46:18,897 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:46:18,920 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-21
+2025-07-07 13:46:19,007 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:19,031 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-02
+2025-07-07 13:46:19,107 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:46:19,132 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-23
+2025-07-07 13:46:19,134 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-23
+2025-07-07 13:46:19,136 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-24 and 2025-05-25
+2025-07-07 13:46:19,240 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:46:19,265 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-01
+2025-07-07 13:46:19,332 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:46:19,352 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-22
+2025-07-07 13:46:19,458 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:19,494 - fund_etl_pipeline - INFO - Updating 860 records for 2025-06-20
+2025-07-07 13:46:19,497 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-20
+2025-07-07 13:46:19,499 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-21 and 2025-06-22
+2025-07-07 13:46:19,594 - fund_etl_pipeline - INFO - Successfully loaded 2580 records for AMRS
+2025-07-07 13:46:19,634 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-05
+2025-07-07 13:46:19,700 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:19,721 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-25
+2025-07-07 13:46:19,786 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:46:19,812 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-30
+2025-07-07 13:46:19,814 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-30
+2025-07-07 13:46:19,816 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-31 and 2025-06-01
+2025-07-07 13:46:19,918 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:46:19,939 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-27
+2025-07-07 13:46:20,002 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:20,026 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-03
+2025-07-07 13:46:20,103 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:46:20,123 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-02
+2025-07-07 13:46:20,189 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:20,210 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-10
+2025-07-07 13:46:20,287 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:20,311 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-06
+2025-07-07 13:46:20,314 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-06
+2025-07-07 13:46:20,317 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-07 and 2025-06-08
+2025-07-07 13:46:20,420 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:46:20,442 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-29
+2025-07-07 13:46:20,507 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:20,527 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-04
+2025-07-07 13:46:20,590 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:20,611 - fund_etl_pipeline - INFO - Updating 858 records for 2025-06-17
+2025-07-07 13:46:20,687 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 13:46:20,707 - fund_etl_pipeline - INFO - Updating 858 records for 2025-06-18
+2025-07-07 13:46:21,433 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 13:46:21,459 - fund_etl_pipeline - INFO - Updating 862 records for 2025-06-27
+2025-07-07 13:46:21,461 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-27
+2025-07-07 13:46:21,463 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-28 and 2025-06-29
+2025-07-07 13:46:21,556 - fund_etl_pipeline - INFO - Successfully loaded 2586 records for AMRS
+2025-07-07 13:46:21,577 - fund_etl_pipeline - INFO - Updating 865 records for 2025-06-11
+2025-07-07 13:46:21,653 - fund_etl_pipeline - INFO - Successfully loaded 865 records for AMRS
+2025-07-07 13:46:21,675 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-03
+2025-07-07 13:46:21,750 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:46:21,751 - fund_etl_pipeline - INFO - Successfully updated 25889 records for AMRS
+2025-07-07 13:46:21,755 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 13:46:22,162 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:46:22,162 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:46:24,497 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:46:24,497 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 13:46:24,497 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:46:27,621 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:46:33,001 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:46:53,008 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,962,285 bytes)
+2025-07-07 13:46:57,915 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29151 records
+2025-07-07 13:46:57,982 - sap_download_module - INFO - Browser closed
+2025-07-07 13:46:58,043 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-27
+2025-07-07 13:46:58,073 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,081 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,103 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-28
+2025-07-07 13:46:58,135 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,139 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,159 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-29
+2025-07-07 13:46:58,194 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,198 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,217 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-30
+2025-07-07 13:46:58,219 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-30
+2025-07-07 13:46:58,221 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-31 and 2025-06-01
+2025-07-07 13:46:58,263 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,270 - fund_etl_pipeline - INFO - Successfully loaded 2898 records for EMEA
+2025-07-07 13:46:58,290 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-02
+2025-07-07 13:46:58,319 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,324 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,342 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-03
+2025-07-07 13:46:58,372 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,376 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,396 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-04
+2025-07-07 13:46:58,432 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,436 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,454 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-05
+2025-07-07 13:46:58,488 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,494 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,517 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-06
+2025-07-07 13:46:58,519 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-06
+2025-07-07 13:46:58,522 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-07 and 2025-06-08
+2025-07-07 13:46:58,571 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,577 - fund_etl_pipeline - INFO - Successfully loaded 2898 records for EMEA
+2025-07-07 13:46:58,599 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-09
+2025-07-07 13:46:58,640 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,646 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,665 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-10
+2025-07-07 13:46:58,702 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,706 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,726 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-11
+2025-07-07 13:46:58,755 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,760 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,778 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-12
+2025-07-07 13:46:58,809 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,813 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:46:58,834 - fund_etl_pipeline - INFO - Adding 974 records for missing date 2025-06-13
+2025-07-07 13:46:58,836 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 13:46:58,838 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 13:46:58,879 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,885 - fund_etl_pipeline - INFO - Successfully loaded 2922 records for EMEA
+2025-07-07 13:46:58,903 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-16
+2025-07-07 13:46:58,933 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,937 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:58,958 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-17
+2025-07-07 13:46:58,991 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:58,996 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,014 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-18
+2025-07-07 13:46:59,045 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,052 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,069 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-19
+2025-07-07 13:46:59,100 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,105 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,123 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-20
+2025-07-07 13:46:59,126 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-20
+2025-07-07 13:46:59,128 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-21 and 2025-06-22
+2025-07-07 13:46:59,168 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,173 - fund_etl_pipeline - INFO - Successfully loaded 2916 records for EMEA
+2025-07-07 13:46:59,193 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-23
+2025-07-07 13:46:59,232 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,237 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,254 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-24
+2025-07-07 13:46:59,288 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,294 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,312 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-25
+2025-07-07 13:46:59,346 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,350 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:46:59,373 - fund_etl_pipeline - INFO - Adding 971 records for missing date 2025-06-26
+2025-07-07 13:46:59,412 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,416 - fund_etl_pipeline - INFO - Successfully loaded 971 records for EMEA
+2025-07-07 13:46:59,435 - fund_etl_pipeline - INFO - Adding 971 records for missing date 2025-06-27
+2025-07-07 13:46:59,438 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-27
+2025-07-07 13:46:59,440 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-28 and 2025-06-29
+2025-07-07 13:46:59,482 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,487 - fund_etl_pipeline - INFO - Successfully loaded 2913 records for EMEA
+2025-07-07 13:46:59,504 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-06-30
+2025-07-07 13:46:59,535 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,539 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:46:59,557 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-07-01
+2025-07-07 13:46:59,586 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,590 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:46:59,612 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-07-02
+2025-07-07 13:46:59,642 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,646 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:46:59,664 - fund_etl_pipeline - INFO - Adding 982 records for missing date 2025-07-03
+2025-07-07 13:46:59,695 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,700 - fund_etl_pipeline - INFO - Successfully loaded 982 records for EMEA
+2025-07-07 13:46:59,718 - fund_etl_pipeline - INFO - Adding 984 records for missing date 2025-07-04
+2025-07-07 13:46:59,721 - fund_etl_pipeline - INFO - Processing Friday data from 2025-07-04
+2025-07-07 13:46:59,722 - fund_etl_pipeline - INFO - Created weekend data for 2025-07-05 and 2025-07-06
+2025-07-07 13:46:59,770 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,785 - fund_etl_pipeline - INFO - Successfully loaded 2952 records for EMEA
+2025-07-07 13:46:59,804 - fund_etl_pipeline - INFO - Adding 992 records for missing date 2025-07-07
+2025-07-07 13:46:59,838 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:46:59,845 - fund_etl_pipeline - INFO - Successfully loaded 992 records for EMEA
+2025-07-07 13:46:59,845 - fund_etl_pipeline - INFO - Successfully updated 29151 records for EMEA
+2025-07-07 13:47:13,949 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-07 13:47:14,356 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:47:14,357 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:47:16,569 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:47:16,569 - sap_download_module - INFO - Downloading AMRS_30DAYS file for 2025-07-07...
+2025-07-07 13:47:16,569 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:47:19,689 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:47:25,747 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:47:42,752 - sap_download_module - INFO - ✓ Downloaded AMRS_30DAYS: /data/lookback/DataDump__AMRS_30DAYS_20250707.xlsx (3,441,317 bytes)
+2025-07-07 13:47:47,186 - fund_etl_pipeline - INFO - Downloaded AMRS lookback file with 25889 records
+2025-07-07 13:47:47,251 - sap_download_module - INFO - Browser closed
+2025-07-07 13:47:55,136 - fund_etl_pipeline - INFO - Updating 862 records for 2025-06-30
+2025-07-07 13:47:55,218 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:47:55,258 - fund_etl_pipeline - INFO - Updating 858 records for 2025-06-17
+2025-07-07 13:47:55,327 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 13:47:55,347 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-28
+2025-07-07 13:47:55,426 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:55,448 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-16
+2025-07-07 13:47:55,510 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 13:47:55,530 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-23
+2025-07-07 13:47:55,593 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:47:55,620 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-12
+2025-07-07 13:47:55,690 - fund_etl_pipeline - INFO - Successfully loaded 866 records for AMRS
+2025-07-07 13:47:55,714 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-23
+2025-07-07 13:47:55,717 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-23
+2025-07-07 13:47:55,719 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-24 and 2025-05-25
+2025-07-07 13:47:55,834 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:47:55,861 - fund_etl_pipeline - INFO - Updating 860 records for 2025-06-20
+2025-07-07 13:47:55,863 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-20
+2025-07-07 13:47:55,864 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-21 and 2025-06-22
+2025-07-07 13:47:55,959 - fund_etl_pipeline - INFO - Successfully loaded 2580 records for AMRS
+2025-07-07 13:47:55,979 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-10
+2025-07-07 13:47:56,056 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,077 - fund_etl_pipeline - INFO - Updating 865 records for 2025-06-11
+2025-07-07 13:47:56,140 - fund_etl_pipeline - INFO - Successfully loaded 865 records for AMRS
+2025-07-07 13:47:56,161 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-05
+2025-07-07 13:47:56,233 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,254 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-03
+2025-07-07 13:47:56,319 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,339 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-29
+2025-07-07 13:47:56,409 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,432 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-04
+2025-07-07 13:47:56,495 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,515 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-02
+2025-07-07 13:47:56,583 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,605 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-27
+2025-07-07 13:47:56,671 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:56,695 - fund_etl_pipeline - INFO - Updating 862 records for 2025-06-27
+2025-07-07 13:47:56,697 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-27
+2025-07-07 13:47:56,699 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-28 and 2025-06-29
+2025-07-07 13:47:56,794 - fund_etl_pipeline - INFO - Successfully loaded 2586 records for AMRS
+2025-07-07 13:47:56,827 - fund_etl_pipeline - INFO - Updating 858 records for 2025-06-18
+2025-07-07 13:47:56,892 - fund_etl_pipeline - INFO - Successfully loaded 858 records for AMRS
+2025-07-07 13:47:56,912 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-01
+2025-07-07 13:47:56,976 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:47:56,999 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-22
+2025-07-07 13:47:57,069 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:57,094 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-06
+2025-07-07 13:47:57,096 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-06
+2025-07-07 13:47:57,098 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-07 and 2025-06-08
+2025-07-07 13:47:57,195 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:47:57,220 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-24
+2025-07-07 13:47:57,315 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:47:57,339 - fund_etl_pipeline - INFO - Updating 864 records for 2025-06-09
+2025-07-07 13:47:57,415 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:57,438 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-21
+2025-07-07 13:47:57,501 - fund_etl_pipeline - INFO - Successfully loaded 864 records for AMRS
+2025-07-07 13:47:57,523 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-02
+2025-07-07 13:47:57,595 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:47:57,617 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-26
+2025-07-07 13:47:57,685 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:47:57,706 - fund_etl_pipeline - INFO - Updating 861 records for 2025-06-25
+2025-07-07 13:47:57,783 - fund_etl_pipeline - INFO - Successfully loaded 861 records for AMRS
+2025-07-07 13:47:57,805 - fund_etl_pipeline - INFO - Updating 862 records for 2025-07-03
+2025-07-07 13:47:57,879 - fund_etl_pipeline - INFO - Successfully loaded 862 records for AMRS
+2025-07-07 13:47:57,905 - fund_etl_pipeline - INFO - Updating 864 records for 2025-05-30
+2025-07-07 13:47:57,907 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-30
+2025-07-07 13:47:57,909 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-31 and 2025-06-01
+2025-07-07 13:47:57,999 - fund_etl_pipeline - INFO - Successfully loaded 2592 records for AMRS
+2025-07-07 13:47:58,022 - fund_etl_pipeline - INFO - Updating 866 records for 2025-06-13
+2025-07-07 13:47:58,024 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 13:47:58,026 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 13:47:58,128 - fund_etl_pipeline - INFO - Successfully loaded 2598 records for AMRS
+2025-07-07 13:47:58,128 - fund_etl_pipeline - INFO - Successfully updated 25889 records for AMRS
+2025-07-07 13:47:58,132 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-07 13:47:58,559 - sap_download_module - INFO - Chrome driver initialized successfully
+2025-07-07 13:47:58,559 - sap_download_module - INFO - Attempting login to SAP BI Launch Pad...
+2025-07-07 13:48:00,776 - sap_download_module - INFO - Already logged in or no login required
+2025-07-07 13:48:00,776 - sap_download_module - INFO - Downloading EMEA_30DAYS file for 2025-07-07...
+2025-07-07 13:48:00,776 - sap_download_module - INFO - Using extended timeout of 1200 seconds for lookback file
+2025-07-07 13:48:03,901 - sap_download_module - INFO - OpenDocument login form detected, logging in...
+2025-07-07 13:48:09,485 - sap_download_module - INFO - Waiting for download to complete (timeout: 1200s)...
+2025-07-07 13:48:27,492 - sap_download_module - INFO - ✓ Downloaded EMEA_30DAYS: /data/lookback/DataDump__EMEA_30DAYS_20250707.xlsx (3,962,285 bytes)
+2025-07-07 13:48:32,402 - fund_etl_pipeline - INFO - Downloaded EMEA lookback file with 29151 records
+2025-07-07 13:48:32,466 - sap_download_module - INFO - Browser closed
+2025-07-07 13:48:32,522 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-27
+2025-07-07 13:48:32,553 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,561 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,582 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-28
+2025-07-07 13:48:32,612 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,618 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,637 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-29
+2025-07-07 13:48:32,671 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,677 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,695 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-05-30
+2025-07-07 13:48:32,698 - fund_etl_pipeline - INFO - Processing Friday data from 2025-05-30
+2025-07-07 13:48:32,699 - fund_etl_pipeline - INFO - Created weekend data for 2025-05-31 and 2025-06-01
+2025-07-07 13:48:32,743 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,748 - fund_etl_pipeline - INFO - Successfully loaded 2898 records for EMEA
+2025-07-07 13:48:32,766 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-02
+2025-07-07 13:48:32,801 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,808 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,826 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-03
+2025-07-07 13:48:32,858 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,865 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,883 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-04
+2025-07-07 13:48:32,913 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,919 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,938 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-05
+2025-07-07 13:48:32,967 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:32,971 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:32,990 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-06
+2025-07-07 13:48:32,993 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-06
+2025-07-07 13:48:32,996 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-07 and 2025-06-08
+2025-07-07 13:48:33,048 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,057 - fund_etl_pipeline - INFO - Successfully loaded 2898 records for EMEA
+2025-07-07 13:48:33,076 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-09
+2025-07-07 13:48:33,107 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,112 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:33,131 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-10
+2025-07-07 13:48:33,162 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,169 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:33,187 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-11
+2025-07-07 13:48:33,230 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,235 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:33,255 - fund_etl_pipeline - INFO - Adding 966 records for missing date 2025-06-12
+2025-07-07 13:48:33,294 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,301 - fund_etl_pipeline - INFO - Successfully loaded 966 records for EMEA
+2025-07-07 13:48:33,320 - fund_etl_pipeline - INFO - Adding 974 records for missing date 2025-06-13
+2025-07-07 13:48:33,322 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-13
+2025-07-07 13:48:33,324 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-14 and 2025-06-15
+2025-07-07 13:48:33,373 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,380 - fund_etl_pipeline - INFO - Successfully loaded 2922 records for EMEA
+2025-07-07 13:48:33,399 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-16
+2025-07-07 13:48:33,434 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,440 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,460 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-17
+2025-07-07 13:48:33,490 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,498 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,517 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-18
+2025-07-07 13:48:33,548 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,552 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,573 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-19
+2025-07-07 13:48:33,615 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,621 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,640 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-20
+2025-07-07 13:48:33,643 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-20
+2025-07-07 13:48:33,645 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-21 and 2025-06-22
+2025-07-07 13:48:33,696 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,702 - fund_etl_pipeline - INFO - Successfully loaded 2916 records for EMEA
+2025-07-07 13:48:33,720 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-23
+2025-07-07 13:48:33,752 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,757 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,778 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-24
+2025-07-07 13:48:33,810 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,817 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,836 - fund_etl_pipeline - INFO - Adding 972 records for missing date 2025-06-25
+2025-07-07 13:48:33,869 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,874 - fund_etl_pipeline - INFO - Successfully loaded 972 records for EMEA
+2025-07-07 13:48:33,893 - fund_etl_pipeline - INFO - Adding 971 records for missing date 2025-06-26
+2025-07-07 13:48:33,925 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:33,930 - fund_etl_pipeline - INFO - Successfully loaded 971 records for EMEA
+2025-07-07 13:48:33,948 - fund_etl_pipeline - INFO - Adding 971 records for missing date 2025-06-27
+2025-07-07 13:48:33,951 - fund_etl_pipeline - INFO - Processing Friday data from 2025-06-27
+2025-07-07 13:48:33,953 - fund_etl_pipeline - INFO - Created weekend data for 2025-06-28 and 2025-06-29
+2025-07-07 13:48:34,005 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,012 - fund_etl_pipeline - INFO - Successfully loaded 2913 records for EMEA
+2025-07-07 13:48:34,031 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-06-30
+2025-07-07 13:48:34,064 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,068 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:48:34,087 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-07-01
+2025-07-07 13:48:34,117 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,124 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:48:34,142 - fund_etl_pipeline - INFO - Adding 981 records for missing date 2025-07-02
+2025-07-07 13:48:34,181 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,188 - fund_etl_pipeline - INFO - Successfully loaded 981 records for EMEA
+2025-07-07 13:48:34,208 - fund_etl_pipeline - INFO - Adding 982 records for missing date 2025-07-03
+2025-07-07 13:48:34,238 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,242 - fund_etl_pipeline - INFO - Successfully loaded 982 records for EMEA
+2025-07-07 13:48:34,261 - fund_etl_pipeline - INFO - Adding 984 records for missing date 2025-07-04
+2025-07-07 13:48:34,264 - fund_etl_pipeline - INFO - Processing Friday data from 2025-07-04
+2025-07-07 13:48:34,265 - fund_etl_pipeline - INFO - Created weekend data for 2025-07-05 and 2025-07-06
+2025-07-07 13:48:34,311 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,317 - fund_etl_pipeline - INFO - Successfully loaded 2952 records for EMEA
+2025-07-07 13:48:34,338 - fund_etl_pipeline - INFO - Adding 992 records for missing date 2025-07-07
+2025-07-07 13:48:34,377 - fund_etl_pipeline - WARNING - Ignoring duplicate entries during update: UNIQUE constraint failed: fund_data.date, fund_data.region, fund_data.fund_code
+2025-07-07 13:48:34,383 - fund_etl_pipeline - INFO - Successfully loaded 992 records for EMEA
+2025-07-07 13:48:34,383 - fund_etl_pipeline - INFO - Successfully updated 29151 records for EMEA
