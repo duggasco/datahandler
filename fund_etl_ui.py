@@ -1547,8 +1547,8 @@ def list_workflows():
     # workflow_tracker.cleanup_old_workflows()
     
     workflows = workflow_tracker.get_all_workflows()
-    # Sort by started_at descending if started_at exists
-    workflows.sort(key=lambda x: x.get('started_at', x.get('created_at', '')), reverse=True)
+    # Sort by started_at descending if started_at exists, handle None values
+    workflows.sort(key=lambda x: x.get('started_at') or x.get('created_at') or '', reverse=True)
     
     return jsonify(workflows)
 

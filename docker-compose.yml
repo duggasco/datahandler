@@ -56,8 +56,8 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
     
     volumes:
-      - ./data:/data:ro
-      - ./logs:/logs:ro
+      - ./data:/data
+      - ./logs:/logs
       - /var/run/docker.sock:/var/run/docker.sock:ro
     
     ports:
