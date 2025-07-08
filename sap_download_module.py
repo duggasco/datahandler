@@ -58,23 +58,7 @@ class SAPOpenDocumentDownloader:
         except Exception as e:
             logger.debug(f"Error cleaning up stale locks: {e}")
         
-        # Also clean up any stale Chrome user data directories
-        try:
-            temp_dir = tempfile.gettempdir()
-            for item in os.listdir(temp_dir):
-                if item.startswith('chrome-user-data-'):
-                    dir_path = os.path.join(temp_dir, item)
-                    if os.path.isdir(dir_path):
-                        try:
-                            # Check directory age
-                            dir_age = time.time() - os.path.getmtime(dir_path)
-                            if dir_age > 300:  # 5 minutes
-                                shutil.rmtree(dir_path, ignore_errors=True)
-                                logger.info(f"Removed stale Chrome user data directory: {dir_path}")
-                        except Exception as e:
-                            logger.debug(f"Error checking/removing {dir_path}: {e}")
-        except Exception as e:
-            logger.debug(f"Error cleaning up stale Chrome directories: {e}")
+        # No need to clean up Chrome user data directories since we're not using them
     
     def __init__(self, config: Dict):
         """
@@ -210,28 +194,8 @@ class SAPOpenDocumentDownloader:
                     logger.info("Waiting for Chrome lock...")
                     time.sleep(0.5)
             
-            # Add small delay to ensure any previous Chrome instance is fully terminated
-            time.sleep(1)
-            
-            # Kill any orphaned Chrome processes before starting
-            try:
-                killed_count = 0
-                for proc in psutil.process_iter(['pid', 'name', 'cmdline', 'create_time']):
-                    if proc.info['name'] in ['chrome', 'google-chrome', 'chromium']:
-                        # Check if it's an old Chrome instance (older than 5 minutes)
-                        process_age = time.time() - proc.info['create_time']
-                        if process_age > 300:  # 5 minutes
-                            # Check if it has our specific flags
-                            cmdline = proc.info.get('cmdline') or []
-                            if any('--user-data-dir=/tmp/chrome-user-data-' in arg for arg in cmdline):
-                                logger.warning(f"Killing orphaned Chrome process {proc.info['pid']} (age: {process_age:.0f}s)")
-                                proc.kill()
-                                killed_count += 1
-                if killed_count > 0:
-                    time.sleep(1)  # Give time for processes to die
-                    logger.info(f"Killed {killed_count} orphaned Chrome processes")
-            except Exception as e:
-                logger.debug(f"Error killing orphaned Chrome processes: {e}")
+            # Add delay to ensure any previous Chrome instance is fully terminated
+            time.sleep(2)
             
             chrome_options = Options()
             
@@ -274,52 +238,39 @@ class SAPOpenDocumentDownloader:
             chrome_options.add_argument("--allow-running-insecure-content")
             chrome_options.add_argument("--window-size=1920,1080")
         
-            # Create unique user data directory to prevent conflicts
-            # Use multiple sources of entropy to prevent race conditions
-            import threading
-            import hashlib
+            # Don't use user data directory to avoid conflicts
+            # Chrome in headless mode doesn't need profile persistence for downloads
+            self.user_data_dir = None
             
-            # Combine multiple entropy sources
-            timestamp = str(int(time.time() * 1000000))  # Microsecond precision
-            process_id = str(os.getpid())
-            thread_id = str(threading.get_ident())
-            random_id = uuid.uuid4().hex
-            
-            # Create hash to ensure uniqueness even with concurrent access
-            entropy_string = f"{process_id}-{thread_id}-{timestamp}-{random_id}"
-            entropy_hash = hashlib.md5(entropy_string.encode()).hexdigest()[:12]
-            
-            self.user_data_dir = os.path.join(tempfile.gettempdir(), f"chrome-user-data-{entropy_hash}")
-            
-            # Create the directory with proper permissions
-            os.makedirs(self.user_data_dir, mode=0o755, exist_ok=True)
-            logger.info(f"Created Chrome user data directory: {self.user_data_dir}")
-            
-            chrome_options.add_argument(f"--user-data-dir={self.user_data_dir}")
-        
-            # Add additional isolation options to prevent conflicts
-            chrome_options.add_argument(f"--remote-debugging-port=0")  # Use random available port
+            # Basic isolation options
             chrome_options.add_argument("--disable-background-networking")
             chrome_options.add_argument("--disable-sync")
             chrome_options.add_argument("--disable-translate")
             chrome_options.add_argument("--disable-default-apps")
-            # Add additional Chrome isolation options
+            chrome_options.add_argument("--disable-plugins")
+            chrome_options.add_argument("--disable-extensions")
+            chrome_options.add_argument("--disable-gpu-sandbox")
+            chrome_options.add_argument("--disable-software-rasterizer")
             chrome_options.add_argument("--disable-background-timer-throttling")
             chrome_options.add_argument("--disable-backgrounding-occluded-windows")
             chrome_options.add_argument("--disable-renderer-backgrounding")
+            chrome_options.add_argument("--disable-features=TranslateUI")
+            chrome_options.add_argument("--disable-ipc-flooding-protection")
             
-            # Disable Chrome's profile locking mechanism
-            chrome_options.add_argument("--disable-features=ProcessPerSiteUpToMainFrameThreshold")
-            chrome_options.add_argument("--disable-site-isolation-trials")
-            chrome_options.add_argument("--disable-features=IsolateOrigins")
-            chrome_options.add_argument("--disable-features=site-per-process")
+            # Memory optimization
+            chrome_options.add_argument("--memory-pressure-off")
+            chrome_options.add_argument("--max_old_space_size=4096")
             
-            # Force single process mode to prevent conflicts
-            chrome_options.add_argument("--single-process")
-            chrome_options.add_argument("--disable-dev-tools")
-            chrome_options.add_argument("--disable-gpu-sandbox")
-            chrome_options.add_argument("--disable-setuid-sandbox")
-            chrome_options.add_argument("--disable-seccomp-filter-sandbox")
+            # Disable crash reporting and telemetry
+            chrome_options.add_argument("--disable-breakpad")
+            chrome_options.add_argument("--disable-client-side-phishing-detection")
+            chrome_options.add_argument("--disable-cloud-import")
+            chrome_options.add_argument("--disable-popup-blocking")
+            chrome_options.add_argument("--disable-print-preview")
+            chrome_options.add_argument("--disable-zero-browsers-open-for-tests")
+            
+            # Use random port for debugging to avoid conflicts
+            chrome_options.add_argument("--remote-debugging-port=0")
             
             # Create driver
             try:
@@ -639,16 +590,7 @@ class SAPOpenDocumentDownloader:
                     except Exception as e:
                         logger.debug(f"Error terminating Chrome processes: {e}")
                 
-                # Kill any remaining Chrome processes (more aggressive cleanup)
-                try:
-                    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-                        if proc.info['name'] in ['chrome', 'google-chrome', 'chromium']:
-                            # Check if it's our Chrome instance by looking for our user data dir
-                            if self.user_data_dir and any(self.user_data_dir in arg for arg in (proc.info.get('cmdline') or [])):
-                                logger.info(f"Force killing orphaned Chrome process {proc.info['pid']}")
-                                proc.kill()
-                except Exception as e:
-                    logger.debug(f"Error during Chrome process cleanup: {e}")
+                # No need for aggressive Chrome process cleanup since we're not using user data directories
                         
             except Exception as e:
                 logger.error(f"Error closing browser: {e}")
@@ -657,27 +599,8 @@ class SAPOpenDocumentDownloader:
                 self.wait = None
                 self._logged_in = False
         
-        # Clean up user data directory
-        if self.user_data_dir and os.path.exists(self.user_data_dir):
-            try:
-                # Add delay before cleanup
-                time.sleep(1)  # Increased from 0.5
-                # Try multiple times to remove directory
-                for attempt in range(3):
-                    try:
-                        shutil.rmtree(self.user_data_dir, ignore_errors=False)
-                        logger.info(f"Cleaned up user data directory: {self.user_data_dir}")
-                        break
-                    except Exception as e:
-                        if attempt < 2:
-                            logger.debug(f"Retry {attempt + 1} for cleanup: {e}")
-                            time.sleep(0.5)
-                        else:
-                            logger.warning(f"Failed to clean up user data directory {self.user_data_dir}: {e}")
-            except Exception as e:
-                logger.warning(f"Failed to clean up user data directory {self.user_data_dir}: {e}")
-            finally:
-                self.user_data_dir = None
+        # No user data directory to clean up since we're not using one
+        self.user_data_dir = None
         
         # Release Chrome lock
         if self._lock_file:
@@ -697,7 +620,7 @@ class SAPOpenDocumentDownloader:
                 self._lock_file = None
         
         # Add delay to ensure full cleanup before next Chrome instance
-        time.sleep(2)  # Increased from 1
+        time.sleep(3)  # Increased to ensure Chrome is fully terminated
 
 
 # Backward compatibility wrapper
