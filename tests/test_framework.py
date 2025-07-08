@@ -215,13 +215,14 @@ class MockSAPDownloader:
         num_records = 100 if '30DAYS' not in region else 3000
         
         data = {
+            'Date': [target_date.strftime('%m/%d/%Y')] * num_records,
             'Fund Code': [f'FUND{i:04d}' for i in range(num_records)],
             'Fund Name': [f'Test Fund {i}' for i in range(num_records)],
-            'Share Class Assets': [1000000 + (i * 10000) for i in range(num_records)],
-            'Portfolio Assets': [2000000 + (i * 20000) for i in range(num_records)],
-            '1 Day Yield': [0.01 + (i * 0.0001) for i in range(num_records)],
-            '7 Day Yield': [0.02 + (i * 0.0001) for i in range(num_records)],
-            'Daily Liquidity': [0.50 + (i * 0.001) for i in range(num_records)]
+            'Share Class Assets (dly/$mils)': [1000000 + (i * 10000) for i in range(num_records)],
+            'Portfolio Assets (dly/$mils)': [2000000 + (i * 20000) for i in range(num_records)],
+            '1-DSY (dly)': [0.01 + (i * 0.0001) for i in range(num_records)],
+            '7-DSY (dly)': [0.02 + (i * 0.0001) for i in range(num_records)],
+            'Daily Liquidity (%)': [0.50 + (i * 0.001) for i in range(num_records)]
         }
         
         df = pd.DataFrame(data)

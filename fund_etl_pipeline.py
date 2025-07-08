@@ -390,6 +390,110 @@ class FundDataETL:
             logger.error(f"Database setup failed: {str(e)}")
             raise
     
+    def transform_data(self, df: pd.DataFrame, region: str, date: datetime) -> pd.DataFrame:
+        """Transform raw Excel data into database-ready format
+        
+        Args:
+            df: Raw DataFrame from Excel file
+            region: Region code (AMRS or EMEA)
+            date: Date for the data (may differ from file date for weekends)
+            
+        Returns:
+            Transformed DataFrame ready for database insertion
+        """
+        # Create a copy to avoid modifying the original
+        df_transformed = df.copy()
+        
+        # Add region and date columns
+        df_transformed['region'] = region
+        df_transformed['date'] = date.strftime('%Y-%m-%d')
+        
+        # Add file_date for tracking (date from the actual file)
+        if 'Date' in df_transformed.columns:
+            df_transformed['file_date'] = pd.to_datetime(df_transformed['Date']).dt.strftime('%Y-%m-%d')
+            # Drop the original Date column to avoid duplication
+            df_transformed = df_transformed.drop('Date', axis=1)
+        
+        # Filter out #MULTIVALUE rows
+        if 'Fund Code' in df_transformed.columns:
+            multivalue_mask = df_transformed['Fund Code'] == '#MULTIVALUE'
+            if multivalue_mask.sum() > 0:
+                logger.info(f"Filtering out {multivalue_mask.sum()} #MULTIVALUE records")
+                df_transformed = df_transformed[~multivalue_mask]
+        
+        # CRITICAL: Ensure Fund Code is string before transformation
+        if 'Fund Code' in df_transformed.columns:
+            df_transformed['Fund Code'] = df_transformed['Fund Code'].astype(str).str.strip()
+        
+        # Rename columns to match database schema
+        column_mapping = {
+            # 'Date' is handled separately above
+            'Fund Code': 'fund_code',
+            'Fund Name': 'fund_name',
+            'Master Class Fund Name': 'master_class_fund_name',
+            'Rating (M/S&P/F)': 'rating',
+            'Unique Identifier': 'unique_identifier',
+            'NASDAQ': 'nasdaq',
+            'Fund Complex (Historical)': 'fund_complex',
+            'SubCategory Historical': 'subcategory',
+            'Domicile': 'domicile',
+            'Currency': 'currency',
+            'Share Class Assets (dly/$mils)': 'share_class_assets',
+            'Portfolio Assets (dly/$mils)': 'portfolio_assets',
+            '1-DSY (dly)': 'one_day_yield',
+            '1-GDSY (dly)': 'one_day_gross_yield',
+            '7-DSY (dly)': 'seven_day_yield',
+            '7-GDSY (dly)': 'seven_day_gross_yield',
+            'Chgd Expense Ratio (mo/dly)': 'expense_ratio',
+            'WAM (dly)': 'wam',
+            'WAL (dly)': 'wal',
+            'Transactional NAV': 'transactional_nav',
+            'Market NAV': 'market_nav',
+            'Daily Liquidity (%)': 'daily_liquidity',
+            'Weekly Liquidity (%)': 'weekly_liquidity',
+            'Fees': 'fees',
+            'Gates': 'gates'
+        }
+        
+        df_transformed = df_transformed.rename(columns=column_mapping)
+        
+        # Clean text fields to handle special characters
+        text_columns = [
+            'fund_code', 'fund_name', 'master_class_fund_name', 'rating',
+            'unique_identifier', 'nasdaq', 'fund_complex', 'subcategory',
+            'domicile', 'currency', 'transactional_nav', 'market_nav',
+            'fees', 'gates'
+        ]
+        
+        for col in text_columns:
+            if col in df_transformed.columns:
+                # Replace None with empty string and strip whitespace
+                df_transformed[col] = df_transformed[col].fillna('')
+                df_transformed[col] = df_transformed[col].apply(lambda x: str(x).strip() if x else '')
+        
+        # Convert numeric columns
+        numeric_columns = [
+            'share_class_assets', 'portfolio_assets', 'one_day_yield',
+            'one_day_gross_yield', 'seven_day_yield', 'seven_day_gross_yield',
+            'expense_ratio', 'wam', 'wal', 'daily_liquidity', 'weekly_liquidity'
+        ]
+        
+        for col in numeric_columns:
+            if col in df_transformed.columns:
+                # First convert to string to handle any non-string values
+                df_transformed[col] = df_transformed[col].astype(str)
+                # Remove commas from numeric strings
+                df_transformed[col] = df_transformed[col].str.replace(',', '')
+                # Replace '-', 'N/A', and empty strings with NaN before converting to numeric
+                df_transformed[col] = df_transformed[col].replace(['-', '', 'N/A', 'nan'], np.nan)
+                df_transformed[col] = pd.to_numeric(df_transformed[col], errors='coerce')
+        
+        # Ensure date column is in the correct format
+        if 'date' in df_transformed.columns:
+            df_transformed['date'] = date.strftime('%Y-%m-%d')
+        
+        return df_transformed
+    
     def load_to_database(self, df: pd.DataFrame, region: str, file_date: datetime, conn=None):
         """Load processed data to SQLite database"""
         close_conn = False  # Initialize first to prevent NameError
@@ -399,76 +503,8 @@ class FundDataETL:
             close_conn = True
         
         try:
-            # Prepare dataframe for loading
-            df_load = df.copy()
-            df_load['region'] = region
-            
-            # CRITICAL: Ensure Fund Code is string before loading
-            if 'Fund Code' in df_load.columns:
-                df_load['Fund Code'] = df_load['Fund Code'].astype(str).str.strip()
-            
-            # Rename columns to match database schema
-            column_mapping = {
-                'Date': 'date',
-                'Fund Code': 'fund_code',
-                'Fund Name': 'fund_name',
-                'Master Class Fund Name': 'master_class_fund_name',
-                'Rating (M/S&P/F)': 'rating',
-                'Unique Identifier': 'unique_identifier',
-                'NASDAQ': 'nasdaq',
-                'Fund Complex (Historical)': 'fund_complex',
-                'SubCategory Historical': 'subcategory',
-                'Domicile': 'domicile',
-                'Currency': 'currency',
-                'Share Class Assets (dly/$mils)': 'share_class_assets',
-                'Portfolio Assets (dly/$mils)': 'portfolio_assets',
-                '1-DSY (dly)': 'one_day_yield',
-                '1-GDSY (dly)': 'one_day_gross_yield',
-                '7-DSY (dly)': 'seven_day_yield',
-                '7-GDSY (dly)': 'seven_day_gross_yield',
-                'Chgd Expense Ratio (mo/dly)': 'expense_ratio',
-                'WAM (dly)': 'wam',
-                'WAL (dly)': 'wal',
-                'Transactional NAV': 'transactional_nav',
-                'Market NAV': 'market_nav',
-                'Daily Liquidity (%)': 'daily_liquidity',
-                'Weekly Liquidity (%)': 'weekly_liquidity',
-                'Fees': 'fees',
-                'Gates': 'gates'
-            }
-            
-            df_load = df_load.rename(columns=column_mapping)
-            
-            # Clean text fields to handle special characters
-            text_columns = [
-                'fund_code', 'fund_name', 'master_class_fund_name', 'rating',
-                'unique_identifier', 'nasdaq', 'fund_complex', 'subcategory',
-                'domicile', 'currency', 'transactional_nav', 'market_nav',
-                'fees', 'gates'
-            ]
-            
-            for col in text_columns:
-                if col in df_load.columns:
-                    # Replace None with empty string and strip whitespace
-                    df_load[col] = df_load[col].fillna('')
-                    df_load[col] = df_load[col].apply(lambda x: str(x).strip() if x else '')
-            
-            # Convert numeric columns
-            numeric_columns = [
-                'share_class_assets', 'portfolio_assets', 'one_day_yield',
-                'one_day_gross_yield', 'seven_day_yield', 'seven_day_gross_yield',
-                'expense_ratio', 'wam', 'wal', 'daily_liquidity', 'weekly_liquidity'
-            ]
-            
-            for col in numeric_columns:
-                if col in df_load.columns:
-                    # Replace '-' with NaN before converting to numeric
-                    df_load[col] = df_load[col].replace(['-', ''], np.nan)
-                    df_load[col] = pd.to_numeric(df_load[col], errors='coerce')
-            
-            # Convert date column to string format for SQLite
-            if 'date' in df_load.columns:
-                df_load['date'] = pd.to_datetime(df_load['date']).dt.strftime('%Y-%m-%d')
+            # Transform the data using the new method
+            df_load = self.transform_data(df, region, file_date)
             
             # Delete existing data for this date/region to handle updates
             cursor = conn.cursor()
@@ -1300,26 +1336,45 @@ class FundDataETL:
                     fund_code = record['fund_code']
                     date = record['date']
                     
-                    # Get the lookback record
+                    # Get the lookback record (lookback_df has Excel column names)
                     lb_record = lookback_df[
-                        (lookback_df['date'] == date) & 
-                        (lookback_df['fund_code'] == fund_code)
+                        (lookback_df['Date'].dt.strftime('%Y-%m-%d') == date) & 
+                        (lookback_df['Fund Code'] == fund_code)
                     ]
                     
                     if not lb_record.empty:
-                        # Update the record
-                        update_data = lb_record.iloc[0].to_dict()
-                        columns = [col for col in update_data.keys() if col not in ['date', 'region', 'fund_code']]
+                        # Update the record - need to map Excel columns to DB columns
+                        excel_data = lb_record.iloc[0].to_dict()
                         
-                        set_clause = ', '.join([f"{col} = ?" for col in columns])
-                        values = [update_data[col] for col in columns]
-                        values.extend([region, date, fund_code])
+                        # Column mapping from Excel to database
+                        column_mapping = {
+                            'Share Class Assets (dly/$mils)': 'share_class_assets',
+                            'Portfolio Assets (dly/$mils)': 'portfolio_assets',
+                            '1-DSY (dly)': 'one_day_yield',
+                            '7-DSY (dly)': 'seven_day_yield',
+                            'WAM (dly)': 'wam',
+                            'WAL (dly)': 'wal',
+                            'Daily Liquidity (%)': 'daily_liquidity',
+                            'Weekly Liquidity (%)': 'weekly_liquidity'
+                        }
                         
-                        cursor.execute(f"""
-                        UPDATE fund_data 
-                        SET {set_clause}
-                        WHERE region = ? AND date = ? AND fund_code = ?
-                        """, values)
+                        # Build update data with only mapped columns that exist
+                        update_values = []
+                        update_columns = []
+                        for excel_col, db_col in column_mapping.items():
+                            if excel_col in excel_data:
+                                update_columns.append(db_col)
+                                update_values.append(excel_data[excel_col])
+                        
+                        if update_columns:
+                            set_clause = ', '.join([f"{col} = ?" for col in update_columns])
+                            update_values.extend([region, date, fund_code])
+                            
+                            cursor.execute(f"""
+                            UPDATE fund_data 
+                            SET {set_clause}
+                            WHERE region = ? AND date = ? AND fund_code = ?
+                            """, update_values)
                         
                         records_updated += 1
                 
@@ -1333,7 +1388,8 @@ class FundDataETL:
                 
             elif update_mode == 'full':
                 # Replace all records for the dates in lookback
-                dates = lookback_df['date'].unique()
+                # Convert dates to strings
+                dates = lookback_df['Date'].dt.strftime('%Y-%m-%d').unique()
                 
                 conn = sqlite3.connect(self.db_path)
                 cursor = conn.cursor()
@@ -1345,8 +1401,43 @@ class FundDataETL:
                     WHERE region = ? AND date = ?
                     """, (region, date))
                 
+                # Prepare lookback data for insertion
+                insert_df = lookback_df.copy()
+                # Use the same column mapping as in load_to_database
+                column_mapping = {
+                    'Date': 'date',
+                    'Fund Code': 'fund_code',
+                    'Fund Name': 'fund_name',
+                    'Master Class Fund Name': 'master_class_fund_name',
+                    'Rating (M/S&P/F)': 'rating',
+                    'Unique Identifier': 'unique_identifier',
+                    'NASDAQ': 'nasdaq',
+                    'Fund Complex (Historical)': 'fund_complex',
+                    'SubCategory Historical': 'subcategory',
+                    'Domicile': 'domicile',
+                    'Currency': 'currency',
+                    'Share Class Assets (dly/$mils)': 'share_class_assets',
+                    'Portfolio Assets (dly/$mils)': 'portfolio_assets',
+                    '1-DSY (dly)': 'one_day_yield',
+                    '1-GDSY (dly)': 'one_day_gross_yield',
+                    '7-DSY (dly)': 'seven_day_yield',
+                    '7-GDSY (dly)': 'seven_day_gross_yield',
+                    'Chgd Expense Ratio (mo/dly)': 'expense_ratio',
+                    'WAM (dly)': 'wam',
+                    'WAL (dly)': 'wal',
+                    'Transactional NAV': 'transactional_nav',
+                    'Market NAV': 'market_nav',
+                    'Daily Liquidity (%)': 'daily_liquidity',
+                    'Weekly Liquidity (%)': 'weekly_liquidity',
+                    'Fees': 'fees',
+                    'Gates': 'gates'
+                }
+                insert_df = insert_df.rename(columns=column_mapping)
+                insert_df['region'] = region
+                insert_df['date'] = insert_df['date'].dt.strftime('%Y-%m-%d')
+                
                 # Insert all lookback records
-                lookback_df.to_sql('fund_data', conn, if_exists='append', index=False)
+                insert_df.to_sql('fund_data', conn, if_exists='append', index=False)
                 
                 conn.commit()
                 conn.close()

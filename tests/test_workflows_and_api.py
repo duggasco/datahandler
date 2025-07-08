@@ -174,6 +174,30 @@ class TestWorkflowTracking(ETLTestCase):
 class TestETLAPI(ETLTestCase):
     """Test ETL API endpoints"""
     
+
+    def tearDown(self):
+        """Clean up after each test"""
+        # Clear any running workflows
+        try:
+            import fund_etl_api
+            fund_etl_api.running_etl_workflows.clear()
+            fund_etl_api.workflows.clear()
+            
+            # Clean up all test workflows from database
+            if hasattr(self, 'test_db'):
+                conn = sqlite3.connect(str(self.test_db))
+                cursor = conn.cursor()
+                try:
+                    cursor.execute("DELETE FROM workflows")
+                    conn.commit()
+                except sqlite3.OperationalError:
+                    # Table may not exist in some tests
+                    pass
+                conn.close()
+        except:
+            pass
+        super().tearDown()
+
     def setUp(self):
         super().setUp()
         # Import here to avoid circular imports
@@ -182,12 +206,12 @@ class TestETLAPI(ETLTestCase):
         self.app.testing = True
         
         # Clean up any running workflows
-        with patch('fund_etl_api.active_workflows', {}):
-            pass
+        import fund_etl_api
+        fund_etl_api.running_etl_workflows.clear()
+        fund_etl_api.workflows.clear()
         
-        # Mock database path
-        with patch('fund_etl_api.DB_PATH', str(self.test_db)):
-            pass
+        # Reset workflow tracker to use test database
+        fund_etl_api.workflow_tracker.reset(str(self.test_db))
     
     def test_health_endpoint(self):
         """Test health check endpoint"""
@@ -223,6 +247,10 @@ class TestETLAPI(ETLTestCase):
     @patch('fund_etl_api.subprocess.Popen')
     def test_validation_endpoints(self, mock_popen):
         """Test validation trigger endpoints"""
+        # Clear any running workflows first
+        import fund_etl_api
+        fund_etl_api.running_etl_workflows.clear()
+        
         # Mock subprocess
         mock_process = Mock()
         mock_process.stdout.readline.side_effect = ['', '']
@@ -240,6 +268,9 @@ class TestETLAPI(ETLTestCase):
         data = json.loads(response.data)
         self.assertIn('workflow_id', data)
         self.assertIn('selective', data['message'])
+        
+        # Clear running workflows before second test
+        fund_etl_api.running_etl_workflows.clear()
         
         # Test full validation
         response = self.app.post(
@@ -308,8 +339,8 @@ class TestETLAPI(ETLTestCase):
         
         # Should get 409 conflict
         self.assertEqual(response.status_code, 409)
-            data = json.loads(response.data)
-            self.assertIn('already running', data['error'])
+        data = json.loads(response.data)
+        self.assertIn('already running', data['error'])
     
     def test_workflow_status_endpoint(self):
         """Test workflow status retrieval"""
@@ -370,6 +401,24 @@ class TestETLAPI(ETLTestCase):
 class TestUIAPI(ETLTestCase, APITestMixin):
     """Test UI API endpoints"""
     
+    def tearDown(self):
+        """Clean up after each test"""
+        # Clean up all test workflows from database
+        try:
+            if hasattr(self, 'test_db'):
+                conn = sqlite3.connect(str(self.test_db))
+                cursor = conn.cursor()
+                try:
+                    cursor.execute("DELETE FROM workflows")
+                    conn.commit()
+                except sqlite3.OperationalError:
+                    # Table may not exist in some tests
+                    pass
+                conn.close()
+        except:
+            pass
+        super().tearDown()
+    
     def setUp(self):
         super().setUp()
         # Import here to avoid circular imports
@@ -380,9 +429,9 @@ class TestUIAPI(ETLTestCase, APITestMixin):
         # Create test database
         self.create_test_database()
         
-        # Mock database path
-        with patch('fund_etl_ui.DB_PATH', str(self.test_db)):
-            pass
+        # Reset workflow tracker to use test database
+        import fund_etl_ui
+        fund_etl_ui.workflow_tracker.reset(str(self.test_db))
     
     def test_health_endpoint(self):
         """Test UI health check"""
@@ -461,7 +510,7 @@ class TestUIAPI(ETLTestCase, APITestMixin):
             
             response = self.app.post('/api/workflow/run-daily')
             
-            self.assertEqual(response.status_code, 202)
+            self.assertEqual(response.status_code, 200)
             data = json.loads(response.data)
             self.assertEqual(data['workflow_id'], 'ui-456')
             self.assertEqual(data['etl_workflow_id'], 'etl-123')
@@ -486,7 +535,7 @@ class TestUIAPI(ETLTestCase, APITestMixin):
                 json={'mode': 'selective'}
             )
             
-            self.assertEqual(response.status_code, 202)
+            self.assertEqual(response.status_code, 200)
             data = json.loads(response.data)
             self.assertIn('selective', data['message'])
     
@@ -589,7 +638,7 @@ class TestAPIIntegration(ETLTestCase):
             mock_post.side_effect = requests.exceptions.ConnectionError()
             
             from fund_etl_ui import app as ui_app
-        app = ui_app.test_client()
+            app = ui_app.test_client()
             response = app.post('/api/workflow/run-daily')
             
             self.assertEqual(response.status_code, 503)

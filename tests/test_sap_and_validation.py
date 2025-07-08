@@ -157,24 +157,35 @@ class TestValidationLogic(ETLTestCase):
             if date.weekday() < 5:  # Weekdays only
                 dates.append(date.strftime('%Y-%m-%d'))
         
-        # Create DataFrame with multiple dates
+        # Create DataFrame with multiple dates - Using Excel column names
         data_rows = []
         funds = [f'FUND{i:04d}' for i in range(100)]
         
         for date in dates:
             for fund in funds:
                 data_rows.append({
-                    'date': date,
-                    'fund_code': fund,
-                    'fund_name': f'Test Fund {fund}',
-                    'share_class_assets': np.random.uniform(1e6, 1e8),
-                    'portfolio_assets': np.random.uniform(2e6, 2e8),
-                    'one_day_yield': np.random.uniform(0.001, 0.05),
-                    'seven_day_yield': np.random.uniform(0.002, 0.06),
-                    'daily_liquidity': np.random.uniform(0.3, 0.8)
+                    'Date': date,  # Capital D
+                    'Fund Code': fund,  # Capital F and C
+                    'Fund Name': f'Test Fund {fund}',  # Capital F and N
+                    'Share Class Assets': np.random.uniform(1e6, 1e8),
+                    'Portfolio Assets': np.random.uniform(2e6, 2e8),
+                    '1 Day Yield': np.random.uniform(0.001, 0.05),
+                    '7 Day Yield': np.random.uniform(0.002, 0.06),
+                    'Daily Liquidity': np.random.uniform(0.3, 0.8)
                 })
         
-        return pd.DataFrame(data_rows)
+        df = pd.DataFrame(data_rows)
+        # Add internal columns for database operations
+        df['date'] = df['Date']
+        df['fund_code'] = df['Fund Code']
+        df['fund_name'] = df['Fund Name']
+        df['share_class_assets'] = df['Share Class Assets']
+        df['portfolio_assets'] = df['Portfolio Assets']
+        df['one_day_yield'] = df['1 Day Yield']
+        df['seven_day_yield'] = df['7 Day Yield']
+        df['daily_liquidity'] = df['Daily Liquidity']
+        
+        return df
     
     def test_validate_against_lookback(self):
         """Test validation against lookback data"""
@@ -229,13 +240,13 @@ class TestValidationLogic(ETLTestCase):
               1000000, 0.0100))
         self.conn.commit()
         
-        # Create lookback with significant change
+        # Create lookback with significant change (using Excel column names)
         lookback_df = pd.DataFrame([{
-            'date': '2024-01-15',
-            'fund_code': 'THRESHOLD_TEST',
-            'fund_name': 'Threshold Test Fund',
-            'share_class_assets': 1000000,
-            'one_day_yield': 0.0200  # 100% change in yield
+            'Date': '2024-01-15',
+            'Fund Code': 'THRESHOLD_TEST',
+            'Fund Name': 'Threshold Test Fund',
+            'Share Class Assets (dly/$mils)': 1000000,
+            '1-DSY (dly)': 0.0200  # 100% change in yield
         }])
         
         # Set threshold in config
@@ -250,8 +261,10 @@ class TestValidationLogic(ETLTestCase):
         self.assertEqual(len(changes), 1)
         
         change = changes[0]
-        self.assertIn('one_day_yield', change['changes'])
-        self.assertGreater(abs(change['changes']['one_day_yield']['pct_change']), 0.05)
+        # Check that one_day_yield is in the changed_fields
+        field_changes = {f['field']: f for f in change['changed_fields']}
+        self.assertIn('one_day_yield', field_changes)
+        self.assertGreater(abs(field_changes['one_day_yield']['pct_change']), 5.0)  # 5% threshold
 
 
 class TestValidationModes(ETLTestCase):
@@ -282,20 +295,20 @@ class TestValidationModes(ETLTestCase):
                   1000000 + i * 100000, 0.01 + i * 0.001))
         self.conn.commit()
         
-        # Create lookback with some changes
+        # Create lookback with some changes (using Excel column names)
         lookback_data = []
         for i in range(10):
             lookback_data.append({
-                'date': '2024-01-15',
-                'fund_code': f'FUND{i:04d}',
-                'fund_name': f'Test Fund {i}',
-                'share_class_assets': 1000000 + i * 100000,
-                'one_day_yield': 0.01 + i * 0.001
+                'Date': '2024-01-15',
+                'Fund Code': f'FUND{i:04d}',
+                'Fund Name': f'Test Fund {i}',
+                'Share Class Assets (dly/$mils)': 1000000 + i * 100000,
+                '1-DSY (dly)': 0.01 + i * 0.001
             })
         
         # Change only first 3 records
         for i in range(3):
-            lookback_data[i]['share_class_assets'] = 9999999
+            lookback_data[i]['Share Class Assets (dly/$mils)'] = 9999999
         
         lookback_df = pd.DataFrame(lookback_data)
         
@@ -325,15 +338,15 @@ class TestValidationModes(ETLTestCase):
         for date in ['2024-01-15', '2024-01-12']:
             self.insert_test_data(self.conn, 'AMRS', date, 5)
         
-        # Create lookback data for one date only
+        # Create lookback data for one date only (using Excel column names)
         lookback_data = []
         for i in range(5):
             lookback_data.append({
-                'date': '2024-01-15',
-                'fund_code': f'NEWFUND{i:04d}',  # All different codes
-                'fund_name': f'New Fund {i}',
-                'share_class_assets': 5555555,
-                'one_day_yield': 0.05
+                'Date': '2024-01-15',
+                'Fund Code': f'NEWFUND{i:04d}',  # All different codes
+                'Fund Name': f'New Fund {i}',
+                'Share Class Assets (dly/$mils)': 5555555,
+                '1-DSY (dly)': 0.05
             })
         
         lookback_df = pd.DataFrame(lookback_data)

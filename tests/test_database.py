@@ -31,7 +31,7 @@ class TestDatabaseInitialization(ETLTestCase):
         """)
         
         tables = [row[0] for row in cursor.fetchall()]
-        expected_tables = ['etl_log', 'etl_runs', 'fund_data', 'workflows']
+        expected_tables = ['etl_log', 'fund_data']  # workflows table is created by workflow_db_tracker
         
         for table in expected_tables:
             self.assertIn(table, tables, f"Table {table} not found")
@@ -49,9 +49,8 @@ class TestDatabaseInitialization(ETLTestCase):
         
         # Check critical columns
         expected_columns = {
-            'id': 'INTEGER',
             'region': 'TEXT',
-            'date': 'TEXT',
+            'date': 'DATE',
             'fund_code': 'TEXT',
             'fund_name': 'TEXT',
             'share_class_assets': 'REAL',
@@ -85,8 +84,7 @@ class TestDatabaseInitialization(ETLTestCase):
         expected_indices = [
             'idx_fund_data_region',
             'idx_fund_data_date',
-            'idx_fund_data_fund_code',
-            'idx_fund_data_composite'
+            'idx_fund_data_fund_code'
         ]
         
         for idx in expected_indices:

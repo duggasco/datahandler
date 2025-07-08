@@ -99,7 +99,7 @@ case "$1" in
     
     "test")
         echo "Running test suite..."
-        docker compose exec fund-etl python /app/test_fund_etl_setup.py
+        docker compose exec fund-etl python /app/tests/run_tests.py
         ;;
     
     "report")
@@ -208,7 +208,7 @@ for region in ['AMRS', 'EMEA']:
     
     "test-validation")
         echo "Testing validation feature..."
-        docker compose exec fund-etl python /app/test_lookback_validation.py
+        docker compose exec fund-etl python -m unittest tests.test_sap_and_validation.TestValidationLogic -v
         ;;
     
     "fix-permissions")

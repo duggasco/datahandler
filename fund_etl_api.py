@@ -35,7 +35,34 @@ logger = logging.getLogger(__name__)
 
 # Database-backed workflow tracking
 DB_PATH = os.environ.get('DB_PATH', '/data/fund_data.db')
-workflow_tracker = DatabaseWorkflowTracker(DB_PATH)
+
+class WorkflowTrackerProxy:
+    """Proxy class that allows swapping the underlying tracker for test isolation"""
+    def __init__(self):
+        self._tracker = None
+        self._lock = threading.Lock()
+    
+    def _get_tracker(self):
+        with self._lock:
+            if self._tracker is None:
+                self._tracker = DatabaseWorkflowTracker(DB_PATH)
+            return self._tracker
+    
+    def reset(self, db_path=None):
+        """Reset the tracker with a new database path - used by tests"""
+        global DB_PATH
+        with self._lock:
+            if db_path:
+                DB_PATH = db_path
+            self._tracker = DatabaseWorkflowTracker(db_path or DB_PATH)
+            return self._tracker
+    
+    def __getattr__(self, name):
+        """Forward all attribute access to the underlying tracker"""
+        return getattr(self._get_tracker(), name)
+
+# Create the proxy instance that can be reset by tests
+workflow_tracker = WorkflowTrackerProxy()
 
 # Keep in-memory workflows for backward compatibility during transition
 workflows = {}
