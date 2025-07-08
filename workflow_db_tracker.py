@@ -114,6 +114,11 @@ class DatabaseWorkflowTracker:
                     updates.append('status = ?')
                     params.append(status)
                     
+                    # Set started_at when transitioning to running
+                    if status == 'running' and current_status in ['pending', None]:
+                        updates.append('started_at = ?')
+                        params.append(datetime.now().isoformat())
+                    
                     if status in ['completed', 'failed']:
                         updates.append('completed_at = ?')
                         params.append(datetime.now().isoformat())

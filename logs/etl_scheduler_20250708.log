@@ -42924,3 +42924,313 @@ Stacktrace:
 #16 0x560e40af74f6 <unknown>
 #17 0x7f2b26f851f5 <unknown>
 
+2025-07-08 01:13:07,239 - fund_etl_pipeline - INFO - Downloading AMRS lookback file with extended timeout of 1200 seconds
+2025-07-08 01:13:07,240 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:09,430 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x557b0f93e1da <unknown>
+#1 0x557b0f3e8ab0 <unknown>
+#2 0x557b0f4238ac <unknown>
+#3 0x557b0f41e307 <unknown>
+#4 0x557b0f46e696 <unknown>
+#5 0x557b0f46dd56 <unknown>
+#6 0x557b0f45ff73 <unknown>
+#7 0x557b0f42caeb <unknown>
+#8 0x557b0f42d751 <unknown>
+#9 0x557b0f902aeb <unknown>
+#10 0x557b0f9068c9 <unknown>
+#11 0x557b0f8e98c9 <unknown>
+#12 0x557b0f907488 <unknown>
+#13 0x557b0f8ce07f <unknown>
+#14 0x557b0f92b888 <unknown>
+#15 0x557b0f92ba66 <unknown>
+#16 0x557b0f93d4f6 <unknown>
+#17 0x7f705b5bf1f5 <unknown>
+
+2025-07-08 01:13:09,430 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:09,430 - sap_download_module - WARNING - Chrome initialization attempt 1 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x557b0f93e1da <unknown>
+#1 0x557b0f3e8ab0 <unknown>
+#2 0x557b0f4238ac <unknown>
+#3 0x557b0f41e307 <unknown>
+#4 0x557b0f46e696 <unknown>
+#5 0x557b0f46dd56 <unknown>
+#6 0x557b0f45ff73 <unknown>
+#7 0x557b0f42caeb <unknown>
+#8 0x557b0f42d751 <unknown>
+#9 0x557b0f902aeb <unknown>
+#10 0x557b0f9068c9 <unknown>
+#11 0x557b0f8e98c9 <unknown>
+#12 0x557b0f907488 <unknown>
+#13 0x557b0f8ce07f <unknown>
+#14 0x557b0f92b888 <unknown>
+#15 0x557b0f92ba66 <unknown>
+#16 0x557b0f93d4f6 <unknown>
+#17 0x7f705b5bf1f5 <unknown>
+
+2025-07-08 01:13:14,431 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:16,615 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55879f0681da <unknown>
+#1 0x55879eb12ab0 <unknown>
+#2 0x55879eb4d8ac <unknown>
+#3 0x55879eb48307 <unknown>
+#4 0x55879eb98696 <unknown>
+#5 0x55879eb97d56 <unknown>
+#6 0x55879eb89f73 <unknown>
+#7 0x55879eb56aeb <unknown>
+#8 0x55879eb57751 <unknown>
+#9 0x55879f02caeb <unknown>
+#10 0x55879f0308c9 <unknown>
+#11 0x55879f0138c9 <unknown>
+#12 0x55879f031488 <unknown>
+#13 0x55879eff807f <unknown>
+#14 0x55879f055888 <unknown>
+#15 0x55879f055a66 <unknown>
+#16 0x55879f0674f6 <unknown>
+#17 0x7f17d06af1f5 <unknown>
+
+2025-07-08 01:13:16,615 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:16,615 - sap_download_module - WARNING - Chrome initialization attempt 2 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55879f0681da <unknown>
+#1 0x55879eb12ab0 <unknown>
+#2 0x55879eb4d8ac <unknown>
+#3 0x55879eb48307 <unknown>
+#4 0x55879eb98696 <unknown>
+#5 0x55879eb97d56 <unknown>
+#6 0x55879eb89f73 <unknown>
+#7 0x55879eb56aeb <unknown>
+#8 0x55879eb57751 <unknown>
+#9 0x55879f02caeb <unknown>
+#10 0x55879f0308c9 <unknown>
+#11 0x55879f0138c9 <unknown>
+#12 0x55879f031488 <unknown>
+#13 0x55879eff807f <unknown>
+#14 0x55879f055888 <unknown>
+#15 0x55879f055a66 <unknown>
+#16 0x55879f0674f6 <unknown>
+#17 0x7f17d06af1f5 <unknown>
+
+2025-07-08 01:13:23,616 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:25,802 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5623ea1ba1da <unknown>
+#1 0x5623e9c64ab0 <unknown>
+#2 0x5623e9c9f8ac <unknown>
+#3 0x5623e9c9a307 <unknown>
+#4 0x5623e9cea696 <unknown>
+#5 0x5623e9ce9d56 <unknown>
+#6 0x5623e9cdbf73 <unknown>
+#7 0x5623e9ca8aeb <unknown>
+#8 0x5623e9ca9751 <unknown>
+#9 0x5623ea17eaeb <unknown>
+#10 0x5623ea1828c9 <unknown>
+#11 0x5623ea1658c9 <unknown>
+#12 0x5623ea183488 <unknown>
+#13 0x5623ea14a07f <unknown>
+#14 0x5623ea1a7888 <unknown>
+#15 0x5623ea1a7a66 <unknown>
+#16 0x5623ea1b94f6 <unknown>
+#17 0x7ff289b4a1f5 <unknown>
+
+2025-07-08 01:13:25,802 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:25,802 - sap_download_module - WARNING - Chrome initialization attempt 3 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5623ea1ba1da <unknown>
+#1 0x5623e9c64ab0 <unknown>
+#2 0x5623e9c9f8ac <unknown>
+#3 0x5623e9c9a307 <unknown>
+#4 0x5623e9cea696 <unknown>
+#5 0x5623e9ce9d56 <unknown>
+#6 0x5623e9cdbf73 <unknown>
+#7 0x5623e9ca8aeb <unknown>
+#8 0x5623e9ca9751 <unknown>
+#9 0x5623ea17eaeb <unknown>
+#10 0x5623ea1828c9 <unknown>
+#11 0x5623ea1658c9 <unknown>
+#12 0x5623ea183488 <unknown>
+#13 0x5623ea14a07f <unknown>
+#14 0x5623ea1a7888 <unknown>
+#15 0x5623ea1a7a66 <unknown>
+#16 0x5623ea1b94f6 <unknown>
+#17 0x7ff289b4a1f5 <unknown>
+
+2025-07-08 01:13:25,802 - sap_download_module - ERROR - Failed to initialize Chrome after all retries
+2025-07-08 01:13:28,802 - fund_etl_pipeline - ERROR - Error downloading lookback file for AMRS: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5623ea1ba1da <unknown>
+#1 0x5623e9c64ab0 <unknown>
+#2 0x5623e9c9f8ac <unknown>
+#3 0x5623e9c9a307 <unknown>
+#4 0x5623e9cea696 <unknown>
+#5 0x5623e9ce9d56 <unknown>
+#6 0x5623e9cdbf73 <unknown>
+#7 0x5623e9ca8aeb <unknown>
+#8 0x5623e9ca9751 <unknown>
+#9 0x5623ea17eaeb <unknown>
+#10 0x5623ea1828c9 <unknown>
+#11 0x5623ea1658c9 <unknown>
+#12 0x5623ea183488 <unknown>
+#13 0x5623ea14a07f <unknown>
+#14 0x5623ea1a7888 <unknown>
+#15 0x5623ea1a7a66 <unknown>
+#16 0x5623ea1b94f6 <unknown>
+#17 0x7ff289b4a1f5 <unknown>
+
+2025-07-08 01:13:28,803 - fund_etl_pipeline - INFO - Downloading EMEA lookback file with extended timeout of 1200 seconds
+2025-07-08 01:13:28,803 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:30,992 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5561df0c71da <unknown>
+#1 0x5561deb71ab0 <unknown>
+#2 0x5561debac8ac <unknown>
+#3 0x5561deba7307 <unknown>
+#4 0x5561debf7696 <unknown>
+#5 0x5561debf6d56 <unknown>
+#6 0x5561debe8f73 <unknown>
+#7 0x5561debb5aeb <unknown>
+#8 0x5561debb6751 <unknown>
+#9 0x5561df08baeb <unknown>
+#10 0x5561df08f8c9 <unknown>
+#11 0x5561df0728c9 <unknown>
+#12 0x5561df090488 <unknown>
+#13 0x5561df05707f <unknown>
+#14 0x5561df0b4888 <unknown>
+#15 0x5561df0b4a66 <unknown>
+#16 0x5561df0c64f6 <unknown>
+#17 0x7f6c076ac1f5 <unknown>
+
+2025-07-08 01:13:30,992 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:30,992 - sap_download_module - WARNING - Chrome initialization attempt 1 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x5561df0c71da <unknown>
+#1 0x5561deb71ab0 <unknown>
+#2 0x5561debac8ac <unknown>
+#3 0x5561deba7307 <unknown>
+#4 0x5561debf7696 <unknown>
+#5 0x5561debf6d56 <unknown>
+#6 0x5561debe8f73 <unknown>
+#7 0x5561debb5aeb <unknown>
+#8 0x5561debb6751 <unknown>
+#9 0x5561df08baeb <unknown>
+#10 0x5561df08f8c9 <unknown>
+#11 0x5561df0728c9 <unknown>
+#12 0x5561df090488 <unknown>
+#13 0x5561df05707f <unknown>
+#14 0x5561df0b4888 <unknown>
+#15 0x5561df0b4a66 <unknown>
+#16 0x5561df0c64f6 <unknown>
+#17 0x7f6c076ac1f5 <unknown>
+
+2025-07-08 01:13:35,995 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:38,184 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55d19adb01da <unknown>
+#1 0x55d19a85aab0 <unknown>
+#2 0x55d19a8958ac <unknown>
+#3 0x55d19a890307 <unknown>
+#4 0x55d19a8e0696 <unknown>
+#5 0x55d19a8dfd56 <unknown>
+#6 0x55d19a8d1f73 <unknown>
+#7 0x55d19a89eaeb <unknown>
+#8 0x55d19a89f751 <unknown>
+#9 0x55d19ad74aeb <unknown>
+#10 0x55d19ad788c9 <unknown>
+#11 0x55d19ad5b8c9 <unknown>
+#12 0x55d19ad79488 <unknown>
+#13 0x55d19ad4007f <unknown>
+#14 0x55d19ad9d888 <unknown>
+#15 0x55d19ad9da66 <unknown>
+#16 0x55d19adaf4f6 <unknown>
+#17 0x7f36b32351f5 <unknown>
+
+2025-07-08 01:13:38,184 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:38,185 - sap_download_module - WARNING - Chrome initialization attempt 2 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55d19adb01da <unknown>
+#1 0x55d19a85aab0 <unknown>
+#2 0x55d19a8958ac <unknown>
+#3 0x55d19a890307 <unknown>
+#4 0x55d19a8e0696 <unknown>
+#5 0x55d19a8dfd56 <unknown>
+#6 0x55d19a8d1f73 <unknown>
+#7 0x55d19a89eaeb <unknown>
+#8 0x55d19a89f751 <unknown>
+#9 0x55d19ad74aeb <unknown>
+#10 0x55d19ad788c9 <unknown>
+#11 0x55d19ad5b8c9 <unknown>
+#12 0x55d19ad79488 <unknown>
+#13 0x55d19ad4007f <unknown>
+#14 0x55d19ad9d888 <unknown>
+#15 0x55d19ad9da66 <unknown>
+#16 0x55d19adaf4f6 <unknown>
+#17 0x7f36b32351f5 <unknown>
+
+2025-07-08 01:13:45,186 - sap_download_module - INFO - Acquired Chrome lock (PID: 64)
+2025-07-08 01:13:47,318 - sap_download_module - ERROR - Failed to initialize Chrome driver: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55e0047861da <unknown>
+#1 0x55e004230ab0 <unknown>
+#2 0x55e00426b8ac <unknown>
+#3 0x55e004266307 <unknown>
+#4 0x55e0042b6696 <unknown>
+#5 0x55e0042b5d56 <unknown>
+#6 0x55e0042a7f73 <unknown>
+#7 0x55e004274aeb <unknown>
+#8 0x55e004275751 <unknown>
+#9 0x55e00474aaeb <unknown>
+#10 0x55e00474e8c9 <unknown>
+#11 0x55e0047318c9 <unknown>
+#12 0x55e00474f488 <unknown>
+#13 0x55e00471607f <unknown>
+#14 0x55e004773888 <unknown>
+#15 0x55e004773a66 <unknown>
+#16 0x55e0047854f6 <unknown>
+#17 0x7f6dd7ded1f5 <unknown>
+
+2025-07-08 01:13:47,318 - sap_download_module - INFO - Released Chrome lock due to error
+2025-07-08 01:13:47,318 - sap_download_module - WARNING - Chrome initialization attempt 3 failed: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55e0047861da <unknown>
+#1 0x55e004230ab0 <unknown>
+#2 0x55e00426b8ac <unknown>
+#3 0x55e004266307 <unknown>
+#4 0x55e0042b6696 <unknown>
+#5 0x55e0042b5d56 <unknown>
+#6 0x55e0042a7f73 <unknown>
+#7 0x55e004274aeb <unknown>
+#8 0x55e004275751 <unknown>
+#9 0x55e00474aaeb <unknown>
+#10 0x55e00474e8c9 <unknown>
+#11 0x55e0047318c9 <unknown>
+#12 0x55e00474f488 <unknown>
+#13 0x55e00471607f <unknown>
+#14 0x55e004773888 <unknown>
+#15 0x55e004773a66 <unknown>
+#16 0x55e0047854f6 <unknown>
+#17 0x7f6dd7ded1f5 <unknown>
+
+2025-07-08 01:13:47,318 - sap_download_module - ERROR - Failed to initialize Chrome after all retries
+2025-07-08 01:13:50,319 - fund_etl_pipeline - ERROR - Error downloading lookback file for EMEA: Message: session not created: probably user data directory is already in use, please specify a unique value for --user-data-dir argument, or don't use --user-data-dir
+Stacktrace:
+#0 0x55e0047861da <unknown>
+#1 0x55e004230ab0 <unknown>
+#2 0x55e00426b8ac <unknown>
+#3 0x55e004266307 <unknown>
+#4 0x55e0042b6696 <unknown>
+#5 0x55e0042b5d56 <unknown>
+#6 0x55e0042a7f73 <unknown>
+#7 0x55e004274aeb <unknown>
+#8 0x55e004275751 <unknown>
+#9 0x55e00474aaeb <unknown>
+#10 0x55e00474e8c9 <unknown>
+#11 0x55e0047318c9 <unknown>
+#12 0x55e00474f488 <unknown>
+#13 0x55e00471607f <unknown>
+#14 0x55e004773888 <unknown>
+#15 0x55e004773a66 <unknown>
+#16 0x55e0047854f6 <unknown>
+#17 0x7f6dd7ded1f5 <unknown>
+

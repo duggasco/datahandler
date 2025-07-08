@@ -923,15 +923,19 @@ HTML_TEMPLATE = '''
                 // Update active workflows display
                 const activeDiv = document.getElementById('workflowsList');
                 if (activeList.length > 0) {
-                    activeDiv.innerHTML = activeList.map(w => `
-                        <div style="padding: 15px; background: #f3f4f6; border-radius: 6px; margin-bottom: 10px;">
-                            <h4 style="margin: 0 0 10px 0;">🔄 ${w.type}</h4>
-                            <p style="margin: 5px 0; color: #6b7280;">Started: ${new Date(w.started_at).toLocaleString()}</p>
-                            <button onclick="viewWorkflowOutput('${w.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                View Output
-                            </button>
-                        </div>
-                    `).join('');
+                    activeDiv.innerHTML = activeList.map(w => {
+                        const startTime = w.started_at ? new Date(w.started_at).toLocaleString() : 
+                                        w.created_at ? new Date(w.created_at).toLocaleString() : 'Just started';
+                        return `
+                            <div style="padding: 15px; background: #f3f4f6; border-radius: 6px; margin-bottom: 10px;">
+                                <h4 style="margin: 0 0 10px 0;">🔄 ${w.type}</h4>
+                                <p style="margin: 5px 0; color: #6b7280;">Started: ${startTime}</p>
+                                <button onclick="viewWorkflowOutput('${w.id}')" style="padding: 6px 12px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                                    View Output
+                                </button>
+                            </div>
+                        `;
+                    }).join('');
                 } else {
                     activeDiv.innerHTML = '<p style="color: #6b7280;">No active workflows</p>';
                 }
@@ -948,7 +952,8 @@ HTML_TEMPLATE = '''
                             <tr>
                                 <td>${w.type}</td>
                                 <td style="color: ${statusColor}; font-weight: 600;">${statusIcon} ${w.status}</td>
-                                <td>${new Date(w.started_at).toLocaleString()}</td>
+                                <td>${w.started_at ? new Date(w.started_at).toLocaleString() : 
+                                     w.created_at ? new Date(w.created_at).toLocaleString() : '-'}</td>
                                 <td>${w.completed_at ? new Date(w.completed_at).toLocaleString() : '-'}</td>
                                 <td>
                                     <button onclick="viewWorkflowOutput('${w.id}')" style="padding: 4px 8px; background: #667eea; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">
@@ -1027,6 +1032,8 @@ HTML_TEMPLATE = '''
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             showSection('overview');
+            // Check for running workflows on page load
+            updateWorkflowStatus();
         });
     </script>
 </body>
@@ -1365,7 +1372,8 @@ def poll_etl_workflow(ui_workflow_id, etl_workflow_id):
     import time
     
     try:
-        workflow_tracker.update_workflow(ui_workflow_id, output_line=f"Monitoring ETL workflow: {etl_workflow_id}")
+        # Update workflow to running status when polling starts
+        workflow_tracker.update_workflow(ui_workflow_id, status='running', output_line=f"Monitoring ETL workflow: {etl_workflow_id}")
         
         # Poll the ETL API for workflow status
         while True:
