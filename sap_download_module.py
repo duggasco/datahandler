@@ -17,6 +17,7 @@ import tempfile
 import fcntl
 import atexit
 import psutil
+import subprocess
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -33,7 +34,8 @@ class SAPOpenDocumentDownloader:
     """Download files from SAP BusinessObjects OpenDocument URLs using Selenium"""
     
     # Class-level lock file for Chrome instance coordination
-    CHROME_LOCK_FILE = '/tmp/sap_chrome_driver.lock'
+    # Use a location where etluser has write permissions
+    CHROME_LOCK_FILE = '/logs/sap_chrome_driver.lock'
     
     @classmethod
     def cleanup_stale_locks(cls):
@@ -43,8 +45,16 @@ class SAPOpenDocumentDownloader:
                 # Check if lock file is stale (older than 5 minutes)
                 file_age = time.time() - os.path.getmtime(cls.CHROME_LOCK_FILE)
                 if file_age > 300:  # 5 minutes
-                    os.unlink(cls.CHROME_LOCK_FILE)
-                    logger.info("Removed stale Chrome lock file")
+                    try:
+                        os.unlink(cls.CHROME_LOCK_FILE)
+                        logger.info("Removed stale Chrome lock file")
+                    except PermissionError:
+                        # Try to remove with sudo if running as root
+                        try:
+                            subprocess.run(['sudo', 'rm', '-f', cls.CHROME_LOCK_FILE], capture_output=True)
+                            logger.info("Removed stale Chrome lock file with sudo")
+                        except:
+                            logger.warning(f"Could not remove stale lock file {cls.CHROME_LOCK_FILE} - permission denied")
         except Exception as e:
             logger.debug(f"Error cleaning up stale locks: {e}")
         
@@ -131,8 +141,46 @@ class SAPOpenDocumentDownloader:
         start_time = time.time()
         
         try:
-            # Try to acquire exclusive lock
-            lock_file = open(self.CHROME_LOCK_FILE, 'w')
+            # Ensure lock directory exists and has proper permissions
+            lock_dir = os.path.dirname(self.CHROME_LOCK_FILE)
+            if not os.path.exists(lock_dir):
+                os.makedirs(lock_dir, mode=0o777, exist_ok=True)
+            
+            # Try to acquire exclusive lock with proper error handling
+            lock_file = None
+            attempts = 0
+            while attempts < 3:
+                try:
+                    # Open lock file with explicit permissions
+                    lock_file = open(self.CHROME_LOCK_FILE, 'w')
+                    # Set file permissions to be writable by all
+                    os.chmod(self.CHROME_LOCK_FILE, 0o666)
+                    break
+                except PermissionError as e:
+                    attempts += 1
+                    logger.warning(f"Permission error opening lock file (attempt {attempts}): {e}")
+                    # If file exists and we can't open it, try to remove it
+                    if os.path.exists(self.CHROME_LOCK_FILE):
+                        try:
+                            # Check if file is stale
+                            file_age = time.time() - os.path.getmtime(self.CHROME_LOCK_FILE)
+                            if file_age > 60:  # 1 minute
+                                # Use subprocess to remove with sudo if needed
+                                result = subprocess.run(['sudo', 'rm', '-f', self.CHROME_LOCK_FILE], 
+                                                      capture_output=True, text=True)
+                                if result.returncode == 0:
+                                    logger.info("Removed stale lock file with sudo")
+                                    time.sleep(0.1)
+                                    continue
+                        except:
+                            pass
+                    if attempts >= 3:
+                        raise
+                    time.sleep(0.5)
+            
+            if not lock_file:
+                raise Exception("Failed to create lock file after 3 attempts")
+            
             while True:
                 try:
                     fcntl.flock(lock_file.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
@@ -149,7 +197,11 @@ class SAPOpenDocumentDownloader:
                                 lock_pid = int(f.read().strip())
                             if not psutil.pid_exists(lock_pid):
                                 logger.warning(f"Lock held by dead process {lock_pid}, removing lock")
-                                os.unlink(self.CHROME_LOCK_FILE)
+                                try:
+                                    os.unlink(self.CHROME_LOCK_FILE)
+                                except PermissionError:
+                                    subprocess.run(['sudo', 'rm', '-f', self.CHROME_LOCK_FILE], 
+                                                 capture_output=True)
                                 time.sleep(0.1)
                                 continue
                         except:
@@ -238,22 +290,10 @@ class SAPOpenDocumentDownloader:
             entropy_hash = hashlib.md5(entropy_string.encode()).hexdigest()[:12]
             
             self.user_data_dir = os.path.join(tempfile.gettempdir(), f"chrome-user-data-{entropy_hash}")
-        
-            # Ensure directory doesn't exist (cleanup any stale directories)
-            max_attempts = 5
-            for attempt in range(max_attempts):
-                if os.path.exists(self.user_data_dir):
-                    try:
-                        shutil.rmtree(self.user_data_dir, ignore_errors=True)
-                        time.sleep(0.1)  # Brief delay to ensure cleanup
-                    except:
-                        pass
-                
-                # If directory still exists, try a different name
-                if os.path.exists(self.user_data_dir):
-                    self.user_data_dir = os.path.join(tempfile.gettempdir(), f"chrome-user-data-{entropy_hash}-{attempt}")
-                else:
-                    break
+            
+            # Create the directory with proper permissions
+            os.makedirs(self.user_data_dir, mode=0o755, exist_ok=True)
+            logger.info(f"Created Chrome user data directory: {self.user_data_dir}")
             
             chrome_options.add_argument(f"--user-data-dir={self.user_data_dir}")
         
@@ -267,6 +307,19 @@ class SAPOpenDocumentDownloader:
             chrome_options.add_argument("--disable-background-timer-throttling")
             chrome_options.add_argument("--disable-backgrounding-occluded-windows")
             chrome_options.add_argument("--disable-renderer-backgrounding")
+            
+            # Disable Chrome's profile locking mechanism
+            chrome_options.add_argument("--disable-features=ProcessPerSiteUpToMainFrameThreshold")
+            chrome_options.add_argument("--disable-site-isolation-trials")
+            chrome_options.add_argument("--disable-features=IsolateOrigins")
+            chrome_options.add_argument("--disable-features=site-per-process")
+            
+            # Force single process mode to prevent conflicts
+            chrome_options.add_argument("--single-process")
+            chrome_options.add_argument("--disable-dev-tools")
+            chrome_options.add_argument("--disable-gpu-sandbox")
+            chrome_options.add_argument("--disable-setuid-sandbox")
+            chrome_options.add_argument("--disable-seccomp-filter-sandbox")
             
             # Create driver
             try:
@@ -632,6 +685,12 @@ class SAPOpenDocumentDownloader:
                 fcntl.flock(self._lock_file.fileno(), fcntl.LOCK_UN)
                 self._lock_file.close()
                 logger.info("Released Chrome lock")
+                # Try to remove lock file
+                try:
+                    os.unlink(self.CHROME_LOCK_FILE)
+                except PermissionError:
+                    # Use sudo if needed
+                    subprocess.run(['sudo', 'rm', '-f', self.CHROME_LOCK_FILE], capture_output=True)
             except Exception as e:
                 logger.debug(f"Error releasing Chrome lock: {e}")
             finally:

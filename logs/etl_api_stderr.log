@@ -5327,3 +5327,39 @@
 2025-07-08 00:28:24,464 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:28:24] "GET /api/etl/workflow/906307e2-8e48-4e01-bf1d-8a7c47c29244 HTTP/1.1" 200 -
 2025-07-08 00:28:25,320 - __main__ - INFO - Workflow 906307e2-8e48-4e01-bf1d-8a7c47c29244 completed with status: completed
 2025-07-08 00:28:26,467 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:28:26] "GET /api/etl/workflow/906307e2-8e48-4e01-bf1d-8a7c47c29244 HTTP/1.1" 200 -
+2025-07-08 00:34:54,983 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://172.19.0.2:8081
+2025-07-08 00:34:54,983 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-08 00:35:02,688 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://172.19.0.2:8081
+2025-07-08 00:35:02,688 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-08 00:36:36,378 - __main__ - INFO - Starting workflow 721e508c-c5c7-4166-9c3a-ca8fd6535329 with command: python /app/fund_etl_scheduler.py --validate
+2025-07-08 00:36:36,378 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:36] "[35m[1mPOST /api/etl/validate HTTP/1.1[0m" 202 -
+2025-07-08 00:36:36,383 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:36] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:38,386 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:38] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:40,390 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:40] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:42,394 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:42] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:44,398 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:44] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:46,403 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:46] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:48,406 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:48] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:50,410 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:50] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:52,414 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:52] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:54,417 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:54] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:56,421 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:56] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:36:58,424 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:36:58] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:37:00,427 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:37:00] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:37:01,970 - __main__ - INFO - Workflow 721e508c-c5c7-4166-9c3a-ca8fd6535329 completed with status: completed
+2025-07-08 00:37:02,430 - werkzeug - INFO - 172.19.0.3 - - [08/Jul/2025 00:37:02] "GET /api/etl/workflow/721e508c-c5c7-4166-9c3a-ca8fd6535329 HTTP/1.1" 200 -
+2025-07-08 00:40:16,810 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8081
+ * Running on http://172.19.0.2:8081
+2025-07-08 00:40:16,810 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-08 00:41:24,985 - __main__ - INFO - Starting workflow 19bcdc0a-849b-43cd-8d54-4e59f6140d4f with command: python /app/fund_etl_scheduler.py --validate
+2025-07-08 00:41:24,986 - werkzeug - INFO - 127.0.0.1 - - [08/Jul/2025 00:41:24] "[35m[1mPOST /api/etl/validate HTTP/1.1[0m" 202 -
+2025-07-08 00:41:35,386 - werkzeug - INFO - 127.0.0.1 - - [08/Jul/2025 00:41:35] "GET /api/etl/workflow/19bcdc0a-849b-43cd-8d54-4e59f6140d4f HTTP/1.1" 200 -
+2025-07-08 00:41:57,630 - __main__ - INFO - Workflow 19bcdc0a-849b-43cd-8d54-4e59f6140d4f completed with status: completed
