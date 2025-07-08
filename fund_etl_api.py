@@ -14,6 +14,11 @@ import json
 import os
 from datetime import datetime
 import logging
+import sys
+
+# Import the database-backed workflow tracker
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from workflow_db_tracker import DatabaseWorkflowTracker
 
 app = Flask(__name__)
 
@@ -28,7 +33,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# In-memory workflow tracking (could be extended to use Redis or database)
+# Database-backed workflow tracking
+DB_PATH = os.environ.get('DB_PATH', '/data/fund_data.db')
+workflow_tracker = DatabaseWorkflowTracker(DB_PATH)
+
+# Keep in-memory workflows for backward compatibility during transition
 workflows = {}
 workflow_lock = threading.Lock()
 
@@ -55,9 +64,12 @@ def run_etl_process(workflow_id, command_args):
     try:
         # Workflow ID should already be in running_etl_workflows from can_start_etl()
         
+        # Update both in-memory and database
         with workflow_lock:
             workflows[workflow_id]['status'] = 'running'
             workflows[workflow_id]['started_at'] = datetime.now().isoformat()
+        
+        workflow_tracker.update_workflow(workflow_id, status='running')
         
         logger.info(f"Starting workflow {workflow_id} with command: {' '.join(command_args)}")
         
@@ -83,6 +95,9 @@ def run_etl_process(workflow_id, command_args):
                 # Update workflow output
                 with workflow_lock:
                     workflows[workflow_id]['output'] = output_lines[-100:]  # Keep last 100 lines
+                
+                # Also update in database
+                workflow_tracker.update_workflow(workflow_id, output_line=line.strip())
         
         process.wait()
         
@@ -96,6 +111,12 @@ def run_etl_process(workflow_id, command_args):
                 workflows[workflow_id]['status'] = 'failed'
                 workflows[workflow_id]['error'] = f'Process exited with code {process.returncode}'
         
+        # Update database
+        if process.returncode == 0:
+            workflow_tracker.update_workflow(workflow_id, status='completed', message='Workflow completed successfully')
+        else:
+            workflow_tracker.update_workflow(workflow_id, status='failed', error=f'Process exited with code {process.returncode}')
+        
         logger.info(f"Workflow {workflow_id} completed with status: {workflows[workflow_id]['status']}")
         
     except Exception as e:
@@ -104,6 +125,9 @@ def run_etl_process(workflow_id, command_args):
             workflows[workflow_id]['status'] = 'failed'
             workflows[workflow_id]['error'] = str(e)
             workflows[workflow_id]['completed_at'] = datetime.now().isoformat()
+        
+        # Update database
+        workflow_tracker.update_workflow(workflow_id, status='failed', error=str(e))
     finally:
         # Remove from running workflows
         with etl_execution_lock:
@@ -131,7 +155,7 @@ def run_daily_etl():
                 'status': 'rejected'
             }), 409
         
-        # Initialize workflow
+        # Initialize workflow in both memory and database
         with workflow_lock:
             workflows[workflow_id] = {
                 'id': workflow_id,
@@ -143,6 +167,9 @@ def run_daily_etl():
                 'output': [],
                 'error': None
             }
+        
+        # Also create in database with same workflow_id
+        workflow_tracker.start_workflow('daily-etl', {}, workflow_id=workflow_id)
         
         # Run in background thread
         thread = threading.Thread(
@@ -182,7 +209,7 @@ def run_validation():
                 'status': 'rejected'
             }), 409
         
-        # Initialize workflow
+        # Initialize workflow in both memory and database
         with workflow_lock:
             workflows[workflow_id] = {
                 'id': workflow_id,
@@ -195,6 +222,9 @@ def run_validation():
                 'error': None,
                 'params': {'mode': mode}
             }
+        
+        # Also create in database with same workflow_id
+        workflow_tracker.start_workflow(f'validation-{mode}', {'mode': mode}, workflow_id=workflow_id)
         
         # Determine command based on mode
         if mode == 'full':
@@ -245,7 +275,7 @@ def run_etl_for_date():
                 'status': 'rejected'
             }), 409
         
-        # Initialize workflow
+        # Initialize workflow in both memory and database
         with workflow_lock:
             workflows[workflow_id] = {
                 'id': workflow_id,
@@ -258,6 +288,9 @@ def run_etl_for_date():
                 'error': None,
                 'params': {'date': target_date}
             }
+        
+        # Also create in database with same workflow_id
+        workflow_tracker.start_workflow('run-date', {'date': target_date}, workflow_id=workflow_id)
         
         # Run in background thread
         thread = threading.Thread(
@@ -280,8 +313,13 @@ def run_etl_for_date():
 @app.route('/api/etl/workflow/<workflow_id>', methods=['GET'])
 def get_workflow_status(workflow_id):
     """Get status of a specific workflow"""
-    with workflow_lock:
-        workflow = workflows.get(workflow_id)
+    # Try database first
+    workflow = workflow_tracker.get_workflow(workflow_id)
+    
+    if not workflow:
+        # Fallback to in-memory for backward compatibility
+        with workflow_lock:
+            workflow = workflows.get(workflow_id)
     
     if not workflow:
         return jsonify({'error': 'Workflow not found'}), 404
@@ -291,12 +329,8 @@ def get_workflow_status(workflow_id):
 @app.route('/api/etl/workflows', methods=['GET'])
 def list_workflows():
     """List all workflows"""
-    with workflow_lock:
-        # Get all workflows, sorted by created_at descending
-        all_workflows = list(workflows.values())
-    
-    # Sort by created_at
-    all_workflows.sort(key=lambda x: x['created_at'], reverse=True)
+    # Get workflows from database
+    all_workflows = workflow_tracker.get_all_workflows(limit=100)
     
     # Optionally filter by status
     status_filter = request.args.get('status')
@@ -310,10 +344,15 @@ def list_workflows():
 def cleanup_workflows():
     """Clean up old completed workflows"""
     try:
-        hours = request.get_json().get('hours', 24)
-        cutoff = datetime.now().timestamp() - (hours * 3600)
+        data = request.get_json() or {}
+        hours = data.get('hours', 24)
         
-        removed_count = 0
+        # Clean up database workflows
+        db_removed = workflow_tracker.cleanup_old_workflows(hours)
+        
+        # Also clean up in-memory workflows
+        cutoff = datetime.now().timestamp() - (hours * 3600)
+        memory_removed = 0
         with workflow_lock:
             to_remove = []
             for wf_id, wf in workflows.items():
@@ -324,10 +363,10 @@ def cleanup_workflows():
             
             for wf_id in to_remove:
                 del workflows[wf_id]
-                removed_count += 1
+                memory_removed += 1
         
         return jsonify({
-            'message': f'Removed {removed_count} workflows older than {hours} hours'
+            'message': f'Removed {db_removed} database workflows and {memory_removed} memory workflows older than {hours} hours'
         })
         
     except Exception as e:

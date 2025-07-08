@@ -23,78 +23,21 @@ import threading
 import uuid
 import time
 
+# Import the database-backed workflow tracker
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from workflow_db_tracker import DatabaseWorkflowTracker
+
 app = Flask(__name__)
 
 DB_PATH = os.environ.get('DB_PATH', '/data/fund_data.db')
 
-# Workflow tracking
+# Workflow tracking - now using database persistence
 workflow_status = {}
 workflow_lock = threading.Lock()
 
-class WorkflowTracker:
-    """Track running workflows and their status"""
-    
-    def __init__(self):
-        self.workflows = {}
-        self.lock = threading.Lock()
-    
-    def start_workflow(self, workflow_type, params):
-        """Start tracking a new workflow"""
-        workflow_id = str(uuid.uuid4())
-        with self.lock:
-            self.workflows[workflow_id] = {
-                'id': workflow_id,
-                'type': workflow_type,
-                'params': params,
-                'status': 'running',
-                'started_at': datetime.now().isoformat(),
-                'completed_at': None,
-                'output': [],
-                'error': None
-            }
-        return workflow_id
-    
-    def update_workflow(self, workflow_id, output_line=None, status=None, error=None):
-        """Update workflow status or add output"""
-        with self.lock:
-            if workflow_id in self.workflows:
-                if output_line:
-                    self.workflows[workflow_id]['output'].append({
-                        'timestamp': datetime.now().isoformat(),
-                        'message': output_line
-                    })
-                if status:
-                    self.workflows[workflow_id]['status'] = status
-                    if status in ['completed', 'failed']:
-                        self.workflows[workflow_id]['completed_at'] = datetime.now().isoformat()
-                if error:
-                    self.workflows[workflow_id]['error'] = error
-    
-    def get_workflow(self, workflow_id):
-        """Get workflow status"""
-        with self.lock:
-            return self.workflows.get(workflow_id)
-    
-    def get_all_workflows(self):
-        """Get all workflows"""
-        with self.lock:
-            return list(self.workflows.values())
-    
-    def cleanup_old_workflows(self, hours=24):
-        """Remove workflows older than specified hours"""
-        cutoff = datetime.now() - timedelta(hours=hours)
-        with self.lock:
-            to_remove = []
-            for wf_id, wf in self.workflows.items():
-                if wf.get('completed_at'):
-                    completed = datetime.fromisoformat(wf['completed_at'])
-                    if completed < cutoff:
-                        to_remove.append(wf_id)
-            for wf_id in to_remove:
-                del self.workflows[wf_id]
-
-# Initialize workflow tracker
-workflow_tracker = WorkflowTracker()
+# Initialize workflow tracker with database persistence
+workflow_tracker = DatabaseWorkflowTracker(DB_PATH)
 
 class NumpyEncoder(json.JSONEncoder):
     """Custom JSON encoder to handle numpy types"""
@@ -1496,6 +1439,9 @@ def run_daily_workflow():
                 etl_response = response.json()
                 etl_workflow_id = etl_response.get('workflow_id')
                 
+                # Update the workflow with ETL workflow ID
+                workflow_tracker.update_workflow(ui_workflow_id, etl_workflow_id=etl_workflow_id)
+                
                 # Start polling thread to monitor ETL workflow
                 thread = threading.Thread(
                     target=poll_etl_workflow,
@@ -1546,6 +1492,9 @@ def run_validation_workflow():
             if response.status_code in [200, 202]:
                 etl_response = response.json()
                 etl_workflow_id = etl_response.get('workflow_id')
+                
+                # Update the workflow with ETL workflow ID
+                workflow_tracker.update_workflow(ui_workflow_id, etl_workflow_id=etl_workflow_id)
                 
                 # Start polling thread to monitor ETL workflow
                 thread = threading.Thread(
