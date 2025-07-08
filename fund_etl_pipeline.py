@@ -194,17 +194,12 @@ class FundDataETL:
             issues.append(f"Found {empty_rows} completely empty rows")
             df = df.dropna(how='all')
         
-        # Check for duplicate primary keys
+        # Check for duplicate primary keys (now that #MULTIVALUE has been handled)
         duplicate_keys = df.groupby(['Fund Code']).size()
         duplicates = duplicate_keys[duplicate_keys > 1]
+        
         if len(duplicates) > 0:
             issues.append(f"Found {len(duplicates)} duplicate Fund Codes")
-            # Handle special case of #MULTIVALUE fund code
-            if '#MULTIVALUE' in duplicates.index:
-                logger.warning("Found #MULTIVALUE fund code - assigning unique identifiers")
-                multivalue_mask = df['Fund Code'] == '#MULTIVALUE'
-                multivalue_count = multivalue_mask.sum()
-                df.loc[multivalue_mask, 'Fund Code'] = [f'#MULTIVALUE_{i+1}' for i in range(multivalue_count)]
         
         # Check required columns for null values
         required_cols = ['Date', 'Fund Code', 'Fund Name', 'Currency']
@@ -471,6 +466,11 @@ class FundDataETL:
             
             # Delete existing data for this date/region to handle updates
             cursor = conn.cursor()
+            
+            # Log what we're about to do
+            logger.debug(f"About to load {len(df_load)} records for {region} on {df_load['date'].iloc[0]}")
+            logger.debug(f"Unique fund codes in data: {df_load['fund_code'].nunique()}")
+            
             cursor.execute("""
             DELETE FROM fund_data 
             WHERE date = ? AND region = ?
@@ -511,6 +511,30 @@ class FundDataETL:
             if close_conn:
                 conn.close()
     
+    def _handle_multivalue_funds(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Handle #MULTIVALUE fund codes by assigning unique identifiers"""
+        df = df.copy()
+        
+        # Check if there are any #MULTIVALUE fund codes
+        if 'Fund Code' in df.columns:
+            # Log initial state
+            logger.debug(f"_handle_multivalue_funds: Processing {len(df)} records")
+            unique_codes_before = df['Fund Code'].nunique()
+            
+            multivalue_mask = df['Fund Code'] == '#MULTIVALUE'
+            multivalue_count = multivalue_mask.sum()
+            
+            if multivalue_count > 0:
+                logger.info(f"Found {multivalue_count} #MULTIVALUE fund codes - assigning unique identifiers")
+                # Assign unique identifiers to each #MULTIVALUE record
+                df.loc[multivalue_mask, 'Fund Code'] = [f'#MULTIVALUE_{i+1}' for i in range(multivalue_count)]
+                
+                # Log results
+                unique_codes_after = df['Fund Code'].nunique()
+                logger.info(f"Fund codes: {unique_codes_before} unique before -> {unique_codes_after} unique after")
+        
+        return df
+    
     def carry_forward_data(self, date: datetime, region: str):
         """Carry forward previous day's data when no new file is available"""
         
@@ -529,6 +553,12 @@ class FundDataETL:
             if result:
                 source_date = result[0]
                 logger.info(f"Carrying forward {region} data from {source_date} to {date.strftime('%Y-%m-%d')}")
+                
+                # First, delete any existing data for the target date to avoid conflicts
+                cursor.execute("""
+                DELETE FROM fund_data 
+                WHERE date = ? AND region = ?
+                """, (date.strftime('%Y-%m-%d'), region))
                 
                 # Copy data with new date
                 cursor.execute("""
@@ -901,6 +931,9 @@ class FundDataETL:
                 if len(date_data) > 0:
                     logger.info(f"Adding {len(date_data)} records for missing date {missing_date}")
                     
+                    # Handle #MULTIVALUE fund codes before processing
+                    date_data = self._handle_multivalue_funds(date_data.copy())
+                    
                     # Process and load missing date data
                     date_data_processed = self.process_dates(date_data, 
                         datetime.strptime(missing_date, '%Y-%m-%d'))
@@ -955,6 +988,10 @@ class FundDataETL:
                     
                     if len(date_data) > 0:
                         logger.info(f"Replacing {len(date_data)} records for {date_str}")
+                        
+                        # Handle #MULTIVALUE fund codes before processing
+                        date_data = self._handle_multivalue_funds(date_data.copy())
+                        
                         date_data_processed = self.process_dates(date_data, 
                             datetime.strptime(date_str, '%Y-%m-%d'))
                         self.load_to_database(date_data_processed, region, 
@@ -1147,6 +1184,9 @@ class FundDataETL:
                 # Read the Excel file
                 logger.info(f"Reading {region} file: {filepath}")
                 df = pd.read_excel(filepath)
+                
+                # Handle #MULTIVALUE fund codes before validation
+                df = self._handle_multivalue_funds(df)
                 
                 # Validate data
                 is_valid, issues = self.validate_dataframe(df, region)
