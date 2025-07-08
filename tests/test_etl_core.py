@@ -238,7 +238,6 @@ class TestDataLoading(ETLTestCase):
         test_data = pd.DataFrame({
             'region': ['AMRS'] * 5,
             'date': ['2024-01-15'] * 5,
-            'as_of_date': ['2024-01-15'] * 5,
             'file_date': ['2024-01-15'] * 5,
             'fund_code': [f'FUND{i:03d}' for i in range(5)],
             'fund_name': [f'Test Fund {i}' for i in range(5)],
@@ -314,7 +313,6 @@ class TestDataLoading(ETLTestCase):
         mixed_data = pd.DataFrame({
             'region': ['AMRS'] * 5,
             'date': ['2024-01-15'] * 5,
-            'as_of_date': ['2024-01-15'] * 5,
             'file_date': ['2024-01-15'] * 5,
             'fund_code': ['TEST0001', 'TEST0002', 'NEW001', 'NEW002', 'NEW003'],
             'fund_name': ['Test Fund 1', 'Test Fund 2', 'New Fund 1', 

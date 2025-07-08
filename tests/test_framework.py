@@ -40,9 +40,10 @@ class ETLTestCase(unittest.TestCase):
         cls.data_dir = Path(cls.temp_dir) / 'data'
         cls.logs_dir = Path(cls.temp_dir) / 'logs'
         cls.config_dir = Path(cls.temp_dir) / 'config'
+        cls.test_data_dir = Path(cls.temp_dir) / 'test_data'
         
         # Create directories
-        for dir_path in [cls.data_dir, cls.logs_dir, cls.config_dir]:
+        for dir_path in [cls.data_dir, cls.logs_dir, cls.config_dir, cls.test_data_dir]:
             dir_path.mkdir(parents=True, exist_ok=True)
         
         # Test database path

@@ -277,6 +277,10 @@ class FundDataETL:
         
         return df
     
+    def initialize_tables(self):
+        """Create database tables if they don't exist (alias for setup_database)"""
+        return self.setup_database()
+    
     def setup_database(self):
         """Create database tables if they don't exist"""
         import os
@@ -344,6 +348,8 @@ class FundDataETL:
                 file_date DATE,
                 status TEXT,
                 records_processed INTEGER,
+                download_time REAL,
+                processing_time REAL,
                 issues TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -593,6 +599,13 @@ class FundDataETL:
             raise
         finally:
             conn.close()
+    
+    def get_lookback_file_path(self, region: str, date: datetime) -> Path:
+        """Get the path for a lookback file"""
+        lookback_dir = self.data_dir / 'lookback'
+        lookback_dir.mkdir(exist_ok=True)
+        filename = f"DataDump__{region.upper()}_30DAYS_{date.strftime('%Y%m%d')}.xlsx"
+        return lookback_dir / filename
     
     def download_lookback_file(self, region: str, lookback_days: int = 30) -> Optional[pd.DataFrame]:
         """Download and return 30-day lookback file for validation"""
@@ -1258,6 +1271,97 @@ class FundDataETL:
             return {'success': True, 'validation_alerts': validation_alerts}
         else:
             return {'success': True}
+    
+    def _format_validation_summary(self, results: Dict) -> str:
+        """Format validation results into a summary string"""
+        summary = results.get('summary', {})
+        lines = [
+            "Validation Summary:",
+            f"Total lookback records: {summary.get('total_lookback_records', 0)}",
+            f"Missing dates: {summary.get('missing_dates_count', 0)}",
+            f"Changed records: {summary.get('changed_records_count', 0)}",
+            f"Requires update: {summary.get('requires_update', False)}"
+        ]
+        return "\n".join(lines)
+    
+    def update_from_lookback(self, region: str, lookback_df: pd.DataFrame, 
+                           validation_results: Dict, update_mode: str = 'selective') -> Dict:
+        """Update database from lookback data based on validation results"""
+        try:
+            if update_mode == 'selective':
+                # Only update changed records
+                changed_records = validation_results.get('changed_records', [])
+                records_updated = 0
+                
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                for record in changed_records:
+                    fund_code = record['fund_code']
+                    date = record['date']
+                    
+                    # Get the lookback record
+                    lb_record = lookback_df[
+                        (lookback_df['date'] == date) & 
+                        (lookback_df['fund_code'] == fund_code)
+                    ]
+                    
+                    if not lb_record.empty:
+                        # Update the record
+                        update_data = lb_record.iloc[0].to_dict()
+                        columns = [col for col in update_data.keys() if col not in ['date', 'region', 'fund_code']]
+                        
+                        set_clause = ', '.join([f"{col} = ?" for col in columns])
+                        values = [update_data[col] for col in columns]
+                        values.extend([region, date, fund_code])
+                        
+                        cursor.execute(f"""
+                        UPDATE fund_data 
+                        SET {set_clause}
+                        WHERE region = ? AND date = ? AND fund_code = ?
+                        """, values)
+                        
+                        records_updated += 1
+                
+                conn.commit()
+                conn.close()
+                
+                return {
+                    'records_updated': records_updated,
+                    'mode': 'selective'
+                }
+                
+            elif update_mode == 'full':
+                # Replace all records for the dates in lookback
+                dates = lookback_df['date'].unique()
+                
+                conn = sqlite3.connect(self.db_path)
+                cursor = conn.cursor()
+                
+                # Delete existing records for these dates
+                for date in dates:
+                    cursor.execute("""
+                    DELETE FROM fund_data 
+                    WHERE region = ? AND date = ?
+                    """, (region, date))
+                
+                # Insert all lookback records
+                lookback_df.to_sql('fund_data', conn, if_exists='append', index=False)
+                
+                conn.commit()
+                conn.close()
+                
+                return {
+                    'records_updated': len(lookback_df),
+                    'mode': 'full'
+                }
+            
+            else:
+                return None
+                
+        except Exception as e:
+            logger.error(f"Failed to update from lookback: {str(e)}")
+            return None
 
 
 # Configuration template

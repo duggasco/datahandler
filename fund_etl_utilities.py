@@ -11,9 +11,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from typing import Optional, Dict, List
 import logging
+import holidays
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+def get_previous_business_day(date: datetime) -> datetime:
+    """Get the previous business day, accounting for weekends and US holidays"""
+    us_holidays = holidays.US()
+    prev_day = date - timedelta(days=1)
+    
+    # Keep going back until we find a business day
+    while prev_day.weekday() >= 5 or prev_day in us_holidays:
+        prev_day = prev_day - timedelta(days=1)
+    
+    return prev_day
 
 
 class FundDataMonitor:

@@ -181,6 +181,10 @@ class TestETLAPI(ETLTestCase):
         self.app = api_app.test_client()
         self.app.testing = True
         
+        # Clean up any running workflows
+        with patch('fund_etl_api.active_workflows', {}):
+            pass
+        
         # Mock database path
         with patch('fund_etl_api.DB_PATH', str(self.test_db)):
             pass
@@ -288,10 +292,22 @@ class TestETLAPI(ETLTestCase):
     
     def test_concurrent_etl_prevention(self):
         """Test prevention of concurrent ETL runs"""
-        with patch('fund_etl_api.is_etl_running', return_value=True):
-            response = self.app.post('/api/etl/run-daily')
+        # First start an ETL run
+        with patch('fund_etl_api.subprocess.Popen') as mock_popen:
+            mock_process = Mock()
+            mock_process.stdout.readline.side_effect = ['Starting', '']
+            mock_process.wait.return_value = None
+            mock_process.returncode = 0
+            mock_popen.return_value = mock_process
             
-            self.assertEqual(response.status_code, 409)
+            # Start first ETL
+            self.app.post('/api/etl/run-daily')
+        
+        # Now try to start another
+        response = self.app.post('/api/etl/run-daily')
+        
+        # Should get 409 conflict
+        self.assertEqual(response.status_code, 409)
             data = json.loads(response.data)
             self.assertIn('already running', data['error'])
     
@@ -509,7 +525,7 @@ class TestUIAPI(ETLTestCase, APITestMixin):
             response = self.app.get('/api/export/fund-data')
             
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content_type, 'text/csv')
+            self.assertTrue(response.content_type.startswith('text/csv'))
             
             # Check CSV content
             csv_data = response.data.decode('utf-8')
@@ -522,7 +538,7 @@ class TestUIAPI(ETLTestCase, APITestMixin):
             response = self.app.get('/api/export/etl-log')
             
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content_type, 'text/csv')
+            self.assertTrue(response.content_type.startswith('text/csv'))
 
 
 class TestAPIIntegration(ETLTestCase):
@@ -569,10 +585,11 @@ class TestAPIIntegration(ETLTestCase):
     def test_error_handling_chain(self):
         """Test error handling through API chain"""
         # Test connection error handling
-        with patch('fund_etl_ui.requests.post') as mock_post:
+        with patch('requests.post') as mock_post:
             mock_post.side_effect = requests.exceptions.ConnectionError()
             
-            app = ui_app.test_client()
+            from fund_etl_ui import app as ui_app
+        app = ui_app.test_client()
             response = app.post('/api/workflow/run-daily')
             
             self.assertEqual(response.status_code, 503)

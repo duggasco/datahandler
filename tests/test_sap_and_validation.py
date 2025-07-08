@@ -23,7 +23,7 @@ class TestSAPDownloader(ETLTestCase):
     
     def setUp(self):
         super().setUp()
-        self.downloader = MockSAPDownloader(self.test_data_dir)
+        self.downloader = MockSAPDownloader(self.data_dir)
     
     def test_download_daily_file(self):
         """Test downloading daily data files"""

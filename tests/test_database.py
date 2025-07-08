@@ -337,7 +337,7 @@ class TestDataIntegrity(ETLTestCase):
         cursor.execute("""
         INSERT INTO fund_data (
             region, date, fund_code, fund_name
-        ) VALUES (?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?)
         """, ('AMRS', '2024-01-15', 'TEST001', 'Test Fund'))
         self.conn.commit()
         
