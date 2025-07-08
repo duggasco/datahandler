@@ -31,8 +31,8 @@ RUN pip install --no-cache-dir \
 # Create app directory
 WORKDIR /app
 
-# Copy UI application
-COPY fund_etl_ui.py .
+# Copy UI application and dependencies
+COPY fund_etl_ui.py workflow_db_tracker.py ./
 
 # Create non-root user and add to docker group
 RUN useradd -m -s /bin/bash uiuser && \
