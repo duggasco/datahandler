@@ -1535,12 +1535,12 @@ def get_workflow_status(workflow_id):
 @app.route('/api/workflow/list')
 def list_workflows():
     """List all workflows"""
-    # Clean up old workflows first
-    workflow_tracker.cleanup_old_workflows()
+    # Note: Cleanup is disabled to avoid database write conflicts
+    # workflow_tracker.cleanup_old_workflows()
     
     workflows = workflow_tracker.get_all_workflows()
-    # Sort by started_at descending
-    workflows.sort(key=lambda x: x['started_at'], reverse=True)
+    # Sort by started_at descending if started_at exists
+    workflows.sort(key=lambda x: x.get('started_at', x.get('created_at', '')), reverse=True)
     
     return jsonify(workflows)
 
