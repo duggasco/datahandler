@@ -12,6 +12,7 @@ urllib3==2.2.1
 
 # Browser automation for SAP downloads
 selenium==4.25.0
+psutil==6.0.0
 
 # Date handling
 holidays==0.45
